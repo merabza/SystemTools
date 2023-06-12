@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit" Version="2.4.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+    </ItemGroup>
+
+</Project>

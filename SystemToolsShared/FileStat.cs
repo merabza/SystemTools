@@ -28,6 +28,31 @@ public static class FileStat
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? fullPath.ToUpperInvariant() : fullPath;
     }
 
+    public static bool CreatePrevFolderIfNotExists(string fileName, bool useConsole, ILogger? logger = null)
+    {
+        try
+        {
+            var sf = new FileInfo(fileName);
+            if (sf.DirectoryName is null)
+                return false;
+
+            DirectoryInfo destDir = new(sf.DirectoryName);
+
+            if (destDir.Exists)
+                return true;
+            //ფოლდერი არ არსებობს, უნდა შეიქმნას
+            destDir.Create();
+            destDir.Refresh();
+
+            return destDir.Exists;
+        }
+        catch (Exception e)
+        {
+            StShared.WriteException(e, useConsole, logger);
+            return false;
+        }
+    }
+
     public static string? CreateFolderIfNotExists(string folderName, bool useConsole, ILogger? logger = null)
     {
         try

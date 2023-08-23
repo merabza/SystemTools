@@ -77,7 +77,13 @@ public static class FileStat
 
     public static string RemoveNotNeedLeadPart(this string dest, char removeLead)
     {
-        return !dest.StartsWith(removeLead) ? dest : dest[1..];
+        return dest.StartsWith(removeLead) ? dest[1..] : dest;
+    }
+
+
+    public static string RemoveNotNeedLastPart(this string dest, char removeLast)
+    {
+        return dest.EndsWith(removeLast) ? dest[..^1] : dest;
     }
 
 

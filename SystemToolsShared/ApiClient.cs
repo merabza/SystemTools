@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using WebAgentMessagesContracts;
 
 namespace SystemToolsShared;
 
@@ -9,14 +10,19 @@ public /*open*/ class ApiClient
 {
     private readonly ILogger _logger;
     protected readonly string? ApiKey;
+    private readonly IMessagesDataManager? _messagesDataManager;
+    private readonly string? _userName;
     protected readonly HttpClient Client;
     protected readonly string Server;
 
-    protected ApiClient(ILogger logger, string server, string? apiKey)
+    protected ApiClient(ILogger logger, string server, string? apiKey, IMessagesDataManager? messagesDataManager,
+        string? userName)
     {
         _logger = logger;
         Server = server.AddNeedLastPart('/');
         ApiKey = apiKey;
+        _messagesDataManager = messagesDataManager;
+        _userName = userName;
         Client = new HttpClient();
     }
 
@@ -25,6 +31,7 @@ public /*open*/ class ApiClient
         if (response.IsSuccessStatusCode)
             return;
         var errorMessage = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        _messagesDataManager?.SendMessage(_userName, $"Returned error message from ApiClient: {errorMessage}").Wait();
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
     }
 

@@ -31,8 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\WebAgentContracts\WebAgentMessagesContracts\WebAgentMessagesContracts.csproj" />
       <ProjectReference Include="..\SignalRClient\SignalRClient.csproj" />
     </ItemGroup>
-
 </Project>

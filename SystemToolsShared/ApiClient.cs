@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using WebAgentMessagesContracts;
+using SignalRClient;
 
 namespace SystemToolsShared;
 
@@ -40,11 +41,21 @@ public /*open*/ class ApiClient
     //    return false;
     //}
 
-    protected async Task<string?> GetAsyncAsString(string afterServerAddress)
+    protected async Task<string?> GetAsyncAsString(string afterServerAddress, bool withMessaging = true)
     {
         Uri uri = new($"{Server}{afterServerAddress}");
 
+        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        if (withMessaging)
+        {
+            webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+            await webAgentMessageHubClient.RunMessages();
+        }
+
         var response = await Client.GetAsync(uri);
+
+        if (webAgentMessageHubClient is not null)
+            await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync();
@@ -70,11 +81,16 @@ public /*open*/ class ApiClient
     //    return false;
     //}
 
-    protected async Task<bool> PostAsync(string afterServerAddress)
+    protected async Task<bool> DeleteAsync(string afterServerAddress)
     {
         Uri uri = new($"{Server}{afterServerAddress}");
 
-        var response = await Client.PostAsync(uri, null);
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        await webAgentMessageHubClient.RunMessages();
+
+        var response = await Client.DeleteAsync(uri);
+
+        await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
             return true;
@@ -83,8 +99,47 @@ public /*open*/ class ApiClient
         return false;
     }
 
+    protected async Task<bool> PostAsync(string afterServerAddress, string? bodyJsonData = null)
+    {
+        Uri uri = new($"{Server}{afterServerAddress}");
+
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        await webAgentMessageHubClient.RunMessages();
+
+        var response = await Client.PostAsync(uri,
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+
+        await webAgentMessageHubClient.StopMessages();
+
+        if (response.IsSuccessStatusCode)
+            return true;
+
+        LogResponseErrorMessage(response);
+        return false;
+    }
+
+    protected async Task<string?> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData = null)
+    {
+        Uri uri = new($"{Server}{afterServerAddress}");
+
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        await webAgentMessageHubClient.RunMessages();
+
+        var response = await Client.PostAsync(uri,
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+
+        await webAgentMessageHubClient.StopMessages();
+
+        if (response.IsSuccessStatusCode)
+            return response.Content.ReadAsStringAsync().Result;
+
+        LogResponseErrorMessage(response);
+        return null;
+    }
+
     public async Task<string?> GetVersion(bool useConsole = false)
     {
+        //+
         try
         {
             return await GetAsyncAsString("test/getversion");
@@ -98,6 +153,7 @@ public /*open*/ class ApiClient
 
     public async Task<bool> CheckValidation()
     {
+        //+
         Console.WriteLine("Try connect to Web Agent...");
 
         var version = await GetVersion();

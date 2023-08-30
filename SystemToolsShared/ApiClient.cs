@@ -36,11 +36,6 @@ public /*open*/ class ApiClient
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
     }
 
-    //public virtual bool CheckApiLive()
-    //{
-    //    return false;
-    //}
-
     protected async Task<string?> GetAsyncAsString(string afterServerAddress, bool withMessaging = true)
     {
         Uri uri = new($"{Server}{afterServerAddress}");
@@ -63,23 +58,6 @@ public /*open*/ class ApiClient
         LogResponseErrorMessage(response);
         return null;
     }
-
-    //protected async Task<bool> PostAsyncWithApiKey(string afterServerAddress)
-    //{
-    //    Uri uri = new($"{Server}{afterServerAddress}");
-
-    //    var body = new ApiKeyModel { ApiKey = ApiKey };
-    //    var bodyApiKeyJsonData = JsonConvert.SerializeObject(body);
-
-    //    var response = await Client.PostAsync(uri,
-    //        new StringContent(bodyApiKeyJsonData, Encoding.UTF8, "application/text"));
-
-    //    if (response.IsSuccessStatusCode)
-    //        return true;
-
-    //    LogResponseErrorMessage(response);
-    //    return false;
-    //}
 
     protected async Task<bool> DeleteAsync(string afterServerAddress)
     {
@@ -135,34 +113,5 @@ public /*open*/ class ApiClient
 
         LogResponseErrorMessage(response);
         return null;
-    }
-
-    public async Task<string?> GetVersion(bool useConsole = false)
-    {
-        //+
-        try
-        {
-            return await GetAsyncAsString("test/getversion");
-        }
-        catch (Exception e)
-        {
-            StShared.WriteErrorLine(e.Message, useConsole);
-            return null;
-        }
-    }
-
-    public async Task<bool> CheckValidation()
-    {
-        //+
-        Console.WriteLine("Try connect to Web Agent...");
-
-        var version = await GetVersion();
-
-        if (string.IsNullOrWhiteSpace(version))
-            return false;
-
-        Console.WriteLine($"Connected successfully, Web Agent version is {version}");
-
-        return true;
     }
 }

@@ -11,43 +11,38 @@ public /*open*/ class ApiClient
 {
     private readonly ILogger _logger;
     protected readonly string? ApiKey;
-    private readonly IMessagesDataManager? _messagesDataManager;
-    private readonly string? _userName;
-    protected readonly HttpClient Client;
-    protected readonly string Server;
+    private readonly HttpClient _client;
+    private readonly string _server;
 
-    protected ApiClient(ILogger logger, string server, string? apiKey, IMessagesDataManager? messagesDataManager,
-        string? userName)
+    protected ApiClient(ILogger logger, string server, string? apiKey)
     {
         _logger = logger;
-        Server = server.AddNeedLastPart('/');
+        _server = server.AddNeedLastPart('/');
         ApiKey = apiKey;
-        _messagesDataManager = messagesDataManager;
-        _userName = userName;
-        Client = new HttpClient();
+        _client = new HttpClient();
     }
 
-    protected void LogResponseErrorMessage(HttpResponseMessage response)
+    private void LogResponseErrorMessage(HttpResponseMessage response)
     {
         if (response.IsSuccessStatusCode)
             return;
         var errorMessage = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-        _messagesDataManager?.SendMessage(_userName, $"Returned error message from ApiClient: {errorMessage}").Wait();
+        //_messagesDataManager?.SendMessage(_userName, $"Returned error message from ApiClient: {errorMessage}").Wait();
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
     }
 
     protected async Task<string?> GetAsyncAsString(string afterServerAddress, bool withMessaging = true)
     {
-        Uri uri = new($"{Server}{afterServerAddress}");
+        Uri uri = new($"{_server}{afterServerAddress}");
 
         WebAgentMessageHubClient? webAgentMessageHubClient = null;
         if (withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, ApiKey);
             await webAgentMessageHubClient.RunMessages();
         }
 
-        var response = await Client.GetAsync(uri);
+        var response = await _client.GetAsync(uri);
 
         if (webAgentMessageHubClient is not null)
             await webAgentMessageHubClient.StopMessages();
@@ -61,12 +56,12 @@ public /*open*/ class ApiClient
 
     protected async Task<bool> DeleteAsync(string afterServerAddress)
     {
-        Uri uri = new($"{Server}{afterServerAddress}");
+        Uri uri = new($"{_server}{afterServerAddress}");
 
-        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, ApiKey);
         await webAgentMessageHubClient.RunMessages();
 
-        var response = await Client.DeleteAsync(uri);
+        var response = await _client.DeleteAsync(uri);
 
         await webAgentMessageHubClient.StopMessages();
 
@@ -79,12 +74,12 @@ public /*open*/ class ApiClient
 
     protected async Task<bool> PostAsync(string afterServerAddress, string? bodyJsonData = null)
     {
-        Uri uri = new($"{Server}{afterServerAddress}");
+        Uri uri = new($"{_server}{afterServerAddress}");
 
-        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, ApiKey);
         await webAgentMessageHubClient.RunMessages();
 
-        var response = await Client.PostAsync(uri,
+        var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
 
         await webAgentMessageHubClient.StopMessages();
@@ -98,12 +93,12 @@ public /*open*/ class ApiClient
 
     protected async Task<string?> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData = null)
     {
-        Uri uri = new($"{Server}{afterServerAddress}");
+        Uri uri = new($"{_server}{afterServerAddress}");
 
-        var webAgentMessageHubClient = new WebAgentMessageHubClient(Server, ApiKey);
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, ApiKey);
         await webAgentMessageHubClient.RunMessages();
 
-        var response = await Client.PostAsync(uri,
+        var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
 
         await webAgentMessageHubClient.StopMessages();

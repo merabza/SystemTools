@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SignalRClient;
 
 namespace SystemToolsShared;
@@ -108,5 +109,29 @@ public /*open*/ class ApiClient
 
         LogResponseErrorMessage(response);
         return null;
+    }
+
+
+    protected async Task<T?> PostAsyncReturn<T>(string afterServerAddress, string? bodyJsonData = null)
+    {
+        Uri uri = new($"{_server}{afterServerAddress}");
+
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, ApiKey);
+        await webAgentMessageHubClient.RunMessages();
+
+        var response = await _client.PostAsync(uri,
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+
+        await webAgentMessageHubClient.StopMessages();
+
+        if (!response.IsSuccessStatusCode)
+        {
+            LogResponseErrorMessage(response);
+            return default;
+        }
+
+        var result = await response.Content.ReadAsStringAsync();
+        var desResult = JsonConvert.DeserializeObject<T>(result);
+        return desResult;
     }
 }

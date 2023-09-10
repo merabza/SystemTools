@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace SystemToolsShared;
 
 public interface IMessagesDataManager
 {
-    Task SendMessage(string? userName, string message);
+    Task SendMessage(string? userName, string message, CancellationToken cancellationToken);
     void UserConnected(string connectionId, string userName);
     void UserDisconnected(string connectionId, string userName);
 }

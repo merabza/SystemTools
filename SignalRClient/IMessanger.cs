@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace SignalRClient;
 
 public interface IMessenger
 {
-    Task SendMessage(string message);
+    Task SendMessage(string message, CancellationToken cancellationToken);
 }

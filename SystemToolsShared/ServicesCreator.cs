@@ -42,7 +42,7 @@ public /*open*/ class ServicesCreator
                 var extension = ".log";
                 if (logFileName.ToLower().EndsWith(".log") || logFileName.ToLower().EndsWith(".txt"))
                     //extension = logFileName.Substring(logFileName.Length - 5);
-                    logFileName = logFileName.Substring(0, logFileName.Length - 4);
+                    logFileName = logFileName[..^4];
 
                 logFileName += extension;
                 Log.Logger = new LoggerConfiguration().WriteTo.Console(consoleLogEventLevel).WriteTo

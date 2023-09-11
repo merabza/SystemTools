@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -24,22 +25,23 @@ public /*open*/ class ApiClient
         _client = new HttpClient();
     }
 
-    private async Task LogResponseErrorMessage(HttpResponseMessage response)
+    private async Task LogResponseErrorMessage(HttpResponseMessage response, CancellationToken cancellationToken)
     {
         if (response.IsSuccessStatusCode)
             return;
 
-        var responseBody = await response.Content.ReadAsStringAsync();
+        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
         var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody);
         if (errors is not null)
             foreach (var err in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
-        var errorMessage = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
     }
 
-    protected async Task<bool> GetAsync(string afterServerAddress, bool withMessaging = true)
+    protected async Task<bool> GetAsync(string afterServerAddress, CancellationToken cancellationToken,
+        bool withMessaging = true)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -51,7 +53,7 @@ public /*open*/ class ApiClient
             await webAgentMessageHubClient.RunMessages();
         }
 
-        var response = await _client.GetAsync(uri);
+        var response = await _client.GetAsync(uri, cancellationToken);
 
         if (webAgentMessageHubClient is not null)
             await webAgentMessageHubClient.StopMessages();
@@ -59,11 +61,12 @@ public /*open*/ class ApiClient
         if (response.IsSuccessStatusCode)
             return true;
 
-        await LogResponseErrorMessage(response);
+        await LogResponseErrorMessage(response, cancellationToken);
         return false;
     }
 
-    protected async Task<string?> GetAsyncAsString(string afterServerAddress, bool withMessaging = true)
+    protected async Task<string?> GetAsyncAsString(string afterServerAddress, CancellationToken cancellationToken,
+        bool withMessaging = true)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -75,19 +78,19 @@ public /*open*/ class ApiClient
             await webAgentMessageHubClient.RunMessages();
         }
 
-        var response = await _client.GetAsync(uri);
+        var response = await _client.GetAsync(uri, cancellationToken);
 
         if (webAgentMessageHubClient is not null)
             await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        await LogResponseErrorMessage(response);
+        await LogResponseErrorMessage(response, cancellationToken);
         return null;
     }
 
-    protected async Task<bool> DeleteAsync(string afterServerAddress)
+    protected async Task<bool> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -95,18 +98,19 @@ public /*open*/ class ApiClient
         var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
         await webAgentMessageHubClient.RunMessages();
 
-        var response = await _client.DeleteAsync(uri);
+        var response = await _client.DeleteAsync(uri, cancellationToken);
 
         await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
             return true;
 
-        await LogResponseErrorMessage(response);
+        await LogResponseErrorMessage(response, cancellationToken);
         return false;
     }
 
-    protected async Task<bool> PostAsync(string afterServerAddress, string? bodyJsonData = null)
+    protected async Task<bool> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
+        string? bodyJsonData = null)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -115,18 +119,20 @@ public /*open*/ class ApiClient
         await webAgentMessageHubClient.RunMessages();
 
         var response = await _client.PostAsync(uri,
-            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
+            cancellationToken);
 
         await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
             return true;
 
-        await LogResponseErrorMessage(response);
+        await LogResponseErrorMessage(response, cancellationToken);
         return false;
     }
 
-    protected async Task<string?> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData = null)
+    protected async Task<string?> PostAsyncReturnString(string afterServerAddress, CancellationToken cancellationToken,
+        string? bodyJsonData = null)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -135,19 +141,21 @@ public /*open*/ class ApiClient
         await webAgentMessageHubClient.RunMessages();
 
         var response = await _client.PostAsync(uri,
-            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
+            cancellationToken);
 
         await webAgentMessageHubClient.StopMessages();
 
         if (response.IsSuccessStatusCode)
-            return await response.Content.ReadAsStringAsync();
+            return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        await LogResponseErrorMessage(response);
+        await LogResponseErrorMessage(response, cancellationToken);
         return null;
     }
 
 
-    protected async Task<T?> PostAsyncReturn<T>(string afterServerAddress, string? bodyJsonData = null)
+    protected async Task<T?> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken,
+        string? bodyJsonData = null)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -156,17 +164,18 @@ public /*open*/ class ApiClient
         await webAgentMessageHubClient.RunMessages();
 
         var response = await _client.PostAsync(uri,
-            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"));
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
+            cancellationToken);
 
         await webAgentMessageHubClient.StopMessages();
 
         if (!response.IsSuccessStatusCode)
         {
-            await LogResponseErrorMessage(response);
+            await LogResponseErrorMessage(response, cancellationToken);
             return default;
         }
 
-        var result = await response.Content.ReadAsStringAsync();
+        var result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
         return desResult;
     }

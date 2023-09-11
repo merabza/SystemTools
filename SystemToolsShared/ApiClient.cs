@@ -50,13 +50,13 @@ public /*open*/ class ApiClient
         if (withMessaging)
         {
             webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages();
+            await webAgentMessageHubClient.RunMessages(cancellationToken);
         }
 
         var response = await _client.GetAsync(uri, cancellationToken);
 
         if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages();
+            await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return true;
@@ -75,13 +75,13 @@ public /*open*/ class ApiClient
         if (withMessaging)
         {
             webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages();
+            await webAgentMessageHubClient.RunMessages(cancellationToken);
         }
 
         var response = await _client.GetAsync(uri, cancellationToken);
 
         if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages();
+            await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -96,11 +96,11 @@ public /*open*/ class ApiClient
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
         var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-        await webAgentMessageHubClient.RunMessages();
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
 
         var response = await _client.DeleteAsync(uri, cancellationToken);
 
-        await webAgentMessageHubClient.StopMessages();
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return true;
@@ -116,13 +116,13 @@ public /*open*/ class ApiClient
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
         var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-        await webAgentMessageHubClient.RunMessages();
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
 
         var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
             cancellationToken);
 
-        await webAgentMessageHubClient.StopMessages();
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return true;
@@ -138,13 +138,13 @@ public /*open*/ class ApiClient
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
         var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-        await webAgentMessageHubClient.RunMessages();
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
 
         var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
             cancellationToken);
 
-        await webAgentMessageHubClient.StopMessages();
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -161,13 +161,13 @@ public /*open*/ class ApiClient
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
         var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-        await webAgentMessageHubClient.RunMessages();
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
 
         var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
             cancellationToken);
 
-        await webAgentMessageHubClient.StopMessages();
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {

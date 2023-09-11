@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -19,7 +20,7 @@ public sealed class WebAgentMessageHubClient
         _apiKey = apiKey;
     }
 
-    public async Task RunMessages()
+    public async Task RunMessages(CancellationToken cancellationToken)
     {
         _connection = new HubConnectionBuilder()
             .WithUrl($"{_server}messages{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}")
@@ -27,12 +28,12 @@ public sealed class WebAgentMessageHubClient
 
         _connection.On<string>(Events.MessageSent, message => Console.WriteLine($"[{_server}]: {message}"));
 
-        await _connection.StartAsync();
+        await _connection.StartAsync(cancellationToken);
     }
 
-    public async Task StopMessages()
+    public async Task StopMessages(CancellationToken cancellationToken)
     {
         if (_connection is not null)
-            await _connection.StopAsync();
+            await _connection.StopAsync(cancellationToken);
     }
 }

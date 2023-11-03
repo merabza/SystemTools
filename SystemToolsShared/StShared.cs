@@ -167,7 +167,7 @@ public static class StShared
         Console.ForegroundColor = currentColor;
     }
 
-    public static void WriteException(Exception ex, string? additionalMessage, bool useConsole,
+    public static void WriteException(Exception? ex, string? additionalMessage, bool useConsole,
         ILogger? logger = null, bool pauseAfter = true)
     {
         logger?.LogError(ex, additionalMessage ?? "");
@@ -186,7 +186,7 @@ public static class StShared
             Pause();
     }
 
-    public static void WriteException(Exception ex, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
+    public static void WriteException(Exception? ex, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
     {
         WriteException(ex, null, useConsole, logger, pauseAfter);
     }

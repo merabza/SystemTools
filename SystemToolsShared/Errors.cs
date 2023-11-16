@@ -32,6 +32,15 @@ public static class Errors
             { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented" };
     }
 
+
+    public static Err SuchARecordAlreadyExists => new() { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
+
+    public static Err TheEntryHasBeenUsedAndCannotBeDeleted => new()
+    {
+        ErrorCode = nameof(TheEntryHasBeenUsedAndCannotBeDeleted),
+        ErrorMessage = "ჩანაწერი გამოყენებულია და ვერ წაიშლება"
+    };
+    
     public static Err ErrorWhenRunningMethod(string methodName, Guid errorGuid)
     {
         return new Err
@@ -48,4 +57,7 @@ public static class Errors
         return new Err
             { ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
     }
+
+
+    
 }

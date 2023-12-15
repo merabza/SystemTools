@@ -24,11 +24,13 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? "" : $"{totalHours} hours, ")}{(totalMinutes == 0 ? "" : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static string RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName, string arguments)
+    public static string RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
+        string arguments)
     {
         //var message = "Running{0}{1} {2}";
         //var args = new object?[] {  };
-        ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName, arguments);
+        ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
+            arguments);
         //if (useConsole)
         //    Console.WriteLine(message, args);
 
@@ -56,7 +58,8 @@ public static class StShared
         }
 
         //message = "output for '{0} {1}' is{2}{3}";
-        ConsoleWriteInformationLine(logger, useConsole,  "output for '{0} {1}' is{2}{3}", programFileName, arguments, Environment.NewLine, sb);
+        ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
+            Environment.NewLine, sb);
         return sb.ToString();
     }
 
@@ -64,18 +67,18 @@ public static class StShared
     public static bool RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
         bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
-        ConsoleWriteInformationLine(logger, useConsole,"Running {0} {1}...", programFileName, arguments);
+        ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
         var proc = Process.Start(programFileName, arguments);
 
         if (waitForExit == 0)
             return true;
 
-        ConsoleWriteInformationLine(logger, useConsole,"Wait For Exit {0}", programFileName);
+        ConsoleWriteInformationLine(logger, useConsole, "Wait For Exit {0}", programFileName);
 
         proc.WaitForExit(waitForExit < 0 ? Timeout.Infinite : waitForExit);
 
-        ConsoleWriteInformationLine(logger, useConsole,"{0} finished", programFileName);
+        ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
 
         if (proc.ExitCode == 0)
             return true;
@@ -121,7 +124,8 @@ public static class StShared
         Console.ReadKey(false);
     }
 
-    public static void ConsoleWriteInformationLine(ILogger? logger, bool useConsole, string message, params object?[] args)
+    public static void ConsoleWriteInformationLine(ILogger? logger, bool useConsole, string message,
+        params object?[] args)
     {
         logger?.LogInformation(message, args);
         if (!useConsole)

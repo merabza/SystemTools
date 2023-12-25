@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SignalRClient;
@@ -154,7 +155,7 @@ public /*open*/ class ApiClient
     }
 
 
-    protected async Task<T?> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken,
+    protected async Task<Option<T>> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken,
         string? bodyJsonData = null)
     {
         Uri uri = new(
@@ -172,11 +173,11 @@ public /*open*/ class ApiClient
         if (!response.IsSuccessStatusCode)
         {
             await LogResponseErrorMessage(response, cancellationToken);
-            return default;
+            return new Option<T>();
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
-        return desResult;
+        return desResult is null ? new Option<T>() : desResult;
     }
 }

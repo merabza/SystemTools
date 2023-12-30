@@ -1,4 +1,6 @@
-﻿namespace SystemToolsShared;
+﻿using System.Collections.Generic;
+
+namespace SystemToolsShared;
 
 public struct Err
 {
@@ -13,4 +15,13 @@ public struct Err
     //    ErrorCode = errorCode;
     //    ErrorMessage = errorMessage;
     //}
+
+    public static Err[] RecreateErrors(Err[] haveErrors, Err addError)
+    {
+        var errors = new List<Err>();
+        errors.AddRange(haveErrors);
+        errors.Add(addError);
+        return errors.ToArray();
+
+    }
 }

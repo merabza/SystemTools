@@ -6,8 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OneOf;
 
 namespace SystemToolsShared;
 
@@ -24,7 +26,7 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? "" : $"{totalHours} hours, ")}{(totalMinutes == 0 ? "" : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static string RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
+    public static OneOf<string, Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
         string arguments)
     {
         //var message = "Running{0}{1} {2}";
@@ -56,15 +58,26 @@ public static class StShared
                 Console.WriteLine(line);
             sb.AppendLine(line);
         }
-
         //message = "output for '{0} {1}' is{2}{3}";
-        ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
-            Environment.NewLine, sb);
-        return sb.ToString();
+
+
+        if (proc.ExitCode == 0)
+        {
+            ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
+                Environment.NewLine, sb);
+            return sb.ToString();
+        }
+
+        var errorMessage = $"{programFileName} process finished with errors. ExitCode={proc.ExitCode}";
+        if ((useConsole || logger != null))
+            WriteErrorLine(errorMessage, useConsole, logger);
+
+        return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
+
     }
 
 
-    public static bool RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
+    public static Option<Err[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
         bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
@@ -72,7 +85,7 @@ public static class StShared
         var proc = Process.Start(programFileName, arguments);
 
         if (waitForExit == 0)
-            return true;
+            return null;
 
         ConsoleWriteInformationLine(logger, useConsole, "Wait For Exit {0}", programFileName);
 
@@ -81,13 +94,13 @@ public static class StShared
         ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
 
         if (proc.ExitCode == 0)
-            return true;
+            return null;
 
         var errorMessage = $"{programFileName} process finished with errors. ExitCode={proc.ExitCode}";
         if (useErrorLine && (useConsole || logger != null))
             WriteErrorLine(errorMessage, useConsole, logger);
 
-        return false;
+        return new Err[]{new() {ErrorCode = "RunProcessError", ErrorMessage = errorMessage}};
     }
 
     public static bool RunCmdProcess(string command, string? projectPath = null)

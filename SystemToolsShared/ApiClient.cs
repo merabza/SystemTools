@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using OneOf;
 using SignalRClient;
 
 namespace SystemToolsShared;
@@ -26,22 +28,30 @@ public /*open*/ class ApiClient
         _client = new HttpClient();
     }
 
-    private async Task LogResponseErrorMessage(HttpResponseMessage response, CancellationToken cancellationToken)
+    private async Task<Option<Err[]>> LogResponseErrorMessage(HttpResponseMessage response,
+        CancellationToken cancellationToken)
     {
         if (response.IsSuccessStatusCode)
-            return;
+            return null;
 
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-        var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody);
+        var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody)?.ToArray();
         if (errors is not null)
             foreach (var err in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
         var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
+
+        return errors?.Length > 0
+            ? errors
+            : new Err[]
+            {
+                new() { ErrorCode = "ApiReturnErrorTest", ErrorMessage = $"Api Returns Error: {errorMessage}" }
+            };
     }
 
-    protected async Task<bool> GetAsync(string afterServerAddress, CancellationToken cancellationToken,
+    protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken,
         bool withMessaging = true)
     {
         Uri uri = new(
@@ -60,14 +70,15 @@ public /*open*/ class ApiClient
             await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
-            return true;
+            return null;
 
-        await LogResponseErrorMessage(response, cancellationToken);
-        return false;
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
-    protected async Task<string?> GetAsyncAsString(string afterServerAddress, CancellationToken cancellationToken,
-        bool withMessaging = true)
+    protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress, CancellationToken cancellationToken, bool withMessaging = true)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -87,11 +98,13 @@ public /*open*/ class ApiClient
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        await LogResponseErrorMessage(response, cancellationToken);
-        return null;
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
-    protected async Task<bool> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
+    protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -104,13 +117,15 @@ public /*open*/ class ApiClient
         await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
-            return true;
+            return null;
 
-        await LogResponseErrorMessage(response, cancellationToken);
-        return false;
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
-    protected async Task<bool> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
+    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
         string? bodyJsonData = null)
     {
         Uri uri = new(
@@ -126,14 +141,16 @@ public /*open*/ class ApiClient
         await webAgentMessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
-            return true;
+            return null;
 
-        await LogResponseErrorMessage(response, cancellationToken);
-        return false;
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
-    protected async Task<string?> PostAsyncReturnString(string afterServerAddress, CancellationToken cancellationToken,
-        string? bodyJsonData = null)
+    protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
+        CancellationToken cancellationToken, string? bodyJsonData = null)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -150,13 +167,15 @@ public /*open*/ class ApiClient
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        await LogResponseErrorMessage(response, cancellationToken);
-        return null;
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
 
-    protected async Task<Option<T>> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken,
-        string? bodyJsonData = null)
+    protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress,
+        CancellationToken cancellationToken, string? bodyJsonData = null)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
@@ -172,12 +191,16 @@ public /*open*/ class ApiClient
 
         if (!response.IsSuccessStatusCode)
         {
-            await LogResponseErrorMessage(response, cancellationToken);
-            return new Option<T>();
+            var respResult = await LogResponseErrorMessage(response, cancellationToken);
+            if (respResult.IsSome)
+                return (Err[])respResult;
+            return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
-        return desResult is null ? new Option<T>() : desResult;
+        if (desResult is null)
+            return new Err[] { new() { ErrorCode = "ApiReturnNothing", ErrorMessage = "Nothing returned Api" } };
+        return desResult;
     }
 }

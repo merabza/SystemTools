@@ -26,8 +26,9 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? "" : $"{totalHours} hours, ")}{(totalMinutes == 0 ? "" : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static OneOf<string, Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
-        string arguments)
+    public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
+        string programFileName,
+        string arguments, int[]? allowExitCodes = null)
     {
         //var message = "Running{0}{1} {2}";
         //var args = new object?[] {  };
@@ -61,11 +62,11 @@ public static class StShared
         //message = "output for '{0} {1}' is{2}{3}";
 
 
-        if (proc.ExitCode == 0)
+        if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
         {
             ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
                 Environment.NewLine, sb);
-            return sb.ToString();
+            return (sb.ToString(), proc.ExitCode);
         }
 
         var errorMessage = $"{programFileName} process finished with errors. ExitCode={proc.ExitCode}";
@@ -74,6 +75,14 @@ public static class StShared
 
         return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
 
+    }
+
+
+    private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)
+    {
+        if (exitCode == 0)
+            return true;
+        return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
 
@@ -100,7 +109,7 @@ public static class StShared
         if (useErrorLine && (useConsole || logger != null))
             WriteErrorLine(errorMessage, useConsole, logger);
 
-        return new Err[]{new() {ErrorCode = "RunProcessError", ErrorMessage = errorMessage}};
+        return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
     }
 
     public static bool RunCmdProcess(string command, string? projectPath = null)

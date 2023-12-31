@@ -24,4 +24,15 @@ public struct Err
         return errors.ToArray();
 
     }
+
+    public static void PrintErrorsOnConsole(Err[] errors)
+    {
+        foreach (var error in errors)
+        {
+            StShared.WriteErrorLine(error.ErrorMessage,true,null,false);
+        }
+
+    }
+
+
 }

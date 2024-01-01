@@ -149,6 +149,30 @@ public /*open*/ class ApiClient
         return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
+    protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, CancellationToken cancellationToken,
+        string? bodyJsonData = null)
+    {
+        Uri uri = new(
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
+
+        var response = await _client.PutAsync(uri,
+            bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
+            cancellationToken);
+
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
+
+        if (response.IsSuccessStatusCode)
+            return null;
+
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+    }
+
     protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
         CancellationToken cancellationToken, string? bodyJsonData = null)
     {
@@ -186,6 +210,34 @@ public /*open*/ class ApiClient
         var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),
             cancellationToken);
+
+        await webAgentMessageHubClient.StopMessages(cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var respResult = await LogResponseErrorMessage(response, cancellationToken);
+            if (respResult.IsSome)
+                return (Err[])respResult;
+            return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        }
+
+        var result = await response.Content.ReadAsStringAsync(cancellationToken);
+        var desResult = JsonConvert.DeserializeObject<T>(result);
+        if (desResult is null)
+            return new Err[] { new() { ErrorCode = "ApiReturnNothing", ErrorMessage = "Nothing returned Api" } };
+        return desResult;
+    }
+
+    protected async Task<OneOf<T, Err[]>> GetAsyncReturn<T>(string afterServerAddress,
+        CancellationToken cancellationToken)
+    {
+        Uri uri = new(
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+
+        var webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
+        await webAgentMessageHubClient.RunMessages(cancellationToken);
+
+        var response = await _client.GetAsync(uri, cancellationToken);
 
         await webAgentMessageHubClient.StopMessages(cancellationToken);
 

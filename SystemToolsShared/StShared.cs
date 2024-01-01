@@ -27,8 +27,7 @@ public static class StShared
     }
 
     public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
-        string programFileName,
-        string arguments, int[]? allowExitCodes = null)
+        string programFileName, string arguments, int[]? allowExitCodes = null)
     {
         //var message = "Running{0}{1} {2}";
         //var args = new object?[] {  };
@@ -87,7 +86,7 @@ public static class StShared
 
 
     public static Option<Err[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
-        bool useErrorLine = true, int waitForExit = Timeout.Infinite)
+        int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
@@ -102,7 +101,7 @@ public static class StShared
 
         ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
 
-        if (proc.ExitCode == 0)
+        if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
             return null;
 
         var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";

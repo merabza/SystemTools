@@ -69,7 +69,7 @@ public static class StShared
             return (sb.ToString(), proc.ExitCode);
         }
 
-        var errorMessage = $"{programFileName} process finished with errors. ExitCode={proc.ExitCode}";
+        var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
         if ((useConsole || logger != null))
             WriteErrorLine(errorMessage, useConsole, logger);
 
@@ -105,7 +105,7 @@ public static class StShared
         if (proc.ExitCode == 0)
             return null;
 
-        var errorMessage = $"{programFileName} process finished with errors. ExitCode={proc.ExitCode}";
+        var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
         if (useErrorLine && (useConsole || logger != null))
             WriteErrorLine(errorMessage, useConsole, logger);
 

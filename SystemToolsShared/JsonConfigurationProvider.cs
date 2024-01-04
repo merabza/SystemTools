@@ -33,21 +33,21 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 
         // Do decryption here, you can tap into the Data property like so:
         foreach (var s in Data.Keys)
-            foreach (var dataKey in appSetEnKeys)
+        foreach (var dataKey in appSetEnKeys)
+        {
+            if (dataKey == s)
             {
-                if ( dataKey == s )
-                {
-                    Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
-                    appSetEnKeys.Remove(dataKey);
-                    break;
-                }
-
-                if (!IsRelevant(dataKey, s)) 
-                    continue;
-
                 Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
+                appSetEnKeys.Remove(dataKey);
                 break;
             }
+
+            if (!IsRelevant(dataKey, s))
+                continue;
+
+            Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
+            break;
+        }
 
         //Console.WriteLine($"Decrypted key={key}, Data[s]={Data[s]}");
         // But you have to make your own MyEncryptionLibrary, not included here
@@ -55,7 +55,6 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 
     private static bool IsRelevant(string dataKey, string dk)
     {
-
         var keys = dataKey.Split(":");
         var dKeys = dk.Split(":");
 
@@ -63,7 +62,6 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
             return false;
 
         for (var i = 0; i < keys.Length; i++)
-        {
             switch (keys[i])
             {
                 case "*":
@@ -76,12 +74,11 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
                 }
                 default:
                 {
-                    if (keys[i] != dKeys[i]) 
+                    if (keys[i] != dKeys[i])
                         return false;
                     break;
                 }
             }
-        }
 
         return true;
     }

@@ -69,11 +69,10 @@ public static class StShared
         }
 
         var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
-        if ((useConsole || logger != null))
+        if (useConsole || logger != null)
             WriteErrorLine(errorMessage, useConsole, logger);
 
         return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
-
     }
 
 

@@ -15,9 +15,9 @@ namespace SystemToolsShared;
 
 public /*open*/ class ApiClient
 {
-    private readonly ILogger _logger;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
+    private readonly ILogger _logger;
     private readonly string _server;
 
     protected ApiClient(ILogger logger, string server, string? apiKey)
@@ -78,7 +78,8 @@ public /*open*/ class ApiClient
         return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
     }
 
-    protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress, CancellationToken cancellationToken, bool withMessaging = true)
+    protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress,
+        CancellationToken cancellationToken, bool withMessaging = true)
     {
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");

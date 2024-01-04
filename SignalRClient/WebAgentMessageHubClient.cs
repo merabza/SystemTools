@@ -7,9 +7,8 @@ namespace SignalRClient;
 
 public sealed class WebAgentMessageHubClient
 {
-    private readonly string _server;
-
     private readonly string? _apiKey;
+    private readonly string _server;
 
     private HubConnection? _connection;
 

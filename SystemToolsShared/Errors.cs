@@ -11,6 +11,16 @@ public static class Errors
         ErrorMessage = "გაუთვალისწინებელი შეცდომა"
     };
 
+
+    public static Err SuchARecordAlreadyExists => new()
+        { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
+
+    public static Err TheEntryHasBeenUsedAndCannotBeDeleted => new()
+    {
+        ErrorCode = nameof(TheEntryHasBeenUsedAndCannotBeDeleted),
+        ErrorMessage = "ჩანაწერი გამოყენებულია და ვერ წაიშლება"
+    };
+
     public static Err VirtualMethodOverrideNotImplemented(string methodName)
     {
         return new Err
@@ -31,16 +41,6 @@ public static class Errors
         return new Err
             { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented" };
     }
-
-
-    public static Err SuchARecordAlreadyExists => new()
-        { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
-
-    public static Err TheEntryHasBeenUsedAndCannotBeDeleted => new()
-    {
-        ErrorCode = nameof(TheEntryHasBeenUsedAndCannotBeDeleted),
-        ErrorMessage = "ჩანაწერი გამოყენებულია და ვერ წაიშლება"
-    };
 
     public static Err ErrorWhenRunningMethod(string methodName, Guid errorGuid)
     {

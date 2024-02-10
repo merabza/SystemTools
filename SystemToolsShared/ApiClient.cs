@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OneOf;
 using SignalRClient;
+using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
@@ -43,12 +44,7 @@ public /*open*/ class ApiClient
         var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
 
-        return errors?.Length > 0
-            ? errors
-            : new Err[]
-            {
-                new() { ErrorCode = "ApiReturnErrorTest", ErrorMessage = $"Api Returns Error: {errorMessage}" }
-            };
+        return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];
     }
 
     protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken,
@@ -75,7 +71,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
     protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress,
@@ -102,7 +98,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
     protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
@@ -123,7 +119,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
     protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
@@ -147,7 +143,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
     protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, CancellationToken cancellationToken,
@@ -171,7 +167,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
     protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
@@ -195,7 +191,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+        return new[] { ApiClientErrors.ApiUnknownError};
     }
 
 
@@ -219,13 +215,13 @@ public /*open*/ class ApiClient
             var respResult = await LogResponseErrorMessage(response, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
-            return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+            return new[] { ApiClientErrors.ApiUnknownError};
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
         if (desResult is null)
-            return new Err[] { new() { ErrorCode = "ApiReturnNothing", ErrorMessage = "Nothing returned Api" } };
+            return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
     }
 
@@ -247,13 +243,13 @@ public /*open*/ class ApiClient
             var respResult = await LogResponseErrorMessage(response, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
-            return new Err[] { new() { ErrorCode = "ApiUnknownError", ErrorMessage = "Unknown Error returned Api" } };
+            return new[] { ApiClientErrors.ApiUnknownError};
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
         if (desResult is null)
-            return new Err[] { new() { ErrorCode = "ApiReturnNothing", ErrorMessage = "Nothing returned Api" } };
+            return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
     }
 }

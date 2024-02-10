@@ -10,6 +10,7 @@ using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OneOf;
+using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
@@ -72,7 +73,7 @@ public static class StShared
         if (useConsole || logger != null)
             WriteErrorLine(errorMessage, useConsole, logger);
 
-        return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
+        return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
 
@@ -107,7 +108,7 @@ public static class StShared
         if (useErrorLine && (useConsole || logger != null))
             WriteErrorLine(errorMessage, useConsole, logger);
 
-        return new Err[] { new() { ErrorCode = "RunProcessError", ErrorMessage = errorMessage } };
+        return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
     public static bool RunCmdProcess(string command, string? projectPath = null)

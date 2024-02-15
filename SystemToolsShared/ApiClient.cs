@@ -37,7 +37,7 @@ public /*open*/ class ApiClient
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
         var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody)?.ToArray();
         if (errors is not null)
-            foreach (var err in errors)
+            foreach (var err  in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
         var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();

@@ -71,7 +71,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
     protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress,
@@ -98,7 +98,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
     protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
@@ -119,7 +119,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
     protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
@@ -143,7 +143,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
     protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, CancellationToken cancellationToken,
@@ -167,7 +167,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
     protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
@@ -191,7 +191,7 @@ public /*open*/ class ApiClient
         var respResult = await LogResponseErrorMessage(response, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
-        return new[] { ApiClientErrors.ApiUnknownError};
+        return new[] { ApiClientErrors.ApiUnknownError };
     }
 
 
@@ -215,7 +215,7 @@ public /*open*/ class ApiClient
             var respResult = await LogResponseErrorMessage(response, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
-            return new[] { ApiClientErrors.ApiUnknownError};
+            return new[] { ApiClientErrors.ApiUnknownError };
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);
@@ -243,7 +243,7 @@ public /*open*/ class ApiClient
             var respResult = await LogResponseErrorMessage(response, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
-            return new[] { ApiClientErrors.ApiUnknownError};
+            return new[] { ApiClientErrors.ApiUnknownError };
         }
 
         var result = await response.Content.ReadAsStringAsync(cancellationToken);

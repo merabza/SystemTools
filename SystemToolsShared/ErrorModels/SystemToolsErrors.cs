@@ -13,7 +13,7 @@ public static class SystemToolsErrors
 
 
     public static Err SuchARecordAlreadyExists => new()
-    { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
+        { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
 
     public static Err TheEntryHasBeenUsedAndCannotBeDeleted => new()
     {
@@ -33,13 +33,13 @@ public static class SystemToolsErrors
     public static Err MethodNotImplemented(string methodName)
     {
         return new Err
-        { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Method {methodName} did Not Implemented" };
+            { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Method {methodName} did Not Implemented" };
     }
 
     public static Err HandlerNotImplemented(string methodName)
     {
         return new Err
-        { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented" };
+            { ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented" };
     }
 
     public static Err ErrorWhenRunningMethod(string methodName, Guid errorGuid)
@@ -56,14 +56,11 @@ public static class SystemToolsErrors
         var errorId = Guid.NewGuid();
         Log.Error($"{errorId} - {e.Message}{Environment.NewLine}{e.StackTrace}");
         return new Err
-        { ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
+            { ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
     }
 
     public static Err RunProcessError(string errorMessage)
     {
         return new Err { ErrorCode = nameof(RunProcessError), ErrorMessage = $"RunProcessError: {errorMessage}" };
     }
-
 }
-
-

@@ -2,7 +2,6 @@
 
 public static class ApiClientErrors
 {
-
     public static Err ApiReturnedAnError(string errorMessage) => new()
         { ErrorCode = nameof(ApiReturnedAnError), ErrorMessage = $"Api Returned an Error: {errorMessage}" };
 

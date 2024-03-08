@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CarcassShared;
+namespace SystemToolsShared;
 
 public sealed class ProjectException : Exception
 {

@@ -13,6 +13,7 @@ public sealed class WebAgentMessageHubClient
     private HubConnection? _connection;
 
     // ReSharper disable once MemberCanBePrivate.Global
+    // ReSharper disable once ConvertToPrimaryConstructor
     public WebAgentMessageHubClient(string server, string? apiKey)
     {
         _server = server;

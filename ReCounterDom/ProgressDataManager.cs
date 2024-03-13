@@ -29,6 +29,18 @@ public class ProgressDataManager : IProgressDataManager, IDisposable, IAsyncDisp
         _logger = logger;
     }
 
+    public async ValueTask DisposeAsync()
+    {
+        GC.SuppressFinalize(this);
+        if (_timer != null) await _timer.DisposeAsync();
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        _timer?.Dispose();
+    }
+
 
     //public void Dispose()
     //{
@@ -134,17 +146,5 @@ public class ProgressDataManager : IProgressDataManager, IDisposable, IAsyncDisp
             StartTimer();
         if (_timerStarted && _connectedIds.Count == 0)
             StopTimer();
-    }
-
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-        _timer?.Dispose();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        GC.SuppressFinalize(this);
-        if (_timer != null) await _timer.DisposeAsync();
     }
 }

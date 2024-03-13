@@ -7,6 +7,7 @@ public class ProgressData
 {
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Dictionary<string, bool> BoolData { get; set; } = [];
+
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Dictionary<string, int> IntData { get; set; } = [];
 

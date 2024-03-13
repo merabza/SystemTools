@@ -7,11 +7,11 @@ namespace ReCounterDom;
 
 public class MessagesHub : Hub
 {
-    private readonly IProgressDataManager _progressDataManager;
     private readonly ILogger<MessagesHub> _logger;
+    private readonly IProgressDataManager _progressDataManager;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public MessagesHub(IProgressDataManager progressDataManager , ILogger<MessagesHub> logger)
+    public MessagesHub(IProgressDataManager progressDataManager, ILogger<MessagesHub> logger)
     {
         _progressDataManager = progressDataManager;
         _logger = logger;

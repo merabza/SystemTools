@@ -40,7 +40,7 @@ public /*open*/ class ServicesCreator
 
             if (logFileName is not null)
             {
-                var extension = ".log";
+                const string extension = ".log";
                 if (logFileName.ToLower().EndsWith(".log") || logFileName.ToLower().EndsWith(".txt"))
                     //extension = logFileName.Substring(logFileName.Length - 5);
                     logFileName = logFileName[..^4];

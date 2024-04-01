@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,17 +18,19 @@ namespace SystemToolsShared;
 public /*open*/ class ApiClient
 {
     private readonly string? _apiKey;
+    private readonly string? _accessToken;
     private readonly bool _withMessaging;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly string _server;
 
-    protected ApiClient(ILogger logger, string server, string? apiKey, bool withMessaging)
+    protected ApiClient(ILogger logger, string server, string? apiKey, string? accessToken, bool withMessaging)
     {
         _logger = logger;
         _server = server.AddNeedLastPart('/');
         _apiKey = apiKey;
         _withMessaging = withMessaging;
+        _accessToken = accessToken;
         _client = new HttpClient();
     }
 
@@ -140,6 +143,10 @@ public /*open*/ class ApiClient
             webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
             await webAgentMessageHubClient.RunMessages(cancellationToken);
         }
+
+        if (_accessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
+            _client.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Authorization", $"Bearer {_accessToken}");
 
         var response = await _client.PostAsync(uri,
             bodyJsonData is null ? null : new StringContent(bodyJsonData, Encoding.UTF8, "application/json"),

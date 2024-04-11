@@ -113,7 +113,7 @@ public static class FileStat
         if (string.IsNullOrWhiteSpace(sFileMask))
             return true;
         var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".")
-            .Replace("\\", "\\\\");
+            .Replace("\\", @"\\");
         if (!sFileMask.EndsWith('*'))
             regexFileMask += '$';
         if (!sFileMask.StartsWith('*'))
@@ -142,7 +142,7 @@ public static class FileStat
                 if (maskPosition == maskFirstVersion.Length)
                     break;
             }
-            else if ((c == '-' || c == '_') && maskPosition > 0 &&
+            else if (c is '-' or '_' && maskPosition > 0 &&
                      maskFirstVersion[maskPosition] != maskFirstVersion[maskPosition - 1])
             {
                 sbMask.Append(c);
@@ -205,8 +205,10 @@ public static class FileStat
             return true;
 
         // Open the two files.
-        FileStream fs1 = new(file1, FileMode.Open);
-        FileStream fs2 = new(file2, FileMode.Open);
+        // ReSharper disable once using
+        using FileStream fs1 = new(file1, FileMode.Open);
+        // ReSharper disable once using
+        using FileStream fs2 = new(file2, FileMode.Open);
 
         // Check the file sizes. If they are not the same, the files
         // are not the same.
@@ -234,8 +236,8 @@ public static class FileStat
         fs1.Close();
         fs2.Close();
 
-        // Return the success of the comparison. "file1byte" is
-        // equal to "file2byte" at this point only if the files are
+        // Return the success of the comparison. "file1Byte" is
+        // equal to "file2Byte" at this point only if the files are
         // the same.
         return file1Byte - file2Byte == 0;
     }

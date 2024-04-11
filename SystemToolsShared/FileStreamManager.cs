@@ -1,11 +1,11 @@
-﻿using System.IO;
+﻿//using System.IO;
 
-namespace SystemToolsShared;
+//namespace SystemToolsShared;
 
-public sealed class FileStreamManager : IFileStreamManager
-{
-    public StreamReader StreamReader(string path)
-    {
-        return new StreamReader(path);
-    }
-}
+//public sealed class FileStreamManager : IFileStreamManager
+//{
+//    public StreamReader StreamReader(string path)
+//    {
+//        return new StreamReader(path);
+//    }
+//}

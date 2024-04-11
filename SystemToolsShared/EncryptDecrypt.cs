@@ -13,9 +13,11 @@ public static class EncryptDecrypt
         string? result = null;
         try
         {
-            var md5 = MD5.Create();
+            // ReSharper disable once using
+            using var md5 = MD5.Create();
             var hash = md5.ComputeHash(Encoding.ASCII.GetBytes(key));
-            var tripleDes = TripleDES.Create();
+            // ReSharper disable once using
+            using var tripleDes = TripleDES.Create();
             tripleDes.Key = hash;
             tripleDes.Mode = CipherMode.ECB;
             tripleDes.Padding = PaddingMode.PKCS7;
@@ -37,14 +39,17 @@ public static class EncryptDecrypt
         string? result = null;
         try
         {
-            var md5 = MD5.Create();
+            // ReSharper disable once using
+            using var md5 = MD5.Create();
             var hash = md5.ComputeHash(Encoding.ASCII.GetBytes(key));
-            var tripleDes = TripleDES.Create();
+            // ReSharper disable once using
+            using var tripleDes = TripleDES.Create();
             tripleDes.Key = hash;
             tripleDes.Mode = CipherMode.ECB;
             tripleDes.Padding = PaddingMode.PKCS7;
             var buff = Convert.FromBase64String(str);
-            var transform = tripleDes.CreateDecryptor();
+            // ReSharper disable once using
+            using var transform = tripleDes.CreateDecryptor();
             result = Encoding.ASCII.GetString(transform.TransformFinalBlock(buff, 0, buff.Length));
         }
         catch

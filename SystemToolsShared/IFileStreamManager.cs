@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿//using System.IO;
 
-namespace SystemToolsShared;
+//namespace SystemToolsShared;
 
-public interface IFileStreamManager
-{
-    StreamReader StreamReader(string path);
-}
+//public interface IFileStreamManager
+//{
+//    StreamReader StreamReader(string path);
+//}

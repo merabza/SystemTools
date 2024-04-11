@@ -42,16 +42,13 @@ public sealed class ProgramAttributes
 
     public void SetAttribute<TC>(string attributeName, TC attributeValue) where TC : notnull
     {
-        if (_attributes.ContainsKey(attributeName))
-            _attributes[attributeName] = attributeValue;
-        else
-            _attributes.Add(attributeName, attributeValue);
+        _attributes[attributeName] = attributeValue;
     }
 
     public TC? GetAttribute<TC>(string attributeName)
     {
-        if (_attributes.ContainsKey(attributeName))
-            return (TC)_attributes[attributeName];
+        if (_attributes.TryGetValue(attributeName, out var attribute))
+            return (TC)attribute;
         return default;
     }
 

@@ -15,7 +15,7 @@ using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
-public /*open*/ class ApiClient
+public /*open*/ class ApiClient: IDisposable, IAsyncDisposable
 {
     private readonly string? _apiKey;
     private readonly string? _accessToken;
@@ -289,5 +289,18 @@ public /*open*/ class ApiClient
         if (desResult is null)
             return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_client is IAsyncDisposable clientAsyncDisposable)
+            await clientAsyncDisposable.DisposeAsync();
+        else
+            _client.Dispose();
     }
 }

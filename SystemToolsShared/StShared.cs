@@ -30,24 +30,20 @@ public static class StShared
     public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
-        //var message = "Running{0}{1} {2}";
-        //var args = new object?[] {  };
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
-        //if (useConsole)
-        //    Console.WriteLine(message, args);
 
-        var proc = new Process
+        // ReSharper disable once using
+        // ReSharper disable once DisposableConstructor
+        using var proc = new Process();
+        proc.StartInfo = new ProcessStartInfo
         {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = programFileName,
-                Arguments = arguments,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true
-            }
+            FileName = programFileName,
+            Arguments = arguments,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true
         };
 
         StringBuilder sb = new();
@@ -90,7 +86,8 @@ public static class StShared
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
-        var proc = Process.Start(programFileName, arguments);
+        // ReSharper disable once using
+        using var proc = Process.Start(programFileName, arguments);
 
         if (waitForExit == 0)
             return null;
@@ -119,7 +116,8 @@ public static class StShared
             RedirectStandardInput = true,
             WorkingDirectory = projectPath ?? Directory.GetCurrentDirectory()
         };
-        var pNpmRunDist = Process.Start(psiNpmRunDist);
+        // ReSharper disable once using
+        using var pNpmRunDist = Process.Start(psiNpmRunDist);
         if (pNpmRunDist == null)
             return false;
         pNpmRunDist.StandardInput.WriteLine($"{command} & exit");

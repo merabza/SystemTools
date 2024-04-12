@@ -22,6 +22,7 @@ public sealed class JsonConfigurationSource : Microsoft.Extensions.Configuration
     public override IConfigurationProvider Build(IConfigurationBuilder builder)
     {
         EnsureDefaults(builder);
+        // ReSharper disable once DisposableConstructor
         return new JsonConfigurationProvider(this);
     }
 }

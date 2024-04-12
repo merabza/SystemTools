@@ -323,6 +323,7 @@ public /*open*/ class ApiClient: IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        // ReSharper disable once SuspiciousTypeConversion.Global
         if (_client is IAsyncDisposable clientAsyncDisposable)
             await clientAsyncDisposable.DisposeAsync();
         else

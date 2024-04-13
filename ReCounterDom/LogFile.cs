@@ -64,7 +64,8 @@ public sealed class LogFile
                 if (rename != null)
                     File.Move(_fileName, rename);
 
-                StreamWriter sw = new(_fileName, true, Encoding.UTF8);
+                // ReSharper disable once using
+                using StreamWriter sw = new(_fileName, true, Encoding.UTF8);
                 try
                 {
                     sw.WriteLine(LogWithAdditionalInfo(strLog));

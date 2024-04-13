@@ -117,6 +117,7 @@ public class ProgressDataManager : IProgressDataManager, IDisposable, IAsyncDisp
     {
         _logger.LogInformation("ProgressDataManager Timer running.");
         _timerStarted = true;
+        // ReSharper disable once DisposableConstructor
         _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
     }
 

@@ -15,7 +15,7 @@ using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
-public /*open*/ class ApiClient: IDisposable, IAsyncDisposable
+public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
 {
     private readonly string? _apiKey;
     private readonly string? _accessToken;
@@ -41,7 +41,18 @@ public /*open*/ class ApiClient: IDisposable, IAsyncDisposable
         if (response.IsSuccessStatusCode)
             return null;
 
+        StShared.WriteErrorLine(
+            $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true, null,
+            false);
+
+        StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null, false);
+
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(responseBody))
+            return new Err[]
+                { new() { ErrorCode = "UnexpectedServerError", ErrorMessage = "Unexpected Server Error" } };
+
         var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody)?.ToArray();
         if (errors is not null)
             foreach (var err in errors)

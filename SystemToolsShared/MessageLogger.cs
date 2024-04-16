@@ -20,67 +20,67 @@ public class MessageLogger
 
     protected async Task LogInfoAndSendMessage(string message, CancellationToken cancellationToken)
     {
+        Logger.LogInformation(message);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, message, cancellationToken);
-        Logger.LogInformation(message);
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, CancellationToken cancellationToken)
     {
+        Logger.LogInformation(message, arg1);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
-        Logger.LogInformation(message, arg1);
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, CancellationToken cancellationToken)
     {
+        Logger.LogInformation(message, arg1, arg2);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
-        Logger.LogInformation(message, arg1, arg2);
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3, CancellationToken cancellationToken)
     {
+        Logger.LogInformation(message, arg1, arg2, arg3);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2, arg3), cancellationToken);
-        Logger.LogInformation(message, arg1, arg2, arg3);
     }
 
     protected async Task LogWarningAndSendMessage(string message, CancellationToken cancellationToken)
     {
+        Logger.LogWarning(message);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, message,
                 cancellationToken);
-        Logger.LogWarning(message);
     }
 
     protected async Task LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken)
     {
+        Logger.LogWarning(message, arg1);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
-        Logger.LogWarning(message, arg1);
     }
 
     protected async Task LogWarningAndSendMessage(string message, object? arg1, object? arg2, CancellationToken cancellationToken)
     {
+        Logger.LogWarning(message, arg1, arg2);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
-        Logger.LogWarning(message, arg1, arg2);
     }
 
     protected async Task<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message, CancellationToken cancellationToken)
     {
+        Logger.LogError(message);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, message, cancellationToken);
-        Logger.LogError(message);
         return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
     }
 
     protected async Task<Err[]> LogErrorAndSendMessageFromError(Err error, CancellationToken cancellationToken)
     {
+        Logger.LogError(error.ErrorMessage);
         if (MessagesDataManager is not null)
             await MessagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
-        Logger.LogError(error.ErrorMessage);
         return [error];
     }
 }

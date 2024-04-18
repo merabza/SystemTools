@@ -115,6 +115,12 @@ public class ReCounter
         LogMessage("procName", message, true);
     }
 
+    protected virtual Exception LogProcMessageAndException(string message)
+    {
+        LogProcMessage(message);
+        return new Exception(message);
+    }
+
     protected bool IsCancellationRequested(CancellationToken cancellationToken)
     {
         if (!cancellationToken.IsCancellationRequested)

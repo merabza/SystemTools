@@ -143,7 +143,7 @@ public class ReCounter
             if (IsCancellationRequested(cancellationToken))
                 return;
 
-            //using var scope = _scopeFactory.CreateScope();
+            //var scope = _scopeFactory.CreateScope();
             SetProcessRun(true);
 
             LogProcMessage($"დაიწყო {_processName}");

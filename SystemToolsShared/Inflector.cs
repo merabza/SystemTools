@@ -80,8 +80,8 @@ public static class Inflector
 
     private static void AddIrregular(string singular, string plural)
     {
-        AddPlural("(" + singular[0] + ")" + singular.Substring(1) + "$", "$1" + plural.Substring(1));
-        AddSingular("(" + plural[0] + ")" + plural.Substring(1) + "$", "$1" + singular.Substring(1));
+        AddPlural("(" + singular[0] + ")" + singular[1..] + "$", "$1" + plural[1..]);
+        AddSingular("(" + plural[0] + ")" + plural[1..] + "$", "$1" + singular[1..]);
     }
 
     private static void AddUncountable(string word)
@@ -222,7 +222,7 @@ public static class Inflector
         //    return new string[] {}; //Return empty array.
 
         if (source.Length == 0)
-            return new[] { "" };
+            return [""];
 
         var words = new StringCollection();
         var wordStartIndex = 0;

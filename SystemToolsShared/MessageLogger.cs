@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
@@ -13,7 +14,8 @@ public class MessageLogger
     private readonly bool _useConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected MessageLogger(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName, bool useConsole)
+    protected MessageLogger(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName,
+        bool useConsole)
     {
         _logger = logger;
         _messagesDataManager = messagesDataManager;
@@ -85,7 +87,7 @@ public class MessageLogger
 
     protected async Task LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken)
     {
-        StShared.WriteWarningLine(string.Format(message,arg1), _useConsole, _logger);
+        StShared.WriteWarningLine(string.Format(message, arg1), _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
     }
@@ -93,7 +95,7 @@ public class MessageLogger
     protected async Task LogWarningAndSendMessage(string message, object? arg1, object? arg2,
         CancellationToken cancellationToken)
     {
-        StShared.WriteWarningLine(string.Format(message,arg1,arg2), _useConsole, _logger);
+        StShared.WriteWarningLine(string.Format(message, arg1, arg2), _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
     }
@@ -110,6 +112,16 @@ public class MessageLogger
     protected async Task<Err[]> LogErrorAndSendMessageFromError(Err error, CancellationToken cancellationToken)
     {
         StShared.WriteErrorLine(error.ErrorMessage, _useConsole, _logger);
+        if (_messagesDataManager is not null)
+            await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
+        return [error];
+    }
+
+    protected async Task<Err[]> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+        CancellationToken cancellationToken)
+    {
+        StShared.WriteException(ex, _useConsole, _logger);
+        var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
         return [error];

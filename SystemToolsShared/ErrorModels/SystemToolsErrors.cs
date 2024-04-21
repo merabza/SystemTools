@@ -11,6 +11,11 @@ public static class SystemToolsErrors
         ErrorMessage = "გაუთვალისწინებელი შეცდომა"
     };
 
+    public static Err ErrorCaught(string methodName, string errorMessage) => new()
+    {
+        ErrorCode = nameof(ErrorCaught),
+        ErrorMessage = $"Error in {methodName} {errorMessage}"
+    };
 
     public static Err SuchARecordAlreadyExists => new()
         { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };

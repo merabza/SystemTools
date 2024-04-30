@@ -141,7 +141,7 @@ public static class StShared
     {
         Console.WriteLine("press any key...");
         Console.ReadKey(false);
-    }
+     }
 
     public static void ConsoleWriteInformationLine(ILogger? logger, bool useConsole, string message,
         params object?[] args)

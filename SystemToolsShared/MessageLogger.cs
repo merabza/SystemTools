@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SystemToolsShared.ErrorModels;
 
@@ -10,8 +10,8 @@ public class MessageLogger
 {
     private readonly ILogger _logger;
     private readonly IMessagesDataManager? _messagesDataManager;
-    private readonly string? _userName;
     private readonly bool _useConsole;
+    private readonly string? _userName;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected MessageLogger(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName,

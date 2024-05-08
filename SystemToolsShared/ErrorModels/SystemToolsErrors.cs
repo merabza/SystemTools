@@ -11,12 +11,6 @@ public static class SystemToolsErrors
         ErrorMessage = "გაუთვალისწინებელი შეცდომა"
     };
 
-    public static Err ErrorCaught(string methodName, string errorMessage) => new()
-    {
-        ErrorCode = nameof(ErrorCaught),
-        ErrorMessage = $"Error in {methodName} {errorMessage}"
-    };
-
     public static Err SuchARecordAlreadyExists => new()
         { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
 
@@ -25,6 +19,15 @@ public static class SystemToolsErrors
         ErrorCode = nameof(TheEntryHasBeenUsedAndCannotBeDeleted),
         ErrorMessage = "ჩანაწერი გამოყენებულია და ვერ წაიშლება"
     };
+
+    public static Err ErrorCaught(string methodName, string errorMessage)
+    {
+        return new Err
+        {
+            ErrorCode = nameof(ErrorCaught),
+            ErrorMessage = $"Error in {methodName} {errorMessage}"
+        };
+    }
 
     public static Err VirtualMethodOverrideNotImplemented(string methodName)
     {

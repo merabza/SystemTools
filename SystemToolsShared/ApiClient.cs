@@ -17,12 +17,12 @@ namespace SystemToolsShared;
 
 public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
 {
-    private readonly string? _apiKey;
     private readonly string? _accessToken;
-    private readonly bool _withMessaging;
+    private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly string _server;
+    private readonly bool _withMessaging;
 
     protected ApiClient(ILogger logger, string server, string? apiKey, string? accessToken, bool withMessaging)
     {
@@ -33,6 +33,20 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         _accessToken = accessToken;
         // ReSharper disable once DisposableConstructor
         _client = new HttpClient();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        // ReSharper disable once SuspiciousTypeConversion.Global
+        if (_client is IAsyncDisposable clientAsyncDisposable)
+            await clientAsyncDisposable.DisposeAsync();
+        else
+            _client.Dispose();
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 
     private async Task<Option<Err[]>> LogResponseErrorMessage(HttpResponseMessage response,
@@ -325,19 +339,5 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         if (desResult is null)
             return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
-    }
-
-    public void Dispose()
-    {
-        _client.Dispose();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        // ReSharper disable once SuspiciousTypeConversion.Global
-        if (_client is IAsyncDisposable clientAsyncDisposable)
-            await clientAsyncDisposable.DisposeAsync();
-        else
-            _client.Dispose();
     }
 }

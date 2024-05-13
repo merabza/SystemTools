@@ -12,7 +12,7 @@ public class ProgressDataManager : IProgressDataManager, IDisposable, IAsyncDisp
 {
     private static readonly object SyncRoot = new();
     private readonly HashSet<string> _connectedIds = [];
-    private readonly IHubContext<MessagesHub> _hub;
+    private readonly IHubContext<ReCounterMessagesHub> _hub;
     private readonly ILogger<ProgressDataManager> _logger;
     private int _currentChangeId;
     private ProgressData? _currentData;
@@ -23,7 +23,7 @@ public class ProgressDataManager : IProgressDataManager, IDisposable, IAsyncDisp
     private bool _timerStarted;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public ProgressDataManager(IHubContext<MessagesHub> hub, ILogger<ProgressDataManager> logger)
+    public ProgressDataManager(IHubContext<ReCounterMessagesHub> hub, ILogger<ProgressDataManager> logger)
     {
         _hub = hub;
         _logger = logger;

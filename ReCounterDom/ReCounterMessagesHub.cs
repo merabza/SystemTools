@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ReCounterDom;
 
-public class MessagesHub : Hub
+public class ReCounterMessagesHub : Hub
 {
-    private readonly ILogger<MessagesHub> _logger;
+    private readonly ILogger<ReCounterMessagesHub> _logger;
     private readonly IProgressDataManager _progressDataManager;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public MessagesHub(IProgressDataManager progressDataManager, ILogger<MessagesHub> logger)
+    public ReCounterMessagesHub(IProgressDataManager progressDataManager, ILogger<ReCounterMessagesHub> logger)
     {
         _progressDataManager = progressDataManager;
         _logger = logger;

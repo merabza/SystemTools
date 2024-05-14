@@ -49,4 +49,3 @@ public class ReCounterQueuedHostedService : BackgroundService, IReCounterService
         _logger.LogInformation("ReCounter Queued Hosted Service is stopping.");
     }
 }
-

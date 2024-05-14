@@ -11,23 +11,17 @@ public class ReCounter
 
     private readonly ReCounterLogger? _rLogger;
 
-    //private readonly IServiceScopeFactory _scopeFactory;
     private int _byLevelPosition;
     private int _procPosition;
 
     protected ReCounter(string superName, string processName, IProgressDataManager progressDataManager,
         string? reCounterLogsFolderName = null)
     {
-        //var projectSettings = DataBaseReCounterSettings.Create(configuration);
-        //_rLogger = projectSettings is not null
-        //    ? ReCounterLogger.Create(projectSettings.ReCounterLogsFolderName, superName)
-        //    : null;
         _rLogger = reCounterLogsFolderName is not null
             ? ReCounterLogger.Create(reCounterLogsFolderName, superName)
             : null;
         _processName = processName;
         _progressDataManager = progressDataManager;
-        //_scopeFactory = scopeFactory;
     }
 
 
@@ -143,7 +137,6 @@ public class ReCounter
             if (IsCancellationRequested(cancellationToken))
                 return;
 
-            //var scope = _scopeFactory.CreateScope();
             SetProcessRun(true);
 
             LogProcMessage($"დაიწყო {_processName}");

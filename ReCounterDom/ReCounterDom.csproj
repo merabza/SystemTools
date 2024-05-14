@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MessagingAbstractions\MessagingAbstractions.csproj" />
+      <ProjectReference Include="..\SignalRContracts\SignalRContracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using SignalRContracts;
 
 namespace ReCounterDom;
 
-public class ReCounterMessagesHub : Hub
+// ReSharper disable once ClassNeverInstantiated.Global
+public class ReCounterMessagesHub : Hub<IProgressDataMessenger>
 {
     private readonly ILogger<ReCounterMessagesHub> _logger;
     private readonly IProgressDataManager _progressDataManager;

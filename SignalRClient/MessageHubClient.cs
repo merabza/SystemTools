@@ -2,10 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using SignalRContracts;
 
 namespace SignalRClient;
 
-public sealed class WebAgentMessageHubClient
+public sealed class MessageHubClient
 {
     private readonly string? _apiKey;
     private readonly string _server;
@@ -14,7 +15,7 @@ public sealed class WebAgentMessageHubClient
 
     // ReSharper disable once MemberCanBePrivate.Global
     // ReSharper disable once ConvertToPrimaryConstructor
-    public WebAgentMessageHubClient(string server, string? apiKey)
+    public MessageHubClient(string server, string? apiKey)
     {
         _server = server;
         _apiKey = apiKey;
@@ -26,7 +27,7 @@ public sealed class WebAgentMessageHubClient
             .WithUrl($"{_server}messages{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}")
             .Build();
 
-        _connection.On<string>(Events.MessageSent, message => Console.WriteLine($"[{_server}]: {message}"));
+        _connection.On<string>(Events.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
 
         await _connection.StartAsync(cancellationToken);
     }

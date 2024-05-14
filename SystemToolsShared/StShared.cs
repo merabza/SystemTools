@@ -274,7 +274,4 @@ public static class StShared
         var pathToExe = processModule?.FileName;
         return pathToExe != null ? Path.GetFileName(pathToExe) : null;
     }
-
-
-
 }

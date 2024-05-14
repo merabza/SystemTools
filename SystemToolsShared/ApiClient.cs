@@ -83,18 +83,18 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -111,18 +111,18 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -138,18 +138,18 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
         using var response = await _client.DeleteAsync(uri, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -166,11 +166,11 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         if (_accessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
@@ -186,8 +186,8 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -204,11 +204,11 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
@@ -220,8 +220,8 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         // ReSharper disable once using
         var response = await _client.PutAsync(uri, content, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -238,11 +238,11 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
@@ -254,8 +254,8 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         // ReSharper disable once using
         var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -273,11 +273,11 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
@@ -289,8 +289,8 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -313,18 +313,18 @@ public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
         Uri uri = new(
             $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
 
-        WebAgentMessageHubClient? webAgentMessageHubClient = null;
+        MessageHubClient? messageHubClient = null;
         if (_withMessaging)
         {
-            webAgentMessageHubClient = new WebAgentMessageHubClient(_server, _apiKey);
-            await webAgentMessageHubClient.RunMessages(cancellationToken);
+            messageHubClient = new MessageHubClient(_server, _apiKey);
+            await messageHubClient.RunMessages(cancellationToken);
         }
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (webAgentMessageHubClient is not null)
-            await webAgentMessageHubClient.StopMessages(cancellationToken);
+        if (messageHubClient is not null)
+            await messageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {

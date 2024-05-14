@@ -257,4 +257,24 @@ public static class StShared
 
         Console.WriteLine($"Serilog WriteTo File Path is: {path.Value}");
     }
+
+
+    public static string? GetMainModulePath()
+    {
+        // ReSharper disable once using
+        using var processModule = Process.GetCurrentProcess().MainModule;
+        var pathToExe = processModule?.FileName;
+        return pathToExe != null ? Path.GetDirectoryName(pathToExe) : null;
+    }
+
+    public static string? GetMainModuleFileName()
+    {
+        // ReSharper disable once using
+        using var processModule = Process.GetCurrentProcess().MainModule;
+        var pathToExe = processModule?.FileName;
+        return pathToExe != null ? Path.GetFileName(pathToExe) : null;
+    }
+
+
+
 }

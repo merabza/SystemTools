@@ -34,5 +34,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SignalRClient\SignalRClient.csproj" />
+        <ProjectReference Include="..\SignalRContracts\SignalRContracts.csproj" />
     </ItemGroup>
 </Project>

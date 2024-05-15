@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
-public /*open*/ class ApiClient : IDisposable, IAsyncDisposable
+public /*open*/ abstract class ApiClient : IDisposable, IAsyncDisposable
 {
     private readonly string? _accessToken;
     private readonly string? _apiKey;

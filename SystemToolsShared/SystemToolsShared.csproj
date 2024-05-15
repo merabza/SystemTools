@@ -33,6 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\ApAgent\SystemTools\SignalRContracts\SignalRContracts.csproj" />
         <ProjectReference Include="..\SignalRClient\SignalRClient.csproj" />
     </ItemGroup>
 </Project>

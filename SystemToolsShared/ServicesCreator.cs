@@ -26,6 +26,7 @@ public /*open*/ class ServicesCreator
     {
         services.AddLogging(configure => configure.AddSerilog());
         services.Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
+        //services.AddHttpClient();
     }
 
     public ServiceProvider? CreateServiceProvider(LogEventLevel consoleLogEventLevel)

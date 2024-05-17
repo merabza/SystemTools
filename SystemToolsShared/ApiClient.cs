@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;
 
-public /*open*/ abstract class ApiClient : IDisposable, IAsyncDisposable
+public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDisposable, 
 {
     private readonly string? _accessToken;
     private readonly string? _apiKey;
@@ -25,30 +24,31 @@ public /*open*/ abstract class ApiClient : IDisposable, IAsyncDisposable
     private readonly string _server;
     private readonly bool _withMessaging;
 
-    protected ApiClient(ILogger logger, string server, string? apiKey, string? accessToken, bool withMessaging)
+    // ReSharper disable once ConvertToPrimaryConstructor
+    protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server,
+        string? apiKey, string? accessToken, bool withMessaging)
     {
         _logger = logger;
         _server = server.AddNeedLastPart('/');
         _apiKey = apiKey;
         _withMessaging = withMessaging;
         _accessToken = accessToken;
-        // ReSharper disable once DisposableConstructor
-        _client = new HttpClient();
+        _client = httpClientFactory.CreateClient();
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        // ReSharper disable once SuspiciousTypeConversion.Global
-        if (_client is IAsyncDisposable clientAsyncDisposable)
-            await clientAsyncDisposable.DisposeAsync();
-        else
-            _client.Dispose();
-    }
+    //public async ValueTask DisposeAsync()
+    //{
+    //    // ReSharper disable once SuspiciousTypeConversion.Global
+    //    if (_client is IAsyncDisposable clientAsyncDisposable)
+    //        await clientAsyncDisposable.DisposeAsync();
+    //    else
+    //        _client.Dispose();
+    //}
 
-    public void Dispose()
-    {
-        _client.Dispose();
-    }
+    //public void Dispose()
+    //{
+    //    _client.Dispose();
+    //}
 
     private async Task<Option<Err[]>> LogResponseErrorMessage(HttpResponseMessage response,
         CancellationToken cancellationToken)

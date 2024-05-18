@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemToolsShared;
 
 namespace ReCounterDom;
 
@@ -24,6 +26,12 @@ public class ReCounter
         _progressDataManager = progressDataManager;
     }
 
+    
+    public void LogErrors(IEnumerable<Err> errors)
+    {
+        foreach (var error in errors)
+            LogMessage("Error", error.ErrorMessage, true);
+    }
 
     protected void LogMessage(string name, string message, bool instantly = false)
     {
@@ -166,4 +174,8 @@ public class ReCounter
             SetProcessRun(false);
         }
     }
+
+        
+
+
 }

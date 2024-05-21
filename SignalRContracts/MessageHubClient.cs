@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
-using SignalRContracts;
 
-namespace SignalRClient;
+namespace SignalRContracts;
 
 public sealed class MessageHubClient
 {

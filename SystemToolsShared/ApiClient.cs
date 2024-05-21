@@ -10,7 +10,7 @@ using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OneOf;
-using SignalRClient;
+using SignalRContracts;
 using SystemToolsShared.ErrorModels;
 
 namespace SystemToolsShared;

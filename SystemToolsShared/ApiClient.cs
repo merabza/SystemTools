@@ -29,7 +29,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         string? apiKey, string? accessToken, bool withMessaging)
     {
         _logger = logger;
-        _server = server.AddNeedLastPart('/');
+        _server = server.RemoveNotNeedLastPart('/');
         _apiKey = apiKey;
         _withMessaging = withMessaging;
         _accessToken = accessToken;

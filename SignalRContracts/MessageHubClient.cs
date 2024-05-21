@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using SignalRContracts.V1.Routes;
 
 namespace SignalRContracts;
 
@@ -23,7 +24,8 @@ public sealed class MessageHubClient
     public async Task RunMessages(CancellationToken cancellationToken)
     {
         _connection = new HubConnectionBuilder()
-            .WithUrl($"{_server}messages{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}")
+            .WithUrl(
+                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}")
             .Build();
 
         _connection.On<string>(Events.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));

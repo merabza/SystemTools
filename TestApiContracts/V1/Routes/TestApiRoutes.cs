@@ -1,4 +1,4 @@
-﻿namespace TestToolsData.Contracts.V1;
+﻿namespace TestApiContracts.V1.Routes;
 
 public static class TestApiRoutes
 {

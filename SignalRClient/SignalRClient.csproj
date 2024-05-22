@@ -6,12 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.5" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SignalRContracts\SignalRContracts.csproj" />
-    </ItemGroup>
-
 </Project>

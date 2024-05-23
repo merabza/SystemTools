@@ -4,25 +4,25 @@ public static class TestApiRoutes
 {
     private const string Root = "api";
     private const string Version = "v1";
-    private const string Base = Root + "/" + Version;
+    public const string ApiBase = Root + "/" + Version;
 
     public static class Test
     {
-        private const string TestBase = Base + "/test";
+        public const string TestBase = "/test";
 
         // GET api/v1/test/testconnection
-        public const string TestConnection = TestBase + "/testconnection";
+        public const string TestConnection = "/testconnection";
 
         // GET api/v1/test/getip
-        public const string GetIp = TestBase + "/getip";
+        public const string GetIp = "/getip";
 
         // GET api/v1/test/getversion
-        public const string GetVersion = TestBase + "/getversion";
+        public const string GetVersion = "/getversion";
 
         // GET api/v1/test/getappsettingsversion
-        public const string GetAppSettingsVersion = TestBase + "/getappsettingsversion";
+        public const string GetAppSettingsVersion = "/getappsettingsversion";
 
         // GET api/v1/test/getsettings        
-        public const string GetSettings = TestBase + "/getsettings";
+        public const string GetSettings = "/getsettings";
     }
 }

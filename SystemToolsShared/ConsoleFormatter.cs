@@ -23,7 +23,7 @@ public sealed class ConsoleFormatter
     public void WriteInSameLine(string text)
     {
         Clear();
-        var forClear = "";
+        var forClear = string.Empty;
         _lastClearLength = 0;
         if (_lastLineLength > text.Length)
         {

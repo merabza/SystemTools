@@ -8,6 +8,19 @@ namespace ReCounterDom;
 
 public class ReCounter
 {
+    public const string Error = "Error";
+    public const string ProcLength = "ProcLength";
+    public const string ProcessRun = "ProcessRun";
+    public const string ProcPosition = "ProcPosition";
+    public const string ByLevelLength = "ByLevelLength";
+    public const string ByLevelPosition = "ByLevelPosition";
+    public const string LevelName = "LevelName";
+    public const string ProcName = "ProcName";
+        
+            
+    
+
+
     private readonly string _processName;
     private readonly IProgressDataManager _progressDataManager;
 
@@ -30,7 +43,7 @@ public class ReCounter
     public void LogErrors(IEnumerable<Err> errors)
     {
         foreach (var error in errors)
-            LogMessage("Error", error.ErrorMessage, true);
+            LogMessage(Error, error.ErrorMessage, true);
     }
 
     protected void LogMessage(string name, string message, bool instantly = false)
@@ -48,17 +61,17 @@ public class ReCounter
     {
         _procPosition = 0;
         SetProcPosition();
-        SetProgressValue("procLength", length, true);
+        SetProgressValue(ProcLength, length, true);
     }
 
     private void SetProcessRun(bool runState)
     {
-        _progressDataManager.SetProgressData("ProcessRun", runState);
+        _progressDataManager.SetProgressData(ProcessRun, runState);
     }
 
     private void SetProcPosition()
     {
-        SetProgressValue("procPosition", _procPosition);
+        SetProgressValue(ProcPosition, _procPosition);
     }
 
     private void ClearProgress()
@@ -78,12 +91,12 @@ public class ReCounter
         }
 
         SetByLevelPosition();
-        SetProgressValue("byLevelLength", length, true);
+        SetProgressValue(ByLevelLength, length, true);
     }
 
     private void SetByLevelPosition()
     {
-        SetProgressValue("byLevelPosition", _byLevelPosition);
+        SetProgressValue(ByLevelPosition, _byLevelPosition);
     }
 
     protected void IncreaseProcPosition()
@@ -106,15 +119,13 @@ public class ReCounter
 
     protected virtual void LogLevelMessage(string message)
     {
-        LogMessage("checkBase", "");
-        LogMessage("changedBase", "");
-        LogMessage("levelName", message, true);
+        LogMessage(LevelName, message, true);
     }
 
     protected virtual void LogProcMessage(string message)
     {
-        LogMessage("levelName", "");
-        LogMessage("procName", message, true);
+        LogMessage(LevelName, string.Empty);
+        LogMessage(ProcName, message, true);
     }
 
     protected virtual Exception LogProcMessageAndException(string message)
@@ -155,17 +166,17 @@ public class ReCounter
         }
         catch (TaskCanceledException)
         {
-            LogMessage("procName", "Operation was canceled");
+            LogMessage(ProcName, "Operation was canceled");
             throw;
         }
         catch (OperationCanceledException)
         {
-            LogMessage("procName", "Operation was canceled");
+            LogMessage(ProcName, "Operation was canceled");
             throw;
         }
         catch (Exception e)
         {
-            LogMessage("error", e.Message);
+            LogMessage(Error, e.Message);
             throw;
         }
         finally

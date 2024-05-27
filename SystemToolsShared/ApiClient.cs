@@ -82,7 +82,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -110,7 +110,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         CancellationToken cancellationToken)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -137,7 +137,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -165,7 +165,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         string? bodyJsonData = null)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -203,7 +203,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         string? bodyJsonData = null)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -237,7 +237,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         CancellationToken cancellationToken, string? bodyJsonData = null)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -272,7 +272,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         CancellationToken cancellationToken, string? bodyJsonData = null)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)
@@ -312,7 +312,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         CancellationToken cancellationToken)
     {
         Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}");
+            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
 
         MessageHubClient? messageHubClient = null;
         if (_withMessaging)

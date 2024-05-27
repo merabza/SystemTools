@@ -25,7 +25,7 @@ public sealed class MessageHubClient
     {
         _connection = new HubConnectionBuilder()
             .WithUrl(
-                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? "" : $"?apikey={_apiKey}")}")
+                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}")
             .Build();
 
         _connection.On<string>(Events.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));

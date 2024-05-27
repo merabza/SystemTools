@@ -42,7 +42,7 @@ public class ReCounterLogger
     private static string CreateFolder(string strLogFolderName)
     {
         if (string.IsNullOrWhiteSpace(strLogFolderName))
-            return "";
+            return string.Empty;
         try
         {
             DirectoryInfo logFolderDir = new(strLogFolderName);
@@ -56,7 +56,7 @@ public class ReCounterLogger
         }
         catch (Exception)
         {
-            return "";
+            return string.Empty;
         }
     }
 }

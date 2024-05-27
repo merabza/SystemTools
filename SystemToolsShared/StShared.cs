@@ -24,7 +24,7 @@ public static class StShared
         var totalMinutes = (int)taken.TotalMinutes; //საათები თუ არ დასჭირდა რომ არ გამოვიტანოთ
         //დახარჯული დროის შესახებ ინფორმაციის გამოტანა ფორმაზე.
         return
-            $"Time taken {(totalHours == 0 ? "" : $"{totalHours} hours, ")}{(totalMinutes == 0 ? "" : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
+            $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
     public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
@@ -193,7 +193,7 @@ public static class StShared
     public static void WriteException(Exception? ex, string? additionalMessage, bool useConsole,
         ILogger? logger = null, bool pauseAfter = true)
     {
-        logger?.LogError(ex, additionalMessage ?? "");
+        logger?.LogError(ex, additionalMessage ?? string.Empty);
         if (!useConsole)
             return;
         var existingColor = Console.ForegroundColor;

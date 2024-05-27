@@ -29,7 +29,7 @@ public static class Inflector
         AddPlural("^(ox)$", "$1en");
         AddPlural("(quiz)$", "$1zes");
 
-        AddSingular("s$", "");
+        AddSingular("s$", string.Empty);
         AddSingular("(n)ews$", "$1ews");
         AddSingular("([ti])a$", "$1um");
         AddSingular("((a)naly|(b)a|(d)iagno|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$", "$1$2sis");
@@ -120,7 +120,7 @@ public static class Inflector
 
     public static string SingularizeCamelParts(this string word)
     {
-        return string.Join("", word.SplitUpperCase().Select(s => s.Singularize()));
+        return string.Join(string.Empty, word.SplitUpperCase().Select(s => s.Singularize()));
     }
 
     private static string ApplyRules(List<Rule> rules, string word)
@@ -222,7 +222,7 @@ public static class Inflector
         //    return new string[] {}; //Return empty array.
 
         if (source.Length == 0)
-            return [""];
+            return [string.Empty];
 
         var words = new StringCollection();
         var wordStartIndex = 0;

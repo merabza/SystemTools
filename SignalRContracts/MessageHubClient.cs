@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using SignalRContracts.Models;
 using SignalRContracts.V1.Routes;
 
 namespace SignalRContracts;
@@ -29,6 +31,20 @@ public sealed class MessageHubClient
             .Build();
 
         _connection.On<string>(Events.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
+
+        _connection.On<ProgressData>(Events.ProgressDataReceived, progressData =>
+        {
+            var lineNo = Console.CursorTop;
+
+            int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
+            int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
+            if (procPosition is not null && procLength is not null)
+            {
+                var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
+                Console.WriteLine($"[{_server}]: {procPosition}-{procLength} {procPercentage}%");
+            }
+            Console.SetCursorPosition(0, lineNo);
+        });
 
         await _connection.StartAsync(cancellationToken);
     }

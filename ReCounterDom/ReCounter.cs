@@ -28,106 +28,106 @@ public class ReCounter
     }
 
 
-    public void LogErrors(IEnumerable<Err> errors)
+    public async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken)
     {
         foreach (var error in errors)
-            LogMessage(ReCounterConstants.Error, error.ErrorMessage, true);
+            await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
     }
 
-    protected void LogMessage(string name, string message, bool instantly = false)
+    protected async Task LogMessage(string name, string message, bool instantly, CancellationToken cancellationToken)
     {
         _rLogger?.LogMessage(message);
-        _progressDataManager.SetProgressData(name, message, instantly);
+        await _progressDataManager.SetProgressData(name, message, instantly, cancellationToken);
     }
 
-    private void SetProgressValue(string name, int value, bool instantly = false)
+    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
     {
-        _progressDataManager.SetProgressData(name, value, instantly);
+        await _progressDataManager.SetProgressData(name, value, instantly, cancellationToken);
     }
 
-    protected void SetProcLength(int length)
+    protected async Task SetProcLength(int length, CancellationToken cancellationToken)
     {
         _procPosition = 0;
-        SetProcPosition();
-        SetProgressValue(ReCounterConstants.ProcLength, length, true);
+        await SetProcPosition(cancellationToken);
+        await SetProgressValue(ReCounterConstants.ProcLength, length, true, cancellationToken);
     }
 
-    private void SetProcessRun(bool runState)
+    private async Task SetProcessRun(bool runState, CancellationToken cancellationToken)
     {
-        _progressDataManager.SetProgressData(ReCounterConstants.ProcessRun, runState);
+        await _progressDataManager.SetProgressData(ReCounterConstants.ProcessRun, runState, true, cancellationToken);
     }
 
-    private void SetProcPosition()
+    private async Task SetProcPosition(CancellationToken cancellationToken)
     {
-        SetProgressValue(ReCounterConstants.ProcPosition, _procPosition);
+        await SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, false, cancellationToken);
     }
 
-    private void ClearProgress()
+    private async Task ClearProgress(CancellationToken cancellationToken)
     {
-        SetByLevelLength(0);
-        SetProcLength(0);
+        await SetByLevelLength(0, -1, cancellationToken);
+        await SetProcLength(0,cancellationToken);
     }
 
-    protected void SetByLevelLength(int length, int realToDo = -1)
+    protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
     {
         _byLevelPosition = 0;
         if (realToDo != -1)
         {
             _byLevelPosition = length - realToDo;
             _procPosition += _byLevelPosition;
-            SetProcPosition();
+            await SetProcPosition(cancellationToken);
         }
 
-        SetByLevelPosition();
-        SetProgressValue(ReCounterConstants.ByLevelLength, length, true);
+        await SetByLevelPosition(cancellationToken);
+        await SetProgressValue(ReCounterConstants.ByLevelLength, length, true, cancellationToken);
     }
 
-    private void SetByLevelPosition()
+    private async Task SetByLevelPosition(CancellationToken cancellationToken)
     {
-        SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition);
+        await SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition, false, cancellationToken);
     }
 
-    protected void IncreaseProcPosition()
+    protected async Task IncreaseProcPosition(CancellationToken cancellationToken)
     {
         _procPosition++;
-        SetProcPosition();
+        await SetProcPosition(cancellationToken);
     }
 
-    protected void IncreaseByLevelPosition()
+    protected async Task IncreaseByLevelPosition(CancellationToken cancellationToken)
     {
         _byLevelPosition++;
-        SetByLevelPosition();
+        await SetByLevelPosition(cancellationToken);
     }
 
-    private void OnFinishReCounter()
+    private async Task OnFinishReCounter(CancellationToken cancellationToken)
     {
-        ClearProgress();
+        await ClearProgress(cancellationToken);
         _progressDataManager.StopTimer();
     }
 
-    protected virtual void LogLevelMessage(string message)
+    protected virtual async Task LogLevelMessage(string message, CancellationToken cancellationToken)
     {
-        LogMessage(ReCounterConstants.LevelName, message, true);
+        await LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
     }
 
-    protected virtual void LogProcMessage(string message)
+    protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken)
     {
-        LogMessage(ReCounterConstants.LevelName, string.Empty);
-        LogMessage(ReCounterConstants.ProcName, message, true);
+        await LogMessage(ReCounterConstants.LevelName, string.Empty, false, cancellationToken);
+        await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
     }
 
-    protected virtual Exception LogProcMessageAndException(string message)
+    protected virtual async Task<Exception> LogProcMessageAndException(string message, CancellationToken cancellationToken)
     {
-        LogProcMessage(message);
+        await LogProcMessage(message,cancellationToken);
         return new Exception(message);
     }
 
-    protected bool IsCancellationRequested(CancellationToken cancellationToken)
+    protected async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
     {
         if (!cancellationToken.IsCancellationRequested)
             return false;
 
-        LogProcMessage($"{_processName} შეჩერებულია");
+        await LogProcMessage($"{_processName} შეჩერებულია", cancellationToken);
         return true;
     }
 
@@ -141,36 +141,36 @@ public class ReCounter
         try
         {
             //შემოწმდეს გაჩერება ხომ არ მოითხოვეს
-            if (IsCancellationRequested(cancellationToken))
+            if (await IsCancellationRequested(cancellationToken))
                 return;
 
-            SetProcessRun(true);
+            await SetProcessRun(true, cancellationToken);
 
-            LogProcMessage($"დაიწყო {_processName}");
+            await LogProcMessage($"დაიწყო {_processName}", cancellationToken);
 
             await RunRecount(cancellationToken);
 
-            LogProcMessage($"{_processName} დასრულდა");
+            await LogProcMessage($"{_processName} დასრულდა", cancellationToken);
         }
         catch (TaskCanceledException)
         {
-            LogMessage(ReCounterConstants.ProcName, "Operation was canceled");
+            await LogMessage(ReCounterConstants.ProcName, "Operation was canceled", false, cancellationToken);
             throw;
         }
         catch (OperationCanceledException)
         {
-            LogMessage(ReCounterConstants.ProcName, "Operation was canceled");
+            await LogMessage(ReCounterConstants.ProcName, "Operation was canceled", false, cancellationToken);
             throw;
         }
         catch (Exception e)
         {
-            LogMessage(ReCounterConstants.Error, e.Message);
+            await LogMessage(ReCounterConstants.Error, e.Message, false, cancellationToken);
             throw;
         }
         finally
         {
-            OnFinishReCounter();
-            SetProcessRun(false);
+            await OnFinishReCounter(cancellationToken);
+            await SetProcessRun(false, cancellationToken);
         }
     }
 }

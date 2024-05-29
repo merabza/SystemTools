@@ -341,4 +341,26 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
             return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
     }
+
+    private MessageHubClient? _messageHubClient;
+
+    public async Task<Option<Err[]>> StartMessageHubMonitoring(CancellationToken cancellationToken)
+    {
+        if (!_withMessaging) 
+            return null;
+
+        _messageHubClient = new MessageHubClient(_server, _apiKey);
+        await _messageHubClient.RunMessages(cancellationToken);
+
+        return null;
+    }
+
+    public async Task<Option<Err[]>> StopMessageHubMonitoring(CancellationToken cancellationToken)
+    {
+
+        if (_messageHubClient is not null)
+            await _messageHubClient.StopMessages(cancellationToken);
+
+        return null;
+    }
 }

@@ -13,10 +13,11 @@ public sealed class ApiKeysChecker(ILoggerFactory loggerFactory, IConfiguration 
 {
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger _logger = loggerFactory.CreateLogger<ApiKeysChecker>();
+    public const string ApiKeyParameterName = "ApiKey";
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var apiKey = context.HttpContext.Request.Query["ApiKey"].ToString();
+        var apiKey = context.HttpContext.Request.Query[ApiKeyParameterName].ToString();
         var remoteAddress = context.HttpContext.Connection.RemoteIpAddress;
 
         if (remoteAddress is null)

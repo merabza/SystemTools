@@ -112,7 +112,7 @@ public class ReCounter
 
     protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken)
     {
-        await LogMessage(ReCounterConstants.LevelName, string.Empty, false, cancellationToken);
+        await LogMessage(ReCounterConstants.LevelName, string.Empty, true, cancellationToken);
         await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
     }
 

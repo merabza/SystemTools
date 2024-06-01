@@ -1,6 +1,6 @@
 ﻿using SystemToolsShared;
 
-namespace ApiToolsShared;
+namespace ApiContracts;
 
 public static class ApiErrors
 {

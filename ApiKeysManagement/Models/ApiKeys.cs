@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ApiToolsShared.Models;
+﻿namespace ApiKeysManagement.Models;
 
 public sealed class ApiKeys
 {

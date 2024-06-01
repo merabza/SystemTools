@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using OneOf;
-using SignalRContracts;
 using SystemToolsShared;
 using SystemToolsShared.ErrorModels;
+using OneOf;
 
-namespace ApiToolsShared;
+namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDisposable, 
 {

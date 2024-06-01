@@ -1,23 +1,22 @@
-﻿using System.Threading.Tasks;
-using ApiToolsShared.Domain;
+﻿using ApiContracts;
+using ApiKeysManagement.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable ReplaceWithPrimaryConstructorParameter
 
-namespace ApiToolsShared;
+namespace ApiKeysManagement;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public sealed class ApiKeysChecker(ILoggerFactory loggerFactory, IConfiguration configuration) : IEndpointFilter
 {
     private readonly IConfiguration _configuration = configuration;
     private readonly ILogger _logger = loggerFactory.CreateLogger<ApiKeysChecker>();
-    public const string ApiKeyParameterName = "ApiKey";
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        var apiKey = context.HttpContext.Request.Query[ApiKeyParameterName].ToString();
+        var apiKey = context.HttpContext.Request.Query[ApiKeysConstants.ApiKeyParameterName].ToString();
         var remoteAddress = context.HttpContext.Connection.RemoteIpAddress;
 
         if (remoteAddress is null)

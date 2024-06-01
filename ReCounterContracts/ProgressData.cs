@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace SignalRContracts.Models;
+namespace ReCounterContracts;
 
 public class ProgressData
 {

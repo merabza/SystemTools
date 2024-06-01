@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using ApiContracts.V1.Routes;
 using Microsoft.AspNetCore.SignalR.Client;
-using SignalRContracts;
-using SignalRContracts.Models;
-using SignalRContracts.V1.Routes;
 
-namespace ApiToolsShared;
+namespace ApiContracts;
 
 public sealed class StingMessageHubClient : IMessageHubClient
 {
@@ -28,10 +22,10 @@ public sealed class StingMessageHubClient : IMessageHubClient
     {
         _connection = new HubConnectionBuilder()
             .WithUrl(
-                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysChecker.ApiKeyParameterName}={_apiKey}")}")
+                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}")
             .Build();
 
-        _connection.On<string>(Events.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
+        _connection.On<string>(StringEvents.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
 
         //_connection.On<ProgressData>(Events.ProgressDataReceived, progressData =>
         //{

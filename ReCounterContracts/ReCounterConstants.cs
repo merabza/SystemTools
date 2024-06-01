@@ -1,4 +1,4 @@
-﻿namespace SignalRContracts;
+﻿namespace ReCounterContracts;
 
 public static class ReCounterConstants
 {

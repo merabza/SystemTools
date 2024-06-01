@@ -1,4 +1,4 @@
-namespace SignalRContracts.V1.Routes;
+namespace ApiContracts.V1.Routes;
 
 public static class MessagesRoutes
 {

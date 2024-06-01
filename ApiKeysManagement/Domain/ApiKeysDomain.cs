@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ApiToolsShared.Models;
+﻿using ApiKeysManagement.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace ApiToolsShared.Domain;
+namespace ApiKeysManagement.Domain;
 
 public sealed class ApiKeysDomain
 {

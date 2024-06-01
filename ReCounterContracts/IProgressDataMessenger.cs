@@ -1,8 +1,6 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using SignalRContracts.Models;
+﻿using ApiContracts;
 
-namespace SignalRContracts;
+namespace ReCounterContracts;
 
 public interface IProgressDataMessenger : IMessenger
 {

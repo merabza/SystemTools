@@ -1,4 +1,4 @@
-﻿namespace ApiToolsShared.Domain;
+﻿namespace ApiKeysManagement.Domain;
 
 public sealed class ApiKeyAndRemoteIpAddressDomain
 {

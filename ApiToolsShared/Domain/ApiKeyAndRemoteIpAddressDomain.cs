@@ -2,6 +2,7 @@
 
 public sealed class ApiKeyAndRemoteIpAddressDomain
 {
+    // ReSharper disable once ConvertToPrimaryConstructor
     public ApiKeyAndRemoteIpAddressDomain(string apiKey, string remoteIpAddress)
     {
         ApiKey = apiKey;

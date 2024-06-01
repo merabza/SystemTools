@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+    <ProjectReference Include="..\SignalRContracts\SignalRContracts.csproj" />
     <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalRContracts;
+namespace SystemToolsShared;
 
 public interface IMessagesDataManager
 {

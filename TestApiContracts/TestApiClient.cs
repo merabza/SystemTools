@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiToolsShared;
 using Microsoft.Extensions.Logging;
 using SystemToolsShared;
 using OneOf;
@@ -14,7 +15,7 @@ public class TestApiClient : ApiClient
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server) : base(logger,
-        httpClientFactory, server, null, null, false)
+        httpClientFactory, server, null, null, null)
     {
     }
 

@@ -39,6 +39,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
                 var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
                 Console.WriteLine($"[{_server}]: {procPosition}-{procLength} {procPercentage}%");
             }
+
             Console.SetCursorPosition(0, lineNo);
         });
 

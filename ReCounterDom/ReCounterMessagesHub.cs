@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using ReCounterContracts;
-using System;
-using System.Threading.Tasks;
 
 namespace ReCounterDom;
 

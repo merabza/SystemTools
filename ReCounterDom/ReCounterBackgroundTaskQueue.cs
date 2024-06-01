@@ -31,4 +31,3 @@ public class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
         _workItems.Clear();
     }
 }
-

@@ -65,7 +65,7 @@ public class ReCounter
     private async Task ClearProgress(CancellationToken cancellationToken)
     {
         await SetByLevelLength(0, -1, cancellationToken);
-        await SetProcLength(0,cancellationToken);
+        await SetProcLength(0, cancellationToken);
     }
 
     protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
@@ -116,9 +116,10 @@ public class ReCounter
         await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
     }
 
-    protected virtual async Task<Exception> LogProcMessageAndException(string message, CancellationToken cancellationToken)
+    protected virtual async Task<Exception> LogProcMessageAndException(string message,
+        CancellationToken cancellationToken)
     {
-        await LogProcMessage(message,cancellationToken);
+        await LogProcMessage(message, cancellationToken);
         return new Exception(message);
     }
 

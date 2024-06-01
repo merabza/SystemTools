@@ -12,10 +12,10 @@ namespace ApiContracts;
 public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDisposable, 
 {
     private readonly string? _accessToken;
-    private readonly string? _apiKey;
+    protected readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
-    private readonly string _server;
+    protected readonly string _server;
     //private readonly bool _withMessaging;
     private readonly IMessageHubClient? _messageHubClient;
 

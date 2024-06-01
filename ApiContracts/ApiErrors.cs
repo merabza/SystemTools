@@ -18,9 +18,13 @@ public static class ApiErrors
         ErrorCode = nameof(SomeRequestParametersAreNotValid), ErrorMessage = "Some request parameters are not valid"
     };
 
-    public static string IsEmptyErrMessage(string propertyNameLocalized) =>
-        $"{propertyNameLocalized} შევსებული უნდა იყოს";
+    public static string IsEmptyErrMessage(string propertyNameLocalized)
+    {
+        return $"{propertyNameLocalized} შევსებული უნდა იყოს";
+    }
 
-    public static string IsLongerThenErrMessage(string propertyNameLocalized) =>
-        propertyNameLocalized + " სიგრძე არ შეიძლება იყოს {MaxLength} სიმბოლოზე მეტი";
+    public static string IsLongerThenErrMessage(string propertyNameLocalized)
+    {
+        return propertyNameLocalized + " სიგრძე არ შეიძლება იყოს {MaxLength} სიმბოლოზე მეტი";
+    }
 }

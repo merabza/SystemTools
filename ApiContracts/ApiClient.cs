@@ -3,9 +3,9 @@ using System.Text;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using OneOf;
 using SystemToolsShared;
 using SystemToolsShared.ErrorModels;
-using OneOf;
 
 namespace ApiContracts;
 
@@ -14,11 +14,13 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     private readonly string? _accessToken;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
+
     private readonly ILogger _logger;
 
-    private readonly string _server;
     //private readonly bool _withMessaging;
     private readonly IMessageHubClient? _messageHubClient;
+
+    private readonly string _server;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server,

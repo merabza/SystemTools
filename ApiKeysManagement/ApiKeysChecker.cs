@@ -35,12 +35,16 @@ public sealed class ApiKeysChecker(ILoggerFactory loggerFactory, IConfiguration 
 
         var apiKeys = ApiKeysDomain.Create(_configuration, _logger);
 
-        //_logger.LogInformation($"View Api Keys. count is - {apiKeys.ApiKeys.Count}");
+        //var apiKeysCount = apiKeys.ApiKeys.Count;
+        //_logger.LogInformation("View Api Keys. count is - {apiKeysCount}", apiKeysCount);
         //foreach (ApiKeyAndRemoteIpAddressDomain key in apiKeys.ApiKeys)
         //{
-        //    _logger.LogInformation($"RemoteIpAddress is - {key.RemoteIpAddress}");
-        //    _logger.LogInformation($"ApiKey is - {key.ApiKey}");
+        //    var keyRemoteIpAddress = key.RemoteIpAddress;
+        //    _logger.LogInformation("RemoteIpAddress is - {keyRemoteIpAddress}", keyRemoteIpAddress);
+        //    var keyApiKey = key.ApiKey;
+        //    _logger.LogInformation("ApiKey is - {keyApiKey}", keyApiKey);
         //}
+
         //_logger.LogInformation("View Api Keys Finished");
 
         var ak = apiKeys.AppSettingsByApiKey(apiKey, remoteIpAddress);

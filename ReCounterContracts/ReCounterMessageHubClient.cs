@@ -42,7 +42,6 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             Console.SetCursorPosition(0, lineNo);
         });
-
         await _connection.StartAsync(cancellationToken);
     }
 

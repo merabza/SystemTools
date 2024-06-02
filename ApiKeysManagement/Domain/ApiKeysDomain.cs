@@ -6,7 +6,8 @@ namespace ApiKeysManagement.Domain;
 
 public sealed class ApiKeysDomain
 {
-    private HashSet<ApiKeyAndRemoteIpAddressDomain> ApiKeys { get; } = new();
+    //public საჭიროა ApiKeysChecker-ში ლოგირებისას
+    public HashSet<ApiKeyAndRemoteIpAddressDomain> ApiKeys { get; } = [];
 
     public static ApiKeysDomain Create(IConfiguration configuration, ILogger logger)
     {

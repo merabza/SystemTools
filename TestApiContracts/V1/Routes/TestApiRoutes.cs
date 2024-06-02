@@ -2,7 +2,7 @@
 
 public static class TestApiRoutes
 {
-    private const string Root = "api";
+    private const string Root = "/api";
     private const string Version = "v1";
     public const string ApiBase = Root + "/" + Version;
 

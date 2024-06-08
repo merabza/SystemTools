@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SystemToolsShared;
+namespace SystemToolsShared.Errors;
 
 public struct Err
 {
@@ -8,7 +8,7 @@ public struct Err
     public string ErrorCode { get; set; }
 
     //[JsonProperty(PropertyName = "errorMessage")]
-    public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; init; }
 
     //public Err(string errorCode, string errorMessage)
     //{

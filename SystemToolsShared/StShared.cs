@@ -10,7 +10,7 @@ using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OneOf;
-using SystemToolsShared.ErrorModels;
+using SystemToolsShared.Errors;
 
 namespace SystemToolsShared;
 

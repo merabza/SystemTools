@@ -1,7 +1,12 @@
-﻿namespace SystemToolsShared.ErrorModels;
+﻿using SystemToolsShared;
+
+namespace ApiContracts.Errors;
 
 public static class ApiClientErrors
 {
+    public static readonly Err UnexpectedServerError = new()
+        { ErrorCode = nameof(UnexpectedServerError), ErrorMessage = "Unexpected Server Error" };
+
     public static readonly Err ApiUnknownError = new()
         { ErrorCode = nameof(ApiUnknownError), ErrorMessage = "Api returned an unknown error" };
 

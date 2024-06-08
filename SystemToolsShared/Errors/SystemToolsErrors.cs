@@ -1,7 +1,7 @@
 ﻿using System;
 using Serilog;
 
-namespace SystemToolsShared.ErrorModels;
+namespace SystemToolsShared.Errors;
 
 public static class SystemToolsErrors
 {

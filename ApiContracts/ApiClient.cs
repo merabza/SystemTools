@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using ApiContracts.Errors;
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using OneOf;
 using SystemToolsShared;
-using SystemToolsShared.ErrorModels;
 
 namespace ApiContracts;
 
@@ -63,8 +63,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
         if (string.IsNullOrWhiteSpace(responseBody))
-            return new Err[]
-                { new() { ErrorCode = "UnexpectedServerError", ErrorMessage = "Unexpected Server Error" } };
+            return new[] { ApiClientErrors.UnexpectedServerError };
 
         var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody)?.ToArray();
         if (errors is not null)

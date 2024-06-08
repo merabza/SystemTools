@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using OneOf;
-using SystemToolsShared;
+using System.Collections.Generic;
+using SystemToolsShared.Errors;
 
 namespace MessagingAbstractions;
 

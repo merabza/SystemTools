@@ -1,4 +1,5 @@
 ﻿using ApiContracts;
+using ApiContracts.Errors;
 using ApiKeysManagement.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

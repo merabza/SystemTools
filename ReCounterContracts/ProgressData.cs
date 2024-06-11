@@ -15,16 +15,25 @@ public class ProgressData
 
     public void Add(string name, string message)
     {
-        StrData[name] = message;
+        if (message == string.Empty)
+            StrData.Remove(name);
+        else
+            StrData[name] = message;
     }
 
     public void Add(string name, int value)
     {
-        IntData[name] = value;
+        if (value == default)
+            IntData.Remove(name);
+        else
+            IntData[name] = value;
     }
 
     public void Add(string name, bool value)
     {
-        BoolData[name] = value;
+        if (value == default)
+            BoolData.Remove(name);
+        else
+            BoolData[name] = value;
     }
 }

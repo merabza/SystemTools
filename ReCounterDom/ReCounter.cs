@@ -156,12 +156,10 @@ public class ReCounter
         catch (TaskCanceledException)
         {
             await LogMessage(ReCounterConstants.ProcName, "Operation was canceled", false, cancellationToken);
-            throw;
         }
         catch (OperationCanceledException)
         {
             await LogMessage(ReCounterConstants.ProcName, "Operation was canceled", false, cancellationToken);
-            throw;
         }
         catch (Exception e)
         {

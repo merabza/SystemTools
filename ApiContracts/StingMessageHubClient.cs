@@ -18,7 +18,7 @@ public sealed class StingMessageHubClient : IMessageHubClient
         _apiKey = apiKey;
     }
 
-    public async Task RunMessages(CancellationToken cancellationToken)
+    public async Task<bool> RunMessages(CancellationToken cancellationToken)
     {
         _connection = new HubConnectionBuilder()
             .WithUrl(
@@ -27,26 +27,41 @@ public sealed class StingMessageHubClient : IMessageHubClient
 
         _connection.On<string>(StringEvents.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
 
-        //_connection.On<ProgressData>(Events.ProgressDataReceived, progressData =>
-        //{
-        //    var lineNo = Console.CursorTop;
+        try
+        {
+            await _connection.StartAsync(cancellationToken);
+            return true;
+        }
+        catch (HttpRequestException)
+        {
+            Console.WriteLine("Error when connecting");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
 
-        //    int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
-        //    int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-        //    if (procPosition is not null && procLength is not null)
-        //    {
-        //        var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
-        //        Console.WriteLine($"[{_server}]: {procPosition}-{procLength} {procPercentage}%");
-        //    }
-        //    Console.SetCursorPosition(0, lineNo);
-        //});
-
-        await _connection.StartAsync(cancellationToken);
+        return false;
     }
 
-    public async Task StopMessages(CancellationToken cancellationToken)
+    public async Task<bool> StopMessages(CancellationToken cancellationToken)
     {
-        if (_connection is not null)
-            await _connection.StopAsync(cancellationToken);
+        try
+        {
+
+            if (_connection is not null)
+                await _connection.StopAsync(cancellationToken);
+            return true;
+        }
+        catch (HttpRequestException)
+        {
+            Console.WriteLine("Error when Stop connection");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        return false;
     }
 }

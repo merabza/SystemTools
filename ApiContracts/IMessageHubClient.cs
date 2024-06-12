@@ -2,6 +2,6 @@
 
 public interface IMessageHubClient
 {
-    Task RunMessages(CancellationToken cancellationToken);
-    Task StopMessages(CancellationToken cancellationToken);
+    Task<bool> RunMessages(CancellationToken cancellationToken);
+    Task<bool> StopMessages(CancellationToken cancellationToken);
 }

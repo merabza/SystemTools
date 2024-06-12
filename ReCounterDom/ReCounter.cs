@@ -40,7 +40,7 @@ public class ReCounter
         await _progressDataManager.SetProgressData(name, message, instantly, cancellationToken);
     }
 
-    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
+    protected async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
     {
         await _progressDataManager.SetProgressData(name, value, instantly, cancellationToken);
     }

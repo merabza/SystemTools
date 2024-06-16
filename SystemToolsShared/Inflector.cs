@@ -131,7 +131,7 @@ public static class Inflector
             return result;
 
         for (var i = rules.Count - 1; i >= 0; i--)
-            if ((result = rules[i].Apply(word)) != null)
+            if ((result = rules[i].Apply(word)) is not null)
                 break;
 
         return result ?? word;
@@ -218,7 +218,7 @@ public static class Inflector
 
     public static string[] SplitUpperCase(this string source)
     {
-        //if(source == null)
+        //if(source is null)
         //    return new string[] {}; //Return empty array.
 
         if (source.Length == 0)

@@ -9,7 +9,7 @@ public static class JsonConfigurationExtensions
         bool optional,
         bool reloadOnChange, string key, string appSetEnKeysFileName)
     {
-        if (builder == null) throw new ArgumentNullException(nameof(builder));
+        if (builder is null) throw new ArgumentNullException(nameof(builder));
         if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("File path must be a non-empty string.");
 
         var source = new JsonConfigurationSource(null, path, optional, reloadOnChange, key, appSetEnKeysFileName);

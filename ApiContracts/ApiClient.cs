@@ -15,22 +15,20 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     private readonly string? _accessToken;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
-
     private readonly ILogger _logger;
-
-    //private readonly bool _withMessaging;
     private readonly IMessageHubClient? _messageHubClient;
-
+    private readonly bool _useConsole;
     private readonly string _server;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server,
-        string? apiKey, string? accessToken, IMessageHubClient? messageHubClient)
+    protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
+        string? accessToken, IMessageHubClient? messageHubClient, bool useConsole)
     {
         _logger = logger;
         _server = server.RemoveNotNeedLastPart('/');
         _apiKey = apiKey;
         _messageHubClient = messageHubClient;
+        _useConsole = useConsole;
         _accessToken = accessToken;
         _client = httpClientFactory.CreateClient();
     }
@@ -55,11 +53,13 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         if (response.IsSuccessStatusCode)
             return null;
 
-        StShared.WriteErrorLine(
-            $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true, null,
-            false);
+        if (_useConsole)
+            StShared.WriteErrorLine(
+                $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true,
+                null, false);
 
-        StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null, false);
+        if (_useConsole)
+            StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null, false);
 
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -67,7 +67,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
             return new[] { ApiClientErrors.UnexpectedServerError };
 
         var errors = JsonConvert.DeserializeObject<IEnumerable<Err>>(responseBody)?.ToArray();
-        if (errors is not null)
+        if (_useConsole && errors is not null)
             foreach (var err in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 

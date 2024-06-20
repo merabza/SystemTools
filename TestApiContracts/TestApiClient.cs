@@ -14,9 +14,10 @@ public class TestApiClient : ApiClient
     //public const string ApiName = "TestApi";
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server) : base(logger,
-        httpClientFactory, server, null, null, null)
+    public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, bool useConsole) : base(
+        logger, httpClientFactory, server, null, null, null, useConsole)
     {
+
     }
 
     public async Task<OneOf<string, Err[]>> GetAppSettingsVersion(CancellationToken cancellationToken)

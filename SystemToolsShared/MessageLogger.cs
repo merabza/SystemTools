@@ -8,13 +8,13 @@ namespace SystemToolsShared;
 
 public class MessageLogger
 {
-    private readonly ILogger _logger;
+    private readonly ILogger? _logger;
     private readonly IMessagesDataManager? _messagesDataManager;
     private readonly bool _useConsole;
     private readonly string? _userName;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected MessageLogger(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName,
+    protected MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
         bool useConsole)
     {
         _logger = logger;
@@ -28,7 +28,7 @@ public class MessageLogger
         if (_useConsole)
             Console.WriteLine(message);
         else
-            _logger.LogInformation(message);
+            _logger?.LogInformation(message);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
     }
@@ -38,7 +38,7 @@ public class MessageLogger
         if (_useConsole)
             Console.WriteLine(message, arg1);
         else
-            _logger.LogInformation(message, arg1);
+            _logger?.LogInformation(message, arg1);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
     }
@@ -49,7 +49,7 @@ public class MessageLogger
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2);
         else
-            _logger.LogInformation(message, arg1, arg2);
+            _logger?.LogInformation(message, arg1, arg2);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
     }
@@ -60,7 +60,7 @@ public class MessageLogger
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2, arg3);
         else
-            _logger.LogInformation(message, arg1, arg2, arg3);
+            _logger?.LogInformation(message, arg1, arg2, arg3);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2, arg3),
                 cancellationToken);
@@ -72,7 +72,7 @@ public class MessageLogger
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2, arg3, arg4);
         else
-            _logger.LogInformation(message, arg1, arg2, arg3, arg4);
+            _logger?.LogInformation(message, arg1, arg2, arg3, arg4);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2, arg3, arg4),
                 cancellationToken);

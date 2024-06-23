@@ -151,7 +151,7 @@ public static class StShared
         if (!useConsole)
             return;
         ConsoleWriteFormattedLine(message, args);
-        Console.WriteLine(message, args);
+        //Console.WriteLine(message, args);
     }
 
 
@@ -184,12 +184,12 @@ public static class StShared
             else
             {
                 if (openBraceIndex > scanIndex)
-                    Console.Write(message.Substring(scanIndex,  openBraceIndex - scanIndex + 1));
+                    Console.Write(message.Substring(scanIndex,  openBraceIndex - scanIndex));
                 var existingColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 if ( argIndex < args.Length)
-                    Console.Write(args[argIndex]);
+                    Console.Write(args[argIndex++]);
                 else
                     Console.Write(message.Substring(openBraceIndex + 1, closeBraceIndex - 1));//value
                 Console.ForegroundColor = existingColor;

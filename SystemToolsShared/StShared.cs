@@ -10,7 +10,6 @@ using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OneOf;
-using SystemToolsShared.ConsoleColorFormat;
 using SystemToolsShared.Errors;
 
 namespace SystemToolsShared;
@@ -151,7 +150,6 @@ public static class StShared
         if (!useConsole)
             return;
         ConsoleWriteFormattedLine(message, args);
-        //Console.WriteLine(message, args);
     }
 
 
@@ -160,13 +158,13 @@ public static class StShared
 
 
         //var vsb = new StringBuilder(256);
-        int scanIndex = 0;
-        int endIndex = message.Length;
-        int argIndex = 0;
+        var scanIndex = 0;
+        var endIndex = message.Length;
+        var argIndex = 0;
 
         while (scanIndex < endIndex)
         {
-            int openBraceIndex = FindBraceIndex(message, '{', scanIndex, endIndex);
+            var openBraceIndex = FindBraceIndex(message, '{', scanIndex, endIndex);
             if (scanIndex == 0 && openBraceIndex == endIndex)
             {
                 // No holes found.
@@ -174,17 +172,17 @@ public static class StShared
                 return;
             }
 
-            int closeBraceIndex = FindBraceIndex(message, '}', openBraceIndex, endIndex);
+            var closeBraceIndex = FindBraceIndex(message, '}', openBraceIndex, endIndex);
 
             if (closeBraceIndex == endIndex)
             {
-                Console.Write(message.Substring(scanIndex, endIndex - scanIndex));
+                Console.Write(message[scanIndex..endIndex]);
                 scanIndex = endIndex;
             }
             else
             {
                 if (openBraceIndex > scanIndex)
-                    Console.Write(message.Substring(scanIndex,  openBraceIndex - scanIndex));
+                    Console.Write(message[scanIndex..openBraceIndex]);
                 var existingColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -202,9 +200,9 @@ public static class StShared
     private static int FindBraceIndex(string format, char brace, int startIndex, int endIndex)
     {
         // Example: {{prefix{{{Argument}}}suffix}}.
-        int braceIndex = endIndex;
-        int scanIndex = startIndex;
-        int braceOccurrenceCount = 0;
+        var braceIndex = endIndex;
+        var scanIndex = startIndex;
+        var braceOccurrenceCount = 0;
 
         while (scanIndex < endIndex)
         {

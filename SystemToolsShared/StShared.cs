@@ -10,6 +10,7 @@ using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OneOf;
+using SystemToolsShared.ConsoleColorFormat;
 using SystemToolsShared.Errors;
 
 namespace SystemToolsShared;
@@ -149,10 +150,102 @@ public static class StShared
         logger?.LogInformation(message, args);
         if (!useConsole)
             return;
+        ConsoleWriteFormattedLine(message, args);
         Console.WriteLine(message, args);
     }
 
 
+    private static void ConsoleWriteFormattedLine(string message, params object?[] args)
+    {
+
+
+        //var vsb = new StringBuilder(256);
+        int scanIndex = 0;
+        int endIndex = message.Length;
+        int argIndex = 0;
+
+        while (scanIndex < endIndex)
+        {
+            int openBraceIndex = FindBraceIndex(message, '{', scanIndex, endIndex);
+            if (scanIndex == 0 && openBraceIndex == endIndex)
+            {
+                // No holes found.
+                Console.WriteLine(message);
+                return;
+            }
+
+            int closeBraceIndex = FindBraceIndex(message, '}', openBraceIndex, endIndex);
+
+            if (closeBraceIndex == endIndex)
+            {
+                Console.Write(message.Substring(scanIndex, endIndex - scanIndex));
+                scanIndex = endIndex;
+            }
+            else
+            {
+                if (openBraceIndex > scanIndex)
+                    Console.Write(message.Substring(scanIndex,  openBraceIndex - scanIndex + 1));
+                var existingColor = Console.ForegroundColor;
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                if ( argIndex < args.Length)
+                    Console.Write(args[argIndex]);
+                else
+                    Console.Write(message.Substring(openBraceIndex + 1, closeBraceIndex - 1));//value
+                Console.ForegroundColor = existingColor;
+
+                scanIndex = closeBraceIndex + 1;
+            }
+        }
+        Console.WriteLine();
+    }
+    private static int FindBraceIndex(string format, char brace, int startIndex, int endIndex)
+    {
+        // Example: {{prefix{{{Argument}}}suffix}}.
+        int braceIndex = endIndex;
+        int scanIndex = startIndex;
+        int braceOccurrenceCount = 0;
+
+        while (scanIndex < endIndex)
+        {
+            if (braceOccurrenceCount > 0 && format[scanIndex] != brace)
+            {
+                if (braceOccurrenceCount % 2 == 0)
+                {
+                    // Even number of '{' or '}' found. Proceed search with next occurrence of '{' or '}'.
+                    braceOccurrenceCount = 0;
+                    braceIndex = endIndex;
+                }
+                else
+                {
+                    // An unescaped '{' or '}' found.
+                    break;
+                }
+            }
+            else if (format[scanIndex] == brace)
+            {
+                if (brace == '}')
+                {
+                    if (braceOccurrenceCount == 0)
+                    {
+                        // For '}' pick the first occurrence.
+                        braceIndex = scanIndex;
+                    }
+                }
+                else
+                {
+                    // For '{' pick the last occurrence.
+                    braceIndex = scanIndex;
+                }
+
+                braceOccurrenceCount++;
+            }
+
+            scanIndex++;
+        }
+
+        return braceIndex;
+    }
     public static void WriteWarningLine(string warningText, bool useConsole, ILogger? logger = null,
         bool pauseAfter = false)
     {

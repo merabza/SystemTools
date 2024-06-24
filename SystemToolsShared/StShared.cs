@@ -155,8 +155,6 @@ public static class StShared
 
     private static void ConsoleWriteFormattedLine(string message, params object?[] args)
     {
-
-
         //var vsb = new StringBuilder(256);
         var scanIndex = 0;
         var endIndex = message.Length;
@@ -215,26 +213,20 @@ public static class StShared
                     braceIndex = endIndex;
                 }
                 else
-                {
                     // An unescaped '{' or '}' found.
                     break;
-                }
             }
             else if (format[scanIndex] == brace)
             {
                 if (brace == '}')
                 {
                     if (braceOccurrenceCount == 0)
-                    {
                         // For '}' pick the first occurrence.
                         braceIndex = scanIndex;
-                    }
                 }
                 else
-                {
                     // For '{' pick the last occurrence.
                     braceIndex = scanIndex;
-                }
 
                 braceOccurrenceCount++;
             }

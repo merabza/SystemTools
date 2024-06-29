@@ -17,8 +17,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ReCounterContracts\ReCounterContracts.csproj" />
-      <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+        <ProjectReference Include="..\ReCounterContracts\ReCounterContracts.csproj" />
+        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

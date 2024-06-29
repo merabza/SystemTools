@@ -59,7 +59,8 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
                 null, false);
 
         if (_useConsole)
-            StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null, false);
+            StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null,
+                false);
 
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 

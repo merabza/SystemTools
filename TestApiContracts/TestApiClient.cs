@@ -17,7 +17,6 @@ public class TestApiClient : ApiClient
     public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, bool useConsole) : base(
         logger, httpClientFactory, server, null, null, null, useConsole)
     {
-
     }
 
     public async Task<OneOf<string, Err[]>> GetAppSettingsVersion(CancellationToken cancellationToken)

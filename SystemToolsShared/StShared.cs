@@ -184,17 +184,19 @@ public static class StShared
                 var existingColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                if ( argIndex < args.Length)
+                if (argIndex < args.Length)
                     Console.Write(args[argIndex++]);
                 else
-                    Console.Write(message.Substring(openBraceIndex + 1, closeBraceIndex - 1));//value
+                    Console.Write(message.Substring(openBraceIndex + 1, closeBraceIndex - 1)); //value
                 Console.ForegroundColor = existingColor;
 
                 scanIndex = closeBraceIndex + 1;
             }
         }
+
         Console.WriteLine();
     }
+
     private static int FindBraceIndex(string format, char brace, int startIndex, int endIndex)
     {
         // Example: {{prefix{{{Argument}}}suffix}}.
@@ -236,6 +238,7 @@ public static class StShared
 
         return braceIndex;
     }
+
     public static void WriteWarningLine(string warningText, bool useConsole, ILogger? logger = null,
         bool pauseAfter = false)
     {

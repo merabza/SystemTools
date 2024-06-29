@@ -48,7 +48,6 @@ public sealed class StingMessageHubClient : IMessageHubClient
     {
         try
         {
-
             if (_connection is not null)
                 await _connection.StopAsync(cancellationToken);
             return true;

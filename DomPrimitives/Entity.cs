@@ -4,6 +4,7 @@ namespace DomPrimitives;
 
 public abstract class Entity : IEquatable<Entity>
 {
+    // ReSharper disable once ConvertToPrimaryConstructor
     protected Entity(int id)
     {
         Id = id;

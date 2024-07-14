@@ -80,8 +80,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
 
     protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -104,8 +103,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress,
         CancellationToken cancellationToken)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -127,8 +125,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
 
     protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -151,8 +148,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken,
         string? bodyJsonData = null)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -185,8 +181,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, CancellationToken cancellationToken,
         string? bodyJsonData = null)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -215,8 +210,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
         CancellationToken cancellationToken, string? bodyJsonData = null)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -246,8 +240,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress,
         CancellationToken cancellationToken, string? bodyJsonData = null)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -282,8 +275,7 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     protected async Task<OneOf<T, Err[]>> GetAsyncReturn<T>(string afterServerAddress,
         CancellationToken cancellationToken)
     {
-        Uri uri = new(
-            $"{_server}{afterServerAddress}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?apikey={_apiKey}")}");
+        var uri = CreateUri(afterServerAddress);
 
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
@@ -307,6 +299,14 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         if (desResult is null)
             return new[] { ApiClientErrors.ApiDidNotReturnAnything };
         return desResult;
+    }
+
+    private Uri CreateUri(string afterServerAddress)
+    {
+        Uri uri = new($"{_server}{afterServerAddress}");
+        if (!string.IsNullOrWhiteSpace(_apiKey)) 
+            uri = string.IsNullOrEmpty(uri.Query) ? new Uri($"{uri}?apikey={_apiKey}") : new Uri($"{uri}&apikey={_apiKey}");
+        return uri;
     }
 
     //private MessageHubClient? _messageHubClient;

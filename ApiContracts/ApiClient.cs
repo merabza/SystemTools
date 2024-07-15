@@ -17,8 +17,8 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly IMessageHubClient? _messageHubClient;
-    private readonly bool _useConsole;
     private readonly string _server;
+    private readonly bool _useConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
@@ -304,8 +304,10 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     private Uri CreateUri(string afterServerAddress)
     {
         Uri uri = new($"{_server}{afterServerAddress}");
-        if (!string.IsNullOrWhiteSpace(_apiKey)) 
-            uri = string.IsNullOrEmpty(uri.Query) ? new Uri($"{uri}?apikey={_apiKey}") : new Uri($"{uri}&apikey={_apiKey}");
+        if (!string.IsNullOrWhiteSpace(_apiKey))
+            uri = string.IsNullOrEmpty(uri.Query)
+                ? new Uri($"{uri}?apikey={_apiKey}")
+                : new Uri($"{uri}&apikey={_apiKey}");
         return uri;
     }
 

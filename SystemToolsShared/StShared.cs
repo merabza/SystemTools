@@ -216,7 +216,9 @@ public static class StShared
                 }
                 else
                     // An unescaped '{' or '}' found.
+                {
                     break;
+                }
             }
             else if (format[scanIndex] == brace)
             {
@@ -228,7 +230,9 @@ public static class StShared
                 }
                 else
                     // For '{' pick the last occurrence.
+                {
                     braceIndex = scanIndex;
+                }
 
                 braceOccurrenceCount++;
             }

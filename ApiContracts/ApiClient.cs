@@ -12,7 +12,6 @@ namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDisposable, 
 {
-    private readonly string? _accessToken;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
@@ -20,16 +19,18 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
     private readonly string _server;
     private readonly bool _useConsole;
 
+    protected static string? AccessToken = null;
+
+
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
-        string? accessToken, IMessageHubClient? messageHubClient, bool useConsole)
+        IMessageHubClient? messageHubClient, bool useConsole)
     {
         _logger = logger;
         _server = server.RemoveNotNeedLastPart('/');
         _apiKey = apiKey;
         _messageHubClient = messageHubClient;
         _useConsole = useConsole;
-        _accessToken = accessToken;
         _client = httpClientFactory.CreateClient();
     }
 
@@ -153,9 +154,9 @@ public /*open*/ abstract class ApiClient : IApiClient //IDisposable, IAsyncDispo
         if (_messageHubClient is not null)
             await _messageHubClient.RunMessages(cancellationToken);
 
-        if (_accessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
+        if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
             _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Authorization", $"Bearer {_accessToken}");
+                new AuthenticationHeaderValue("Authorization", $"Bearer {AccessToken}");
 
         // ReSharper disable once using
         using var content = bodyJsonData is null

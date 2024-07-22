@@ -147,7 +147,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
             _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Authorization", $"Bearer {AccessToken}");
+                new AuthenticationHeaderValue("Bearer", AccessToken);
 
         // ReSharper disable once using
         using var content = bodyJsonData is null

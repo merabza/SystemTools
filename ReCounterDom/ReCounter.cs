@@ -68,7 +68,8 @@ public class ReCounter
         await SetProcLength(0, cancellationToken);
     }
 
-    private async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
+    //protected საჭიროა AppGrammarGe პროექტისათვის
+    protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
     {
         _byLevelPosition = 0;
         if (realToDo != -1)
@@ -123,7 +124,8 @@ public class ReCounter
         return new Exception(message);
     }
 
-    private async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
+    //protected საჭიროა AppGrammarGe პროექტისათვის
+    protected async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
     {
         if (!cancellationToken.IsCancellationRequested)
             return false;

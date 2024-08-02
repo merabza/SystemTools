@@ -28,7 +28,7 @@ public class ReCounter
     }
 
 
-    public async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken)
+    protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken)
     {
         foreach (var error in errors)
             await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
@@ -40,7 +40,7 @@ public class ReCounter
         await _progressDataManager.SetProgressData(name, message, instantly, cancellationToken);
     }
 
-    protected async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
+    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
     {
         await _progressDataManager.SetProgressData(name, value, instantly, cancellationToken);
     }
@@ -68,7 +68,7 @@ public class ReCounter
         await SetProcLength(0, cancellationToken);
     }
 
-    protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
+    private async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
     {
         _byLevelPosition = 0;
         if (realToDo != -1)
@@ -123,7 +123,7 @@ public class ReCounter
         return new Exception(message);
     }
 
-    protected async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
+    private async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
     {
         if (!cancellationToken.IsCancellationRequested)
             return false;

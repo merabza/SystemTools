@@ -21,7 +21,7 @@ public static class ConfigurationHelper
 
         if (unique)
             sb.Append(UniqueText);
-        return sb.ToString();
+        return sb.ToString()[..128];
     }
 
     public static string CreateConstraintName(this string tableName, string relatedTableName)

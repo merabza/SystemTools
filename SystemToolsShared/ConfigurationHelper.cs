@@ -22,7 +22,7 @@ public static class ConfigurationHelper
         if (unique)
             sb.Append(UniqueText);
         var indexName = sb.ToString();
-        return indexName.Length > 128 ? indexName : indexName[..128];
+        return indexName.Length > 128 ? indexName[..128] : indexName;
     }
 
     public static string CreateConstraintName(this string tableName, string relatedTableName)

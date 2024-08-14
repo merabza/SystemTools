@@ -12,14 +12,13 @@ namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient
 {
+    protected static string? AccessToken = null;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly IMessageHubClient? _messageHubClient;
     private readonly string _server;
     private readonly bool _useConsole;
-
-    protected static string? AccessToken = null;
 
 
     // ReSharper disable once ConvertToPrimaryConstructor

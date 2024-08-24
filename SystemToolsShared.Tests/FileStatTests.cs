@@ -10,7 +10,7 @@ public sealed class FileStatTests
         Assert.Equal(4, Add(2, 2));
     }
 
-    private int Add(int x, int y)
+    private static int Add(int x, int y)
     {
         return x + y;
     }

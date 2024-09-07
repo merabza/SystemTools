@@ -69,6 +69,7 @@ public class ReCounter
     }
 
     //protected საჭიროა AppGrammarGe პროექტისათვის
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
     {
         _byLevelPosition = 0;
@@ -125,6 +126,7 @@ public class ReCounter
     }
 
     //protected საჭიროა AppGrammarGe პროექტისათვის
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
     {
         if (!cancellationToken.IsCancellationRequested)

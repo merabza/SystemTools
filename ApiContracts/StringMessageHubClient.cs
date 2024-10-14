@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 
 namespace ApiContracts;
 
-public sealed class StingMessageHubClient : IMessageHubClient
+public sealed class StringMessageHubClient : IMessageHubClient
 {
     private readonly string? _apiKey;
     private readonly string _server;
@@ -12,7 +12,7 @@ public sealed class StingMessageHubClient : IMessageHubClient
 
     // ReSharper disable once MemberCanBePrivate.Global
     // ReSharper disable once ConvertToPrimaryConstructor
-    public StingMessageHubClient(string server, string? apiKey)
+    public StringMessageHubClient(string server, string? apiKey)
     {
         _server = server;
         _apiKey = apiKey;

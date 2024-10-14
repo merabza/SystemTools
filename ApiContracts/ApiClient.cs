@@ -181,8 +181,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PutAsync(afterServerAddress, null, cancellationToken);
     }
 
-    protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
-        CancellationToken cancellationToken)
+    private async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
@@ -216,8 +215,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturnString(afterServerAddress, null, cancellationToken);
     }
 
-    protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData,
-        CancellationToken cancellationToken)
+    private async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 

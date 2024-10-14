@@ -20,6 +20,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly string _server;
     private readonly bool _useConsole;
 
+    public IMessageHubClient? MessageHubClient => _messageHubClient;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,

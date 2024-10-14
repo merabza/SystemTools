@@ -148,15 +148,20 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     protected Task<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
-        return PostAsync(afterServerAddress, null, cancellationToken);
+        return PostAsync(afterServerAddress, true, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, string? bodyJsonData,
+    protected Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient, CancellationToken cancellationToken)
+    {
+        return PostAsync(afterServerAddress, useMessageHubClient, null, cancellationToken);
+    }
+
+    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient, string? bodyJsonData,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.RunMessages(cancellationToken);
 
         SetAuthorizationAccessToken();
@@ -170,7 +175,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
@@ -257,19 +262,22 @@ public /*open*/ abstract class ApiClient : IApiClient
         return new[] { ApiClientErrors.ApiUnknownError };
     }
 
-
     protected Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken)
     {
-        return PostAsyncReturn<T>(afterServerAddress, null, cancellationToken);
+        return PostAsyncReturn<T>(afterServerAddress, true, null, cancellationToken);
     }
 
+    protected Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient, CancellationToken cancellationToken)
+    {
+        return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, null, cancellationToken);
+    }
 
-    protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, string? bodyJsonData,
+    protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient, string? bodyJsonData,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
@@ -281,7 +289,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)

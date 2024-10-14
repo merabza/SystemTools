@@ -16,11 +16,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
-    private readonly IMessageHubClient? _messageHubClient;
     private readonly string _server;
     private readonly bool _useConsole;
-
-    public IMessageHubClient? MessageHubClient => _messageHubClient;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
@@ -29,10 +26,12 @@ public /*open*/ abstract class ApiClient : IApiClient
         _logger = logger;
         _server = server.RemoveNotNeedLastPart('/');
         _apiKey = apiKey;
-        _messageHubClient = messageHubClient;
+        MessageHubClient = messageHubClient;
         _useConsole = useConsole;
         _client = httpClientFactory.CreateClient();
     }
+
+    public IMessageHubClient? MessageHubClient { get; }
 
     private async Task<Option<Err[]>> LogResponseErrorMessage(HttpResponseMessage response,
         CancellationToken cancellationToken)
@@ -67,18 +66,24 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken)
     {
+        return await GetAsync(afterServerAddress, true, cancellationToken);
+    }
+
+    protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, bool useMessageHubClient,
+        CancellationToken cancellationToken)
+    {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (useMessageHubClient && MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         SetAuthorizationAccessToken();
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (useMessageHubClient && MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -101,14 +106,14 @@ public /*open*/ abstract class ApiClient : IApiClient
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -123,14 +128,14 @@ public /*open*/ abstract class ApiClient : IApiClient
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var response = await _client.DeleteAsync(uri, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -151,8 +156,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         SetAuthorizationAccessToken();
 
@@ -165,8 +170,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -182,12 +187,13 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PutAsync(afterServerAddress, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData, CancellationToken cancellationToken)
+    private async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
+        CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var content = bodyJsonData is null
@@ -198,8 +204,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         var response = await _client.PutAsync(uri, content, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -213,15 +219,22 @@ public /*open*/ abstract class ApiClient : IApiClient
     protected Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
         CancellationToken cancellationToken)
     {
-        return PostAsyncReturnString(afterServerAddress, null, cancellationToken);
+        return PostAsyncReturnString(afterServerAddress, true, null, cancellationToken);
     }
 
-    private async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, string? bodyJsonData, CancellationToken cancellationToken)
+    protected Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
+        CancellationToken cancellationToken)
+    {
+        return PostAsyncReturnString(afterServerAddress, useMessageHubClient, null, cancellationToken);
+    }
+
+    private async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
+        string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (useMessageHubClient && MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var content = bodyJsonData is null
@@ -232,8 +245,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (useMessageHubClient && MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
@@ -256,8 +269,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var content = bodyJsonData is null
@@ -268,8 +281,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -291,14 +304,14 @@ public /*open*/ abstract class ApiClient : IApiClient
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.RunMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);
 
-        if (_messageHubClient is not null)
-            await _messageHubClient.StopMessages(cancellationToken);
+        if (MessageHubClient is not null)
+            await MessageHubClient.StopMessages(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {

@@ -156,7 +156,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsync(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient, string? bodyJsonData,
+    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient, string? bodyJsonData,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
@@ -192,7 +192,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PutAsync(afterServerAddress, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
+    protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
@@ -233,7 +233,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturnString(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    private async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
+    protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);

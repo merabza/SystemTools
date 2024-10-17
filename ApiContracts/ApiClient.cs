@@ -12,7 +12,7 @@ namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient
 {
-    protected static string? AccessToken = null;
+    protected string? AccessToken = null;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
@@ -96,9 +96,10 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     private void SetAuthorizationAccessToken()
     {
-        if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null)
-            _client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", AccessToken);
+        if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null ||
+            _client.DefaultRequestHeaders.Authorization?.Parameter is null ||
+            _client.DefaultRequestHeaders.Authorization.Parameter != AccessToken)
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
     }
 
     protected async Task<OneOf<string, Err[]>> GetAsyncAsString(string afterServerAddress,

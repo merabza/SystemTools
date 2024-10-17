@@ -9,5 +9,9 @@ public static class MessagesRoutes
     public static class Messages
     {
         public const string MessagesRoute = "/messages";
+
+        //HUB api/v1/messages/recountmessages
+        public const string RecountMessages = "/recountmessages";
+
     }
 }

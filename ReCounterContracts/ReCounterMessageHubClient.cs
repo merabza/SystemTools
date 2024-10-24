@@ -1,7 +1,7 @@
 ﻿using ApiContracts;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using RecounterMessagesApiContracts.V1.Routes;
+using ReCounterContracts.V1.Routes;
 
 namespace ReCounterContracts;
 

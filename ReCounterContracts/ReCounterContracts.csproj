@@ -12,7 +12,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
-        <ProjectReference Include="..\RecounterMessagesApiContracts\RecounterMessagesApiContracts.csproj" />
         <ProjectReference Include="..\StringMessagesApiContracts\StringMessagesApiContracts.csproj" />
     </ItemGroup>
 

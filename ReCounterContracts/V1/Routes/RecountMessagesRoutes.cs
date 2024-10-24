@@ -1,4 +1,4 @@
-﻿namespace RecounterMessagesApiContracts.V1.Routes;
+﻿namespace ReCounterContracts.V1.Routes;
 
 public static class RecountMessagesRoutes
 {

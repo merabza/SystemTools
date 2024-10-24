@@ -1,4 +1,4 @@
-namespace ApiContracts.V1.Routes;
+namespace StringMessagesApiContracts.V1.Routes;
 
 public static class MessagesRoutes
 {
@@ -9,9 +9,5 @@ public static class MessagesRoutes
     public static class Messages
     {
         public const string MessagesRoute = "/messages";
-
-        //HUB api/v1/messages/recountmessages
-        public const string RecountMessages = "/recountmessages";
-
     }
 }

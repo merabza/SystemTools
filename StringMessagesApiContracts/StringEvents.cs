@@ -1,4 +1,4 @@
-﻿namespace ApiContracts;
+﻿namespace StringMessagesApiContracts;
 
 public static class StringEvents
 {

@@ -11,7 +11,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\ProcessorWorkerService\RecounterMessagesApiContracts\RecounterMessagesApiContracts.csproj" />
         <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
+        <ProjectReference Include="..\StringMessagesApiContracts\StringMessagesApiContracts.csproj" />
     </ItemGroup>
 
 </Project>

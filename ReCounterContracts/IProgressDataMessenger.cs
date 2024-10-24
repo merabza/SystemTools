@@ -1,4 +1,4 @@
-﻿using ApiContracts;
+﻿using StringMessagesApiContracts;
 
 namespace ReCounterContracts;
 

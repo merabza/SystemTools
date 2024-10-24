@@ -1,7 +1,7 @@
 ﻿using ApiContracts;
-using ApiContracts.V1.Routes;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
+using RecounterMessagesApiContracts.V1.Routes;
 
 namespace ReCounterContracts;
 
@@ -11,8 +11,8 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private static string? _lastProcName;
     private readonly string? _apiKey;
     private readonly string? _progressValueName;
-    private string? _accessToken;
     private readonly string _server;
+    private string? _accessToken;
 
     private HubConnection? _connection;
 
@@ -25,16 +25,10 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         _progressValueName = progressValueName;
     }
 
-    
-    public void SetToken(string accessToken)
-    {
-        _accessToken = accessToken;
-    }
-
     public async Task<bool> RunMessages(CancellationToken cancellationToken)
     {
         _connection = new HubConnectionBuilder().WithUrl(
-            $"{_server}{MessagesRoutes.Messages.RecountMessages}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
+            $"{_server}{RecountMessagesRoutes.ReCounterRoute.RecountMessages}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
             options =>
             {
                 //options.SkipNegotiation = true;
@@ -58,14 +52,17 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-            var progressValueName = _progressValueName is null ? null : progressData.StrData.GetValueOrDefault(_progressValueName);
+            var progressValueName = _progressValueName is null
+                ? null
+                : progressData.StrData.GetValueOrDefault(_progressValueName);
 
             var lineNo = Console.CursorTop;
             if (procPosition is not null && procLength is not null)
                 if ((decimal)procLength > 0)
                 {
                     var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
-                    var conMessage = $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
+                    var conMessage =
+                        $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
                     var conMessageLength = conMessage.Length;
                     if (_lastLength > conMessageLength)
                         conMessage = conMessage.PadRight(_lastLength);
@@ -112,5 +109,11 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         }
 
         return false;
+    }
+
+
+    public void SetToken(string accessToken)
+    {
+        _accessToken = accessToken;
     }
 }

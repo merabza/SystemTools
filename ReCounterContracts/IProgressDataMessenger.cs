@@ -1,8 +1,7 @@
-﻿using StringMessagesApiContracts;
-
+﻿
 namespace ReCounterContracts;
 
-public interface IProgressDataMessenger : IMessenger
+public interface IProgressDataMessenger
 {
     Task SendProgressData(ProgressData progressData, CancellationToken cancellationToken);
 }

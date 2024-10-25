@@ -1,5 +1,4 @@
-﻿
-namespace ReCounterContracts;
+﻿namespace ReCounterContracts;
 
 public interface IProgressDataMessenger
 {

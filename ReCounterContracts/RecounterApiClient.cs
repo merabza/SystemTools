@@ -13,7 +13,6 @@ public class RecounterApiClient : ApiClient
         bool useConsole) : base(logger, httpClientFactory, server, apiKey,
         new ReCounterMessageHubClient(server, apiKey, string.Empty), useConsole)
     {
-
     }
 
     public async Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(CancellationToken cancellationToken)

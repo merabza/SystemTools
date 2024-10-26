@@ -9,6 +9,7 @@ namespace ReCounterDom;
 
 public class ReCounter
 {
+    private readonly string? _userName;
     private readonly string _processName;
     private readonly IProgressDataManager _progressDataManager;
 
@@ -17,12 +18,13 @@ public class ReCounter
     private int _byLevelPosition;
     private int _procPosition;
 
-    protected ReCounter(string superName, string processName, IProgressDataManager progressDataManager,
-        string? reCounterLogsFolderName = null)
+    protected ReCounter(string? userName, string superName, string processName,
+        IProgressDataManager progressDataManager, string? reCounterLogsFolderName = null)
     {
         _rLogger = reCounterLogsFolderName is not null
             ? ReCounterLogger.Create(reCounterLogsFolderName, superName)
             : null;
+        _userName = userName;
         _processName = processName;
         _progressDataManager = progressDataManager;
     }
@@ -37,12 +39,12 @@ public class ReCounter
     protected async Task LogMessage(string name, string message, bool instantly, CancellationToken cancellationToken)
     {
         _rLogger?.LogMessage(message);
-        await _progressDataManager.SetProgressData(name, message, instantly, cancellationToken);
+        await _progressDataManager.SetProgressData(_userName, name, message, instantly, cancellationToken);
     }
 
     private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
     {
-        await _progressDataManager.SetProgressData(name, value, instantly, cancellationToken);
+        await _progressDataManager.SetProgressData(_userName, name, value, instantly, cancellationToken);
     }
 
     protected async Task SetProcLength(int length, CancellationToken cancellationToken)
@@ -54,7 +56,8 @@ public class ReCounter
 
     private async Task SetProcessRun(bool runState, CancellationToken cancellationToken)
     {
-        await _progressDataManager.SetProgressData(ReCounterConstants.ProcessRun, runState, true, cancellationToken);
+        await _progressDataManager.SetProgressData(_userName, ReCounterConstants.ProcessRun, runState, true,
+            cancellationToken);
     }
 
     private async Task SetProcPosition(CancellationToken cancellationToken)

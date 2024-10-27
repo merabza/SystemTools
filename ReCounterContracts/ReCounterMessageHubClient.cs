@@ -79,9 +79,11 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
             await _connection.StartAsync(cancellationToken);
             return true;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
             Console.WriteLine("Error when connecting");
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
         }
         catch (Exception e)
         {

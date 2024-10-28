@@ -8,10 +8,12 @@ public static class RecountMessagesRoutes
 
     public static class ReCounterRoute
     {
-        public const string MessagesRoute = "/messages";
 
-        //HUB api/v1/recounter/recountmessages
-        public const string RecountMessages = "/recountmessages";
+        //api/v1/recounter
+        public const string Recounter = "/recounter";
+
+        //HUB api/v1/recounter/messages
+        public const string Messages = "/messages";
 
         // POST api/v1/recounter/cancelcurrentprocess
         public const string CancelCurrentProcess = "/cancelcurrentprocess";

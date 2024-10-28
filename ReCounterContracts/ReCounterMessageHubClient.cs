@@ -28,7 +28,11 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     public async Task<bool> RunMessages(CancellationToken cancellationToken)
     {
         _connection = new HubConnectionBuilder().WithUrl(
+<<<<<<< HEAD
             $"{_server}{RecountMessagesRoutes.ReCounterRoute.Recounter}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
+=======
+            $"{_server}{RecountMessagesRoutes.ReCounterRoute.Messages}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
+>>>>>>> af4fc64316e73a6d37b86f3149811f283b968355
             options =>
             {
                 //options.SkipNegotiation = true;

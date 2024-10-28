@@ -2,9 +2,9 @@ namespace StringMessagesApiContracts.V1.Routes;
 
 public static class MessagesRoutes
 {
-    private const string Root = "api";
+    private const string Api = "api";
     private const string Version = "v1";
-    public const string ApiBase = Root + "/" + Version;
+    public const string ApiBase = Api + "/" + Version;
 
     public static class Messages
     {

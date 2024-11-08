@@ -144,7 +144,7 @@ public static class Inflector
 
     public static string Humanize(this string lowercaseAndUnderscoredWord)
     {
-        return Capitalize(Regex.Replace(lowercaseAndUnderscoredWord, @"_", " "));
+        return Capitalize(Regex.Replace(lowercaseAndUnderscoredWord, "_", " "));
     }
 
     public static string Pascalize(this string lowercaseAndUnderscoredWord)
@@ -161,7 +161,7 @@ public static class Inflector
     {
         return Regex
             .Replace(
-                Regex.Replace(Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
+                Regex.Replace(Regex.Replace(pascalCasedWord, "([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
                     "$1_$2"),
                 @"[-\s]", "_").ToLower();
     }

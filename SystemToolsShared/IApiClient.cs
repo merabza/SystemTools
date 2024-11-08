@@ -1,5 +1,3 @@
 ﻿namespace SystemToolsShared;
 
-public interface IApiClient
-{
-}
+public interface IApiClient;

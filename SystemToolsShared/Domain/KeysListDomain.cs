@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using SystemToolsShared.Models;
 
@@ -23,13 +24,11 @@ public sealed class KeysListDomain
         var appSetEnKeysJsonString = File.ReadAllText(filename);
         var appSetEnKeysList = JsonConvert.DeserializeObject<KeysList>(appSetEnKeysJsonString);
 
-        if (appSetEnKeysList is null || appSetEnKeysList.Keys is null)
+        if (appSetEnKeysList?.Keys is null)
             return null;
 
-        List<string> keys = new();
-        foreach (var s in appSetEnKeysList.Keys)
-            if (s is not null)
-                keys.Add(s);
+        List<string> keys = [];
+        keys.AddRange(appSetEnKeysList.Keys.OfType<string>());
 
 
         return new KeysListDomain(keys);

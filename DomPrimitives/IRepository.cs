@@ -1,5 +1,3 @@
 ﻿namespace DomPrimitives;
 
-public interface IRepository
-{
-}
+public interface IRepository;

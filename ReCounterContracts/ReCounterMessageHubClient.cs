@@ -10,9 +10,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private static int _lastLength;
     private static string? _lastProcName;
     private readonly string? _apiKey;
+    private string? _accessToken;
     private readonly string? _progressValueName;
     private readonly string _server;
-    private string? _accessToken;
 
     private HubConnection? _connection;
 
@@ -31,7 +31,6 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
             $"{_server}{RecountMessagesRoutes.ReCounterRoute.Recounter}{RecountMessagesRoutes.ReCounterRoute.Messages}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
             options =>
             {
-                //options.SkipNegotiation = true;
                 options.Transports = HttpTransportType.LongPolling;
                 options.AccessTokenProvider = () => Task.FromResult(_accessToken);
             }).Build();
@@ -83,7 +82,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         {
             Console.WriteLine("Error when connecting");
             Console.WriteLine(ex.Message);
-            Console.WriteLine(ex.StackTrace);
+            //Console.WriteLine(ex.StackTrace);
         }
         catch (Exception e)
         {
@@ -112,10 +111,10 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
         return false;
     }
-
-
+    
     public void SetToken(string accessToken)
     {
         _accessToken = accessToken;
     }
+
 }

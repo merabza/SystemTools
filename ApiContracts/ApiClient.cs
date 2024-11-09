@@ -31,7 +31,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         _client = httpClientFactory.CreateClient();
     }
 
-    public IMessageHubClient? MessageHubClient { get; }
+    protected IMessageHubClient? MessageHubClient { get; }
 
     private async Task<Option<Err[]>> LogResponseErrorMessage(HttpResponseMessage response,
         CancellationToken cancellationToken)
@@ -84,6 +84,25 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.StopMessages(cancellationToken);
+
+        if (response.IsSuccessStatusCode)
+            return null;
+
+        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        if (respResult.IsSome)
+            return (Err[])respResult;
+        return new[] { ApiClientErrors.ApiUnknownError };
+    }
+
+    protected async Task<Option<Err[]>> GetWithTokenAsync(string token, string afterServerAddress,
+        CancellationToken cancellationToken)
+    {
+        var uri = CreateUri(afterServerAddress);
+
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // ReSharper disable once using
+        using var response = await _client.GetAsync(uri, cancellationToken);
 
         if (response.IsSuccessStatusCode)
             return null;
@@ -158,9 +177,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsync(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
-        string? bodyJsonData,
-        CancellationToken cancellationToken)
+    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
+        string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 

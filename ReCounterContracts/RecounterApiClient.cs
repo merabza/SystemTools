@@ -19,7 +19,7 @@ public class RecounterApiClient : ApiClient
     {
         return await GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,
-            cancellationToken);
+            false, cancellationToken);
     }
 
     public async Task<OneOf<bool, Err[]>> CancelCurrentProcess(CancellationToken cancellationToken)

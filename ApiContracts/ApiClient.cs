@@ -331,12 +331,12 @@ public /*open*/ abstract class ApiClient : IApiClient
         return desResult;
     }
 
-    protected async Task<OneOf<T, Err[]>> GetAsyncReturn<T>(string afterServerAddress,
+    protected async Task<OneOf<T, Err[]>> GetAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.RunMessages(cancellationToken);
 
         // ReSharper disable once using

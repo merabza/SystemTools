@@ -11,7 +11,7 @@ public class RecounterApiClient : ApiClient
     // ReSharper disable once ConvertToPrimaryConstructor
     protected RecounterApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
         bool useConsole) : base(logger, httpClientFactory, server, apiKey,
-        new ReCounterMessageHubClient(server, apiKey, string.Empty), useConsole)
+        new ReCounterMessageHubClient(server, apiKey), useConsole)
     {
     }
 
@@ -19,7 +19,7 @@ public class RecounterApiClient : ApiClient
     {
         return await GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,
-            cancellationToken);
+            false, cancellationToken);
     }
 
     public async Task<OneOf<bool, Err[]>> CancelCurrentProcess(CancellationToken cancellationToken)

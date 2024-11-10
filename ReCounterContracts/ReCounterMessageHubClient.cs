@@ -11,18 +11,16 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private static string? _lastProcName;
     private readonly string? _apiKey;
     private string? _accessToken;
-    private readonly string? _progressValueName;
     private readonly string _server;
 
     private HubConnection? _connection;
 
     // ReSharper disable once MemberCanBePrivate.Global
     // ReSharper disable once ConvertToPrimaryConstructor
-    public ReCounterMessageHubClient(string server, string? apiKey, string? progressValueName)
+    public ReCounterMessageHubClient(string server, string? apiKey)
     {
         _server = server;
         _apiKey = apiKey;
-        _progressValueName = progressValueName;
     }
 
     public async Task<bool> RunMessages(CancellationToken cancellationToken)
@@ -51,9 +49,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-            var progressValueName = _progressValueName is null
-                ? null
-                : progressData.StrData.GetValueOrDefault(_progressValueName);
+            var progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
 
             var lineNo = Console.CursorTop;
             if (procPosition is not null && procLength is not null)

@@ -23,7 +23,7 @@ public class ReCounterMessagesHub : Hub<IProgressDataMessenger>
     {
         //_userCount ++;
         _logger.LogInformation("OnConnectedAsync");
-        _progressDataManager.UserConnected(Context.ConnectionId, Context.UserIdentifier);
+        _progressDataManager.UserConnected(Context.ConnectionId, Context.User?.Identity?.Name);
         return base.OnConnectedAsync();
     }
 
@@ -31,7 +31,7 @@ public class ReCounterMessagesHub : Hub<IProgressDataMessenger>
     {
         //_userCount --;
         _logger.LogInformation("OnDisconnectedAsync");
-        _progressDataManager.UserDisconnected(Context.ConnectionId, Context.UserIdentifier);
+        _progressDataManager.UserDisconnected(Context.ConnectionId, Context.User?.Identity?.Name);
         return base.OnDisconnectedAsync(exception);
     }
 }

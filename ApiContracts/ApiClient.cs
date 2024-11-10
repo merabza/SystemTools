@@ -177,7 +177,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsync(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
+    //გამოიყენება SupportTools პროექტში DatabaseApiClient-ის მიერ
+    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);

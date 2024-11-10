@@ -12,8 +12,11 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private readonly string? _apiKey;
     private string? _accessToken;
     private readonly string _server;
+    private bool _isProcessRunning;
 
     private HubConnection? _connection;
+
+    public bool IsProcessRunning => _isProcessRunning;
 
     // ReSharper disable once MemberCanBePrivate.Global
     // ReSharper disable once ConvertToPrimaryConstructor
@@ -37,6 +40,16 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
         _connection.On<ProgressData>(RecounterEvents.ProgressDataReceived, progressData =>
         {
+            if (progressData.BoolData.Count > 0)
+            {
+                if (progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out var value))
+                {
+                    _isProcessRunning = value;
+                    if (!_isProcessRunning)
+                        ProcessMonitoringManager.Instance.StopWaitingKeyboard(cancellationToken);
+                }
+            }
+
             if (progressData.StrData.Count > 0)
             {
                 var procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);

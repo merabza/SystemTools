@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using ApiContracts.Errors;
 using LanguageExt;
 using Microsoft.Extensions.Logging;

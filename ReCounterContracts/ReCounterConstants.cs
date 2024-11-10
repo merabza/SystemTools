@@ -10,4 +10,5 @@ public static class ReCounterConstants
     public const string ByLevelPosition = nameof(ByLevelPosition);
     public const string LevelName = nameof(LevelName);
     public const string ProcName = nameof(ProcName);
+    public const string ProcProgressMessage = nameof(ProcProgressMessage);
 }

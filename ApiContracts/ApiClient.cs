@@ -69,7 +69,21 @@ public /*open*/ abstract class ApiClient : IApiClient
         return await GetAsync(afterServerAddress, true, cancellationToken);
     }
 
-    protected async Task<Option<Err[]>> GetAsync(string afterServerAddress, bool useMessageHubClient,
+    public async Task<bool> RunMessages(CancellationToken cancellationToken)
+    {
+        if (MessageHubClient is not null)
+            return await MessageHubClient.RunMessages(cancellationToken);
+        return false;
+    }
+
+    public async Task<bool> StopMessages(CancellationToken cancellationToken)
+    {
+        if (MessageHubClient is not null)
+            return await MessageHubClient.StopMessages(cancellationToken);
+        return false;
+    }
+
+    private async Task<Option<Err[]>> GetAsync(string afterServerAddress, bool useMessageHubClient,
         CancellationToken cancellationToken)
     {
         var uri = CreateUri(afterServerAddress);
@@ -338,6 +352,8 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (useMessageHubClient && MessageHubClient is not null)
             await MessageHubClient.RunMessages(cancellationToken);
+
+        SetAuthorizationAccessToken();
 
         // ReSharper disable once using
         using var response = await _client.GetAsync(uri, cancellationToken);

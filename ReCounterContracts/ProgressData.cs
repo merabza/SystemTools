@@ -31,9 +31,6 @@ public class ProgressData
 
     public void Add(string name, bool value)
     {
-        if (value == default)
-            BoolData.Remove(name);
-        else
-            BoolData[name] = value;
+        BoolData[name] = value;
     }
 }

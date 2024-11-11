@@ -1,19 +1,19 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿//using Microsoft.Extensions.Hosting;
 
-namespace ReCounterContracts;
+//namespace ReCounterContracts;
 
-public class WaitKeyboardEscapeBackgroundService : BackgroundService
-{
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        while (true)
-        {
-            var ch = Console.ReadKey(true);
-            if (ch.Key == ConsoleKey.Escape)
-            {
+//public class WaitKeyboardEscapeBackgroundService : BackgroundService
+//{
+//    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+//    {
+//        while (true)
+//        {
+//            var ch = Console.ReadKey(true);
+//            if (ch.Key == ConsoleKey.Escape)
+//            {
 
-                return Task.CompletedTask;
-            }
-        }
-    }
-}
+//                return Task.CompletedTask;
+//            }
+//        }
+//    }
+//}

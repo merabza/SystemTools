@@ -140,7 +140,7 @@ public static class StShared
     public static void Pause()
     {
         Console.WriteLine("press any key...");
-        Console.ReadKey(false);
+        Console.ReadKey(true);
     }
 
     public static void ConsoleWriteInformationLine(ILogger? logger, bool useConsole, string message,

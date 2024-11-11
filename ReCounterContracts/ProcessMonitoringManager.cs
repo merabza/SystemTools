@@ -4,7 +4,7 @@ public sealed class ProcessMonitoringManager
 {
     private static ProcessMonitoringManager? _instance;
     private static readonly object SyncRoot = new();
-    private WaitKeyboardEscapeBackgroundService? _waitKeyboardEscapeBackgroundService;
+    //private WaitKeyboardEscapeBackgroundService? _waitKeyboardEscapeBackgroundService;
 
 
     // ReSharper disable once MemberCanBePrivate.Global
@@ -33,18 +33,21 @@ public sealed class ProcessMonitoringManager
         _instance = newInstance;
     }
 
-    public bool StopWaitingKeyboard(CancellationToken cancellationToken)
-    {
-        if (_waitKeyboardEscapeBackgroundService is null)
-            return true;
-        _waitKeyboardEscapeBackgroundService.StopAsync(cancellationToken);
-        return true;
-    }
+    //public bool StopWaitingKeyboard(CancellationToken cancellationToken)
+    //{
+    //    if (_waitKeyboardEscapeBackgroundService is null)
+    //        return true;
+    //    _waitKeyboardEscapeBackgroundService.StopAsync(cancellationToken);
+    //    return true;
+    //}
 
-    public Task StartWaitingKeyboard(CancellationToken cancellationToken)
-    {
-        _waitKeyboardEscapeBackgroundService = new WaitKeyboardEscapeBackgroundService();
+    //public Task StartWaitingKeyboard(CancellationToken cancellationToken)
+    //{
+    //    _waitKeyboardEscapeBackgroundService = new WaitKeyboardEscapeBackgroundService();
 
-        return _waitKeyboardEscapeBackgroundService.StartAsync(cancellationToken);
-    }
+    //    return _waitKeyboardEscapeBackgroundService.StartAsync(cancellationToken);
+    //}
+
+    public bool ProcessIsRunning { get; set; }
+
 }

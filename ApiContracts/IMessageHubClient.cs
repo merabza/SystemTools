@@ -1,4 +1,7 @@
-﻿namespace ApiContracts;
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace ApiContracts;
 
 public interface IMessageHubClient
 {

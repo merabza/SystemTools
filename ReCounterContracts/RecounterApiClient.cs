@@ -9,11 +9,11 @@ using SystemToolsShared.Errors;
 
 namespace ReCounterContracts;
 
-public class RecounterApiClient : ApiClient
+public class ReCounterApiClient : ApiClient
 {
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected RecounterApiClient(ILogger logger, IHttpClientFactory httpClientFactory,
+    protected ReCounterApiClient(ILogger logger, IHttpClientFactory httpClientFactory,
         ReCounterMessageHubClient messageHubClient, string server, string? apiKey, bool useConsole) : base(logger,
         httpClientFactory, server, apiKey, messageHubClient, useConsole)
     {

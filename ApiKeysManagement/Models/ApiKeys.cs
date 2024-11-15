@@ -1,4 +1,6 @@
-﻿namespace ApiKeysManagement.Models;
+﻿using System.Collections.Generic;
+
+namespace ApiKeysManagement.Models;
 
 public sealed class ApiKeys
 {

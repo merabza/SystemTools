@@ -11,7 +11,6 @@ namespace ReCounterContracts;
 
 public class ReCounterApiClient : ApiClient
 {
-
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ReCounterApiClient(ILogger logger, IHttpClientFactory httpClientFactory,
         ReCounterMessageHubClient messageHubClient, string server, string? apiKey, bool useConsole) : base(logger,

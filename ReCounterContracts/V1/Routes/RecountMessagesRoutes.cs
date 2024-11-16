@@ -8,7 +8,6 @@ public static class RecountMessagesRoutes
 
     public static class ReCounterRoute
     {
-
         //api/v1/recounter
         public const string Recounter = "/recounter";
 

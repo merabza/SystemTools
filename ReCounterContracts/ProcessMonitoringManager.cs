@@ -49,5 +49,4 @@ public sealed class ProcessMonitoringManager
     //}
 
     public bool ProcessIsRunning { get; set; }
-
 }

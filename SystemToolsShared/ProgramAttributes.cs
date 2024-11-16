@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace SystemToolsShared;
 
 public sealed class ProgramAttributes
 {
     private static ProgramAttributes? _instance;
-    private static readonly object SyncRoot = new();
-
-
+    private static readonly Lock SyncRoot = new();
     private readonly Dictionary<string, object> _attributes;
 
     // ReSharper disable once MemberCanBePrivate.Global
@@ -40,6 +39,9 @@ public sealed class ProgramAttributes
         _instance = newInstance;
     }
 
+    public string AppName { get; set; } = null!;
+    public string AppKey { get; set; } = null!;
+
     public void SetAttribute<TC>(string attributeName, TC attributeValue) where TC : notnull
     {
         _attributes[attributeName] = attributeValue;
@@ -61,7 +63,7 @@ public sealed class ProgramAttributes
             if (atLeastOneAdded)
                 sb.Append(", ");
             sb.Append(kvp.Key);
-            sb.Append("=");
+            sb.Append('=');
             sb.Append(kvp.Value);
             atLeastOneAdded = true;
         }

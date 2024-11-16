@@ -8,11 +8,6 @@ public sealed class ProgramAttributes
 {
     private static ProgramAttributes? _instance;
     private static readonly Lock SyncRoot = new();
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 67c968539d83d3cd1a137c56b7ea7265dcfb3fb0
     private readonly Dictionary<string, object> _attributes;
 
     // ReSharper disable once MemberCanBePrivate.Global

@@ -53,7 +53,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
                 if (_lastProcName != procName)
                 {
                     Console.WriteLine(procName);
-                    
+
                     _lastProcName = procName;
                 }
             }
@@ -118,10 +118,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
         return false;
     }
-    
+
     public void SetToken(string accessToken)
     {
         _accessToken = accessToken;
     }
-
 }

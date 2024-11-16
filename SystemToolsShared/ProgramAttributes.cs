@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace SystemToolsShared;
 
 public sealed class ProgramAttributes
 {
     private static ProgramAttributes? _instance;
-    private static readonly object SyncRoot = new();
+    private static readonly Lock SyncRoot = new();
 
 
     private readonly Dictionary<string, object> _attributes;
@@ -61,7 +62,7 @@ public sealed class ProgramAttributes
             if (atLeastOneAdded)
                 sb.Append(", ");
             sb.Append(kvp.Key);
-            sb.Append("=");
+            sb.Append('=');
             sb.Append(kvp.Value);
             atLeastOneAdded = true;
         }

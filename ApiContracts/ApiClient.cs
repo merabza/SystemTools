@@ -77,14 +77,14 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     public async ValueTask<bool> RunMessages(CancellationToken cancellationToken = default)
     {
-        if (MessageHubClient is null) 
+        if (MessageHubClient is null)
             return false;
         return await MessageHubClient.RunMessages(cancellationToken);
     }
 
     public async ValueTask<bool> StopMessages(CancellationToken cancellationToken = default)
     {
-        if (MessageHubClient is null) 
+        if (MessageHubClient is null)
             return false;
         return await MessageHubClient.StopMessages(cancellationToken);
     }
@@ -164,7 +164,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return new[] { ApiClientErrors.ApiUnknownError };
     }
 
-    protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress, CancellationToken cancellationToken = default)
+    protected async Task<Option<Err[]>> DeleteAsync(string afterServerAddress,
+        CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
 
@@ -198,7 +199,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში DatabaseApiClient-ის მიერ
-    private async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
+    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
@@ -234,7 +235,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PutAsync(afterServerAddress, null, cancellationToken);
     }
 
-    private async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
+    //გამოიყენება SupportTools პროექტში
+    protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
@@ -275,9 +277,9 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturnString(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    private async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
-        bool useMessageHubClient,
-        string? bodyJsonData, CancellationToken cancellationToken = default)
+    //გამოიყენება SupportTools პროექტში
+    protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
+        bool useMessageHubClient, string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
 
@@ -305,7 +307,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return new[] { ApiClientErrors.ApiUnknownError };
     }
 
-    protected Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, CancellationToken cancellationToken = default)
+    protected Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress,
+        CancellationToken cancellationToken = default)
     {
         return PostAsyncReturn<T>(afterServerAddress, true, null, cancellationToken);
     }

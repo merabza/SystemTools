@@ -23,7 +23,7 @@ public class MessageLogger
         _useConsole = useConsole;
     }
 
-    protected async Task LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
+    protected async ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message);
@@ -33,7 +33,7 @@ public class MessageLogger
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
     }
 
-    protected async Task LogInfoAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
+    protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message, arg1);
@@ -43,7 +43,7 @@ public class MessageLogger
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
     }
 
-    protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2,
+    protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2,
         CancellationToken cancellationToken = default)
     {
         if (_useConsole)
@@ -54,7 +54,7 @@ public class MessageLogger
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
     }
 
-    protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
+    protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
         CancellationToken cancellationToken = default)
     {
         if (_useConsole)
@@ -66,7 +66,7 @@ public class MessageLogger
                 cancellationToken);
     }
 
-    protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3, object? arg4,
+    protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3, object? arg4,
         CancellationToken cancellationToken = default)
     {
         if (_useConsole)
@@ -78,21 +78,21 @@ public class MessageLogger
                 cancellationToken);
     }
 
-    protected async Task LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
+    protected async ValueTask LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(message, _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
     }
 
-    protected async Task LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
+    protected async ValueTask LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(string.Format(message, arg1), _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1), cancellationToken);
     }
 
-    protected async Task LogWarningAndSendMessage(string message, object? arg1, object? arg2,
+    protected async ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(string.Format(message, arg1, arg2), _useConsole, _logger);

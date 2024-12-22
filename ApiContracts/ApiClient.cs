@@ -82,7 +82,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return await MessageHubClient.RunMessages(cancellationToken);
     }
 
-    public async Task<bool> StopMessages(CancellationToken cancellationToken = default)
+    public async ValueTask<bool> StopMessages(CancellationToken cancellationToken = default)
     {
         if (MessageHubClient is null) 
             return false;

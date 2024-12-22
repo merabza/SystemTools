@@ -30,42 +30,42 @@ public class ReCounter
     }
 
 
-    protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken)
+    protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken = default)
     {
         foreach (var error in errors)
             await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
     }
 
-    protected async Task LogMessage(string name, string message, bool instantly, CancellationToken cancellationToken)
+    protected async Task LogMessage(string name, string message, bool instantly, CancellationToken cancellationToken = default)
     {
         _rLogger?.LogMessage(message);
         await _progressDataManager.SetProgressData(_userName, name, message, instantly, cancellationToken);
     }
 
-    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken)
+    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken = default)
     {
         await _progressDataManager.SetProgressData(_userName, name, value, instantly, cancellationToken);
     }
 
-    protected async Task SetProcLength(int length, CancellationToken cancellationToken)
+    protected async Task SetProcLength(int length, CancellationToken cancellationToken = default)
     {
         _procPosition = 0;
         await SetProcPosition(cancellationToken);
         await SetProgressValue(ReCounterConstants.ProcLength, length, true, cancellationToken);
     }
 
-    protected async Task SetProcessRun(bool runState, CancellationToken cancellationToken)
+    protected async Task SetProcessRun(bool runState, CancellationToken cancellationToken = default)
     {
         await _progressDataManager.SetProgressData(_userName, ReCounterConstants.ProcessRun, runState, true,
             cancellationToken);
     }
 
-    private async Task SetProcPosition(CancellationToken cancellationToken)
+    private async Task SetProcPosition(CancellationToken cancellationToken = default)
     {
         await SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, false, cancellationToken);
     }
 
-    private async Task ClearProgress(CancellationToken cancellationToken)
+    private async Task ClearProgress(CancellationToken cancellationToken = default)
     {
         await SetByLevelLength(0, -1, cancellationToken);
         await SetProcLength(0, cancellationToken);
@@ -73,7 +73,7 @@ public class ReCounter
 
     //protected საჭიროა AppGrammarGe პროექტისათვის
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken)
+    protected async Task SetByLevelLength(int length, int realToDo, CancellationToken cancellationToken = default)
     {
         _byLevelPosition = 0;
         if (realToDo != -1)
@@ -87,42 +87,42 @@ public class ReCounter
         await SetProgressValue(ReCounterConstants.ByLevelLength, length, true, cancellationToken);
     }
 
-    private async Task SetByLevelPosition(CancellationToken cancellationToken)
+    private async Task SetByLevelPosition(CancellationToken cancellationToken = default)
     {
         await SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition, false, cancellationToken);
     }
 
-    protected async Task IncreaseProcPosition(CancellationToken cancellationToken)
+    protected async Task IncreaseProcPosition(CancellationToken cancellationToken = default)
     {
         _procPosition++;
         await SetProcPosition(cancellationToken);
     }
 
-    protected async Task IncreaseByLevelPosition(CancellationToken cancellationToken)
+    protected async Task IncreaseByLevelPosition(CancellationToken cancellationToken = default)
     {
         _byLevelPosition++;
         await SetByLevelPosition(cancellationToken);
     }
 
-    private async Task OnFinishReCounter(CancellationToken cancellationToken)
+    private async Task OnFinishReCounter(CancellationToken cancellationToken = default)
     {
         await ClearProgress(cancellationToken);
         _progressDataManager.StopTimer();
     }
 
-    protected virtual async Task LogLevelMessage(string message, CancellationToken cancellationToken)
+    protected virtual async Task LogLevelMessage(string message, CancellationToken cancellationToken = default)
     {
         await LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
     }
 
-    protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken)
+    protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken = default)
     {
         await LogMessage(ReCounterConstants.LevelName, string.Empty, true, cancellationToken);
         await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
     }
 
     protected virtual async Task<Exception> LogProcMessageAndException(string message,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         await LogProcMessage(message, cancellationToken);
         return new Exception(message);
@@ -130,7 +130,7 @@ public class ReCounter
 
     //protected საჭიროა AppGrammarGe პროექტისათვის
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task<bool> IsCancellationRequested(CancellationToken cancellationToken)
+    protected async ValueTask<bool> IsCancellationRequested(CancellationToken cancellationToken = default)
     {
         if (!cancellationToken.IsCancellationRequested)
             return false;
@@ -139,12 +139,12 @@ public class ReCounter
         return true;
     }
 
-    protected virtual Task RunRecount(CancellationToken cancellationToken)
+    protected virtual Task RunRecount(CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }
 
-    public async Task Recount(CancellationToken cancellationToken)
+    public async Task Recount(CancellationToken cancellationToken = default)
     {
         try
         {

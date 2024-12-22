@@ -19,14 +19,13 @@ public class TestApiClient : ApiClient
     {
     }
 
-    public async Task<OneOf<string, Err[]>> GetAppSettingsVersion(CancellationToken cancellationToken)
+    public Task<OneOf<string, Err[]>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
     {
-        return await GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetAppSettingsVersion,
-            cancellationToken);
+        return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetAppSettingsVersion, cancellationToken);
     }
 
-    public async Task<OneOf<string, Err[]>> GetVersion(CancellationToken cancellationToken)
+    public Task<OneOf<string, Err[]>> GetVersion(CancellationToken cancellationToken = default)
     {
-        return await GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
+        return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
     }
 }

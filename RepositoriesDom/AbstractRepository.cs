@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using OneOf;
+using SystemToolsShared.Errors;
 
 namespace RepositoriesDom;
 
@@ -15,12 +19,12 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         _ctx = ctx;
     }
 
-    public async Task<IDbContextTransaction> GetTransaction(CancellationToken cancellationToken)
+    public Task<IDbContextTransaction> GetTransaction(CancellationToken cancellationToken = default)
     {
-        return await _ctx.Database.BeginTransactionAsync(cancellationToken);
+        return _ctx.Database.BeginTransactionAsync(cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _ctx.SaveChangesAsync(cancellationToken);
     }
@@ -29,5 +33,30 @@ public /*open*/ class AbstractRepository : IAbstractRepository
     {
         var entType = _ctx.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
         return entType?.GetTableName();
+    }
+
+    public async Task<OneOf<int, Err[]>> ExecuteSqlRawRetOneOfAsync(string sql, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await _ctx.Database.ExecuteSqlRawAsync(sql, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
+        }
+    }
+
+    protected async Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await _ctx.Database.ExecuteSqlRawAsync(sql, cancellationToken);
+            return null;
+        }
+        catch (Exception e)
+        {
+            return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
+        }
     }
 }

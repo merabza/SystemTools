@@ -33,7 +33,7 @@ public sealed class ProcessMonitoringManager
         _instance = newInstance;
     }
 
-    //public bool StopWaitingKeyboard(CancellationToken cancellationToken)
+    //public bool StopWaitingKeyboard(CancellationToken cancellationToken = default)
     //{
     //    if (_waitKeyboardEscapeBackgroundService is null)
     //        return true;
@@ -41,7 +41,7 @@ public sealed class ProcessMonitoringManager
     //    return true;
     //}
 
-    //public Task StartWaitingKeyboard(CancellationToken cancellationToken)
+    //public Task StartWaitingKeyboard(CancellationToken cancellationToken = default)
     //{
     //    _waitKeyboardEscapeBackgroundService = new WaitKeyboardEscapeBackgroundService();
 

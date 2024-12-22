@@ -23,7 +23,7 @@ public class MessageLogger
         _useConsole = useConsole;
     }
 
-    protected async Task LogInfoAndSendMessage(string message, CancellationToken cancellationToken)
+    protected async Task LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message);
@@ -33,7 +33,7 @@ public class MessageLogger
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
     }
 
-    protected async Task LogInfoAndSendMessage(string message, object? arg1, CancellationToken cancellationToken)
+    protected async Task LogInfoAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message, arg1);
@@ -44,7 +44,7 @@ public class MessageLogger
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2);
@@ -55,7 +55,7 @@ public class MessageLogger
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2, arg3);
@@ -67,7 +67,7 @@ public class MessageLogger
     }
 
     protected async Task LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3, object? arg4,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         if (_useConsole)
             Console.WriteLine(message, arg1, arg2, arg3, arg4);
@@ -78,14 +78,14 @@ public class MessageLogger
                 cancellationToken);
     }
 
-    protected async Task LogWarningAndSendMessage(string message, CancellationToken cancellationToken)
+    protected async Task LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(message, _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
     }
 
-    protected async Task LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken)
+    protected async Task LogWarningAndSendMessage(string message, object? arg1, CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(string.Format(message, arg1), _useConsole, _logger);
         if (_messagesDataManager is not null)
@@ -93,37 +93,45 @@ public class MessageLogger
     }
 
     protected async Task LogWarningAndSendMessage(string message, object? arg1, object? arg2,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(string.Format(message, arg1, arg2), _useConsole, _logger);
         if (_messagesDataManager is not null)
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
     }
 
-    protected async Task<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
-        CancellationToken cancellationToken)
+    protected async ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+        CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(message, _useConsole, _logger);
-        if (_messagesDataManager is not null)
-            await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
+
+        if (_messagesDataManager is null) 
+            return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
+
+        await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
         return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
     }
 
-    protected async Task<Err[]> LogErrorAndSendMessageFromError(Err error, CancellationToken cancellationToken)
+    protected async ValueTask<Err[]> LogErrorAndSendMessageFromError(Err error, CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(error.ErrorMessage, _useConsole, _logger);
-        if (_messagesDataManager is not null)
-            await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
+        
+        if (_messagesDataManager is null) 
+            return [error];
+
+        await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
         return [error];
     }
 
-    protected async Task<Err[]> LogErrorAndSendMessageFromException(Exception ex, string methodName,
-        CancellationToken cancellationToken)
+    protected async ValueTask<Err[]> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+        CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, _useConsole, _logger);
         var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
-        if (_messagesDataManager is not null)
-            await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
+        if (_messagesDataManager is null) 
+            return [error];
+
+        await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
         return [error];
     }
 }

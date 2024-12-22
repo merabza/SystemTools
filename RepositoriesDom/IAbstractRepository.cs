@@ -6,8 +6,8 @@ namespace RepositoriesDom;
 
 public interface IAbstractRepository
 {
-    Task<IDbContextTransaction> GetTransaction(CancellationToken cancellationToken);
+    Task<IDbContextTransaction> GetTransaction(CancellationToken cancellationToken = default);
 
-    Task SaveChangesAsync(CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
     string? GetTableName<T>();
 }

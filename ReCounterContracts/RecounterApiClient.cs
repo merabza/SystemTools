@@ -18,16 +18,16 @@ public class ReCounterApiClient : ApiClient
     {
     }
 
-    public async Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(CancellationToken cancellationToken)
+    public Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(CancellationToken cancellationToken = default)
     {
-        return await GetAsyncReturn<ProgressData>(
+        return GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,
             false, cancellationToken);
     }
 
-    public async Task<OneOf<bool, Err[]>> CancelCurrentProcess(CancellationToken cancellationToken)
+    public Task<OneOf<bool, Err[]>> CancelCurrentProcess(CancellationToken cancellationToken = default)
     {
-        return await PostAsyncReturn<bool>(
+        return PostAsyncReturn<bool>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CancelCurrentProcess,
             cancellationToken);
     }

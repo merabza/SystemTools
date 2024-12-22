@@ -5,5 +5,5 @@ namespace StringMessagesApiContracts;
 
 public interface IMessenger
 {
-    Task SendMessage(string message, CancellationToken cancellationToken);
+    Task SendMessage(string message, CancellationToken cancellationToken = default);
 }

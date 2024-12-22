@@ -7,6 +7,6 @@ namespace ReCounterDom;
 public interface IReCounterBackgroundTaskQueue
 {
     void QueueBackgroundWorkItem(Func<CancellationToken, Task> workItem);
-    Task<Func<CancellationToken, Task>?> DequeueAsync(CancellationToken cancellationToken);
+    Task<Func<CancellationToken, Task>?> DequeueAsync(CancellationToken cancellationToken = default);
     void ClearQueue();
 }

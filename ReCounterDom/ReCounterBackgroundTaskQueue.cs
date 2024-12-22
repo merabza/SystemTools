@@ -18,7 +18,7 @@ public class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
         _signal.Release();
     }
 
-    public async Task<Func<CancellationToken, Task>?> DequeueAsync(CancellationToken cancellationToken)
+    public async Task<Func<CancellationToken, Task>?> DequeueAsync(CancellationToken cancellationToken = default)
     {
         await _signal.WaitAsync(cancellationToken);
         _workItems.TryDequeue(out var workItem);

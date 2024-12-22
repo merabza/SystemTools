@@ -29,7 +29,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         _apiKey = apiKey;
     }
 
-    public async Task<bool> RunMessages(CancellationToken cancellationToken)
+    public async Task<bool> RunMessages(CancellationToken cancellationToken = default)
     {
         _connection = new HubConnectionBuilder().WithUrl(
             $"{_server}{RecountMessagesRoutes.ReCounterRoute.Recounter}{RecountMessagesRoutes.ReCounterRoute.Messages}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}",
@@ -99,12 +99,14 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         return false;
     }
 
-    public async Task<bool> StopMessages(CancellationToken cancellationToken)
+    public async ValueTask<bool> StopMessages(CancellationToken cancellationToken = default)
     {
         try
         {
-            if (_connection is not null)
-                await _connection.StopAsync(cancellationToken);
+            if (_connection is null) 
+                return true;
+
+            await _connection.StopAsync(cancellationToken);
             return true;
         }
         catch (HttpRequestException)

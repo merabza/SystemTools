@@ -5,5 +5,5 @@ namespace ReCounterContracts;
 
 public interface IProgressDataMessenger
 {
-    Task SendProgressData(ProgressData progressData, CancellationToken cancellationToken);
+    Task SendProgressData(ProgressData progressData, CancellationToken cancellationToken = default);
 }

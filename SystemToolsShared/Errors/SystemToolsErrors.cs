@@ -71,4 +71,13 @@ public static class SystemToolsErrors
     {
         return new Err { ErrorCode = nameof(RunProcessError), ErrorMessage = $"RunProcessError: {errorMessage}" };
     }
+
+    public static Err UnexpectedDatabaseException(Exception e)
+    {
+        var errorId = Guid.NewGuid();
+        Log.Error($"{errorId} - {e.Message}{Environment.NewLine}{e.StackTrace}");
+        return new Err
+            { ErrorCode = nameof(UnexpectedDatabaseException), ErrorMessage = $"მონაცემთა ბაზასთან დაკავშირებული გაუთვალისწინებელი შეცდომა: {errorId}" };
+    }
+
 }

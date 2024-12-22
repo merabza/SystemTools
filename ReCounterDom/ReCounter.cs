@@ -54,7 +54,7 @@ public class ReCounter
         await SetProgressValue(ReCounterConstants.ProcLength, length, true, cancellationToken);
     }
 
-    protected async Task SetProcessRun(bool runState, CancellationToken cancellationToken = default)
+    private async Task SetProcessRun(bool runState, CancellationToken cancellationToken = default)
     {
         await _progressDataManager.SetProgressData(_userName, ReCounterConstants.ProcessRun, runState, true,
             cancellationToken);

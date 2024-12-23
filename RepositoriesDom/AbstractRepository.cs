@@ -24,9 +24,9 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         return _ctx.Database.BeginTransactionAsync(cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        await _ctx.SaveChangesAsync(cancellationToken);
+        return _ctx.SaveChangesAsync(cancellationToken);
     }
 
     public string? GetTableName<T>()

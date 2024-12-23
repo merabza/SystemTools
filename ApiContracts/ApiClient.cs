@@ -236,6 +236,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {

@@ -199,6 +199,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში DatabaseApiClient-ის მიერ
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken = default)
     {
@@ -236,6 +237,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<Option<Err[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {
@@ -278,6 +280,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
         bool useMessageHubClient, string? bodyJsonData, CancellationToken cancellationToken = default)
     {
@@ -319,7 +322,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
+    private async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {

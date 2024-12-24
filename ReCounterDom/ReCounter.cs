@@ -9,11 +9,11 @@ namespace ReCounterDom;
 
 public class ReCounter
 {
-    private readonly string? _userName;
     private readonly string _processName;
     private readonly IProgressDataManager _progressDataManager;
 
     private readonly ReCounterLogger? _rLogger;
+    private readonly string? _userName;
 
     private int _byLevelPosition;
     private int _procPosition;
@@ -36,15 +36,17 @@ public class ReCounter
             await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
     }
 
-    protected async Task LogMessage(string name, string message, bool instantly, CancellationToken cancellationToken = default)
+    protected ValueTask LogMessage(string name, string message, bool instantly,
+        CancellationToken cancellationToken = default)
     {
         _rLogger?.LogMessage(message);
-        await _progressDataManager.SetProgressData(_userName, name, message, instantly, cancellationToken);
+        return _progressDataManager.SetProgressData(_userName, name, message, instantly, cancellationToken);
     }
 
-    private async Task SetProgressValue(string name, int value, bool instantly, CancellationToken cancellationToken = default)
+    private ValueTask SetProgressValue(string name, int value, bool instantly,
+        CancellationToken cancellationToken = default)
     {
-        await _progressDataManager.SetProgressData(_userName, name, value, instantly, cancellationToken);
+        return _progressDataManager.SetProgressData(_userName, name, value, instantly, cancellationToken);
     }
 
     protected async Task SetProcLength(int length, CancellationToken cancellationToken = default)
@@ -54,15 +56,15 @@ public class ReCounter
         await SetProgressValue(ReCounterConstants.ProcLength, length, true, cancellationToken);
     }
 
-    private async Task SetProcessRun(bool runState, CancellationToken cancellationToken = default)
+    private ValueTask SetProcessRun(bool runState, CancellationToken cancellationToken = default)
     {
-        await _progressDataManager.SetProgressData(_userName, ReCounterConstants.ProcessRun, runState, true,
+        return _progressDataManager.SetProgressData(_userName, ReCounterConstants.ProcessRun, runState, true,
             cancellationToken);
     }
 
-    private async Task SetProcPosition(CancellationToken cancellationToken = default)
+    private ValueTask SetProcPosition(CancellationToken cancellationToken = default)
     {
-        await SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, false, cancellationToken);
+        return SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, false, cancellationToken);
     }
 
     private async Task ClearProgress(CancellationToken cancellationToken = default)
@@ -87,21 +89,21 @@ public class ReCounter
         await SetProgressValue(ReCounterConstants.ByLevelLength, length, true, cancellationToken);
     }
 
-    private async Task SetByLevelPosition(CancellationToken cancellationToken = default)
+    private ValueTask SetByLevelPosition(CancellationToken cancellationToken = default)
     {
-        await SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition, false, cancellationToken);
+        return SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition, false, cancellationToken);
     }
 
-    protected async Task IncreaseProcPosition(CancellationToken cancellationToken = default)
+    protected ValueTask IncreaseProcPosition(CancellationToken cancellationToken = default)
     {
         _procPosition++;
-        await SetProcPosition(cancellationToken);
+        return SetProcPosition(cancellationToken);
     }
 
-    protected async Task IncreaseByLevelPosition(CancellationToken cancellationToken = default)
+    protected ValueTask IncreaseByLevelPosition(CancellationToken cancellationToken = default)
     {
         _byLevelPosition++;
-        await SetByLevelPosition(cancellationToken);
+        return SetByLevelPosition(cancellationToken);
     }
 
     private async Task OnFinishReCounter(CancellationToken cancellationToken = default)
@@ -110,9 +112,9 @@ public class ReCounter
         _progressDataManager.StopTimer();
     }
 
-    protected virtual async Task LogLevelMessage(string message, CancellationToken cancellationToken = default)
+    protected virtual ValueTask LogLevelMessage(string message, CancellationToken cancellationToken = default)
     {
-        await LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
+        return LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
     }
 
     protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken = default)

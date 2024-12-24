@@ -187,7 +187,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return new[] { ApiClientErrors.ApiUnknownError };
     }
 
-    protected ValueTask<Option<Err[]>> PostAsync(string afterServerAddress, CancellationToken cancellationToken = default)
+    protected ValueTask<Option<Err[]>> PostAsync(string afterServerAddress,
+        CancellationToken cancellationToken = default)
     {
         return PostAsync(afterServerAddress, true, null, cancellationToken);
     }
@@ -323,6 +324,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში
+    // ReSharper disable once MemberCanBePrivate.Global
     protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData,
         CancellationToken cancellationToken = default)

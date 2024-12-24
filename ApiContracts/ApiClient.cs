@@ -199,12 +199,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში DatabaseApiClient-ის მიერ
-<<<<<<< HEAD
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
-=======
     protected async ValueTask<Option<Err[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
->>>>>>> 8461ff02a09c94e92209e9b514fb783430183625
         string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
@@ -284,12 +280,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //გამოიყენება SupportTools პროექტში
-<<<<<<< HEAD
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
-=======
     protected async ValueTask<OneOf<string, Err[]>> PostAsyncReturnString(string afterServerAddress,
->>>>>>> 8461ff02a09c94e92209e9b514fb783430183625
         bool useMessageHubClient, string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         var uri = CreateUri(afterServerAddress);
@@ -330,7 +322,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
-    private async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
+    //გამოიყენება SupportTools პროექტში
+    protected async Task<OneOf<T, Err[]>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {

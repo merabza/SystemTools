@@ -9,6 +9,7 @@ namespace ApiKeysManagement.Domain;
 public sealed class ApiKeysDomain
 {
     //public საჭიროა ApiKeysChecker-ში ლოგირებისას
+    // ReSharper disable once MemberCanBePrivate.Global
     public HashSet<ApiKeyAndRemoteIpAddressDomain> ApiKeys { get; } = [];
 
     public static ApiKeysDomain Create(IConfiguration configuration, ILogger logger)
@@ -17,7 +18,7 @@ public sealed class ApiKeysDomain
         var apiKeys = apiKeysSection.Get<ApiKeys>();
 
         var apiKeysDomain = new ApiKeysDomain();
-        var count = apiKeys?.AppSettingsByApiKey?.Count ?? 0;
+        //var count = apiKeys?.AppSettingsByApiKey?.Count ?? 0;
         //logger.LogInformation("ApiKeys count is {count}", count);
         if (apiKeys?.AppSettingsByApiKey is null)
             return apiKeysDomain;

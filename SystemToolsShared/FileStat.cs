@@ -23,8 +23,7 @@ public static class FileStat
             if (result.Scheme != "file")
                 return result.AbsoluteUri.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-        var fullPath = Path.GetFullPath(path)
-            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        var fullPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? fullPath.ToUpperInvariant() : fullPath;
     }
 
@@ -112,8 +111,7 @@ public static class FileStat
     {
         if (string.IsNullOrWhiteSpace(sFileMask))
             return true;
-        var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".")
-            .Replace("\\", @"\\");
+        var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
         if (!sFileMask.EndsWith('*'))
             regexFileMask += '$';
         if (!sFileMask.StartsWith('*'))
@@ -165,8 +163,7 @@ public static class FileStat
             return (DateTime.MinValue, null);
         var mask = sbMask.ToString();
         var strDate = fileName.Substring(maskPositionInName, mask.Length);
-        var pattern = fileName[..maskPositionInName] + mask +
-                      fileName[(maskPositionInName + mask.Length)..];
+        var pattern = fileName[..maskPositionInName] + mask + fileName[(maskPositionInName + mask.Length)..];
 
         var dt = TryGetDate(strDate, mask);
         return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);

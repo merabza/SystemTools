@@ -280,8 +280,8 @@ public static class StShared
         Console.ForegroundColor = currentColor;
     }
 
-    public static void WriteException(Exception? ex, string? additionalMessage, bool useConsole,
-        ILogger? logger = null, bool pauseAfter = true)
+    public static void WriteException(Exception? ex, string? additionalMessage, bool useConsole, ILogger? logger = null,
+        bool pauseAfter = true)
     {
         logger?.LogError(ex, additionalMessage ?? string.Empty);
         if (!useConsole)
@@ -314,8 +314,7 @@ public static class StShared
         //    return;
         //}
 
-        var writeToSection =
-            serilogSettings.GetChildren().SingleOrDefault(s => s.Key == "WriteTo");
+        var writeToSection = serilogSettings.GetChildren().SingleOrDefault(s => s.Key == "WriteTo");
 
         if (writeToSection is null)
         {
@@ -323,8 +322,7 @@ public static class StShared
             return;
         }
 
-        var writeToWithNameFile =
-            writeToSection.GetChildren().FirstOrDefault(child => child["Name"] == "File");
+        var writeToWithNameFile = writeToSection.GetChildren().FirstOrDefault(child => child["Name"] == "File");
         if (writeToWithNameFile is null)
         {
             Console.WriteLine("Serilog WriteTo File Section not set");

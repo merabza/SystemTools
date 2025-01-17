@@ -1,6 +1,7 @@
 ﻿//using FilesProcessing;
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
+    public static OneOf<(string, int), IEnumerable<Err>> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
@@ -81,8 +82,8 @@ public static class StShared
     }
 
 
-    public static Option<Err[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
-        int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
+    public static Option<IEnumerable<Err>> RunProcess(bool useConsole, ILogger? logger, string programFileName,
+        string arguments, int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 

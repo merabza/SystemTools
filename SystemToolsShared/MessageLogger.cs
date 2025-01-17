@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -100,7 +101,7 @@ public class MessageLogger
             await _messagesDataManager.SendMessage(_userName, string.Format(message, arg1, arg2), cancellationToken);
     }
 
-    protected async ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+    protected async ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(string errorCode, string message,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(message, _useConsole, _logger);

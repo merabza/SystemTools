@@ -1,4 +1,9 @@
-﻿using System;
+﻿using ApiContracts.Errors;
+using LanguageExt;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using OneOf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -6,11 +11,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiContracts.Errors;
-using LanguageExt;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using OneOf;
 using SystemToolsShared;
 using SystemToolsShared.Errors;
 
@@ -18,16 +18,15 @@ namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient
 {
-    //protected იყენებს SystemTools
-    protected string? AccessToken = null;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly string _server;
+
     private readonly bool _useConsole;
 
     //protected იყენებს SystemTools
-    protected IMessageHubClient? MessageHubClient { get; }
+    protected string? AccessToken = null;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
@@ -40,6 +39,9 @@ public /*open*/ abstract class ApiClient : IApiClient
         _useConsole = useConsole;
         _client = httpClientFactory.CreateClient();
     }
+
+    //protected იყენებს SystemTools
+    protected IMessageHubClient? MessageHubClient { get; }
 
 
     private async ValueTask<Option<IEnumerable<Err>>> LogResponseErrorMessage(HttpResponseMessage response,

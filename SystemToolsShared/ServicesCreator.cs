@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using System;
+using System.IO;
+using System.Text;
 
 namespace SystemToolsShared;
 

@@ -1,5 +1,9 @@
 ﻿//using FilesProcessing;
 
+using LanguageExt;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using OneOf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,10 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using LanguageExt;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using OneOf;
 using SystemToolsShared.Errors;
 
 namespace SystemToolsShared;
@@ -216,7 +216,7 @@ public static class StShared
                     braceIndex = endIndex;
                 }
                 else
-                    // An unescaped '{' or '}' found.
+                // An unescaped '{' or '}' found.
                 {
                     break;
                 }
@@ -230,7 +230,7 @@ public static class StShared
                         braceIndex = scanIndex;
                 }
                 else
-                    // For '{' pick the last occurrence.
+                // For '{' pick the last occurrence.
                 {
                     braceIndex = scanIndex;
                 }

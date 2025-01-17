@@ -34,7 +34,7 @@ public sealed class FilePermission
         FileAccess others)
     {
         var permission = new FilePermission(filePath)
-            { Flags = new FilePermissionFlag(user, group, others) };
+        { Flags = new FilePermissionFlag(user, group, others) };
         return permission.Apply();
     }
 

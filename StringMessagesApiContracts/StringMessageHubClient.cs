@@ -1,10 +1,10 @@
-﻿using System;
+﻿using ApiContracts;
+using Microsoft.AspNetCore.SignalR.Client;
+using StringMessagesApiContracts.V1.Routes;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiContracts;
-using Microsoft.AspNetCore.SignalR.Client;
-using StringMessagesApiContracts.V1.Routes;
 
 namespace StringMessagesApiContracts;
 
@@ -53,7 +53,7 @@ public sealed class StringMessageHubClient : IMessageHubClient
     {
         try
         {
-            if (_connection is null) 
+            if (_connection is null)
                 return true;
 
             await _connection.StopAsync(cancellationToken);

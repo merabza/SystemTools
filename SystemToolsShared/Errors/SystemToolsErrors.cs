@@ -1,5 +1,5 @@
-﻿using System;
-using Serilog;
+﻿using Serilog;
+using System;
 
 namespace SystemToolsShared.Errors;
 
@@ -7,7 +7,8 @@ public static class SystemToolsErrors
 {
     public static readonly Err UnexpectedError = new()
     {
-        ErrorCode = nameof(UnexpectedError), ErrorMessage = "გაუთვალისწინებელი შეცდომა"
+        ErrorCode = nameof(UnexpectedError),
+        ErrorMessage = "გაუთვალისწინებელი შეცდომა"
     };
 
     public static Err SuchARecordAlreadyExists =>
@@ -38,7 +39,8 @@ public static class SystemToolsErrors
     {
         return new Err
         {
-            ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Method {methodName} did Not Implemented"
+            ErrorCode = nameof(MethodNotImplemented),
+            ErrorMessage = $"Method {methodName} did Not Implemented"
         };
     }
 
@@ -46,7 +48,8 @@ public static class SystemToolsErrors
     {
         return new Err
         {
-            ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented"
+            ErrorCode = nameof(MethodNotImplemented),
+            ErrorMessage = $"Handler {methodName} did Not Implemented"
         };
     }
 
@@ -65,7 +68,8 @@ public static class SystemToolsErrors
         Log.Error($"{errorId} - {e.Message}{Environment.NewLine}{e.StackTrace}");
         return new Err
         {
-            ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}"
+            ErrorCode = nameof(UnexpectedApiException),
+            ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}"
         };
     }
 

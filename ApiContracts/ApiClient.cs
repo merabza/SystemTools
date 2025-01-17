@@ -18,12 +18,16 @@ namespace ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient
 {
-    private readonly string? _accessToken = null;
+    //protected იყენებს SystemTools
+    protected string? AccessToken = null;
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger _logger;
     private readonly string _server;
     private readonly bool _useConsole;
+
+    //protected იყენებს SystemTools
+    protected IMessageHubClient? MessageHubClient { get; }
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
@@ -37,7 +41,6 @@ public /*open*/ abstract class ApiClient : IApiClient
         _client = httpClientFactory.CreateClient();
     }
 
-    private IMessageHubClient? MessageHubClient { get; }
 
     private async ValueTask<Option<IEnumerable<Err>>> LogResponseErrorMessage(HttpResponseMessage response,
         CancellationToken cancellationToken = default)
@@ -136,10 +139,10 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     private void SetAuthorizationAccessToken()
     {
-        if ((_accessToken is not null && _client.DefaultRequestHeaders.Authorization is null) ||
+        if ((AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null) ||
             _client.DefaultRequestHeaders.Authorization?.Parameter is null ||
-            _client.DefaultRequestHeaders.Authorization.Parameter != _accessToken)
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+            _client.DefaultRequestHeaders.Authorization.Parameter != AccessToken)
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
     }
 
     protected async Task<OneOf<string, IEnumerable<Err>>> GetAsyncAsString(string afterServerAddress,

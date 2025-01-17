@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiContracts;
@@ -18,14 +19,15 @@ public class ReCounterApiClient : ApiClient
     {
     }
 
-    public Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(CancellationToken cancellationToken = default)
+    public Task<OneOf<ProgressData, IEnumerable<Err>>> GetCurrentProcessStatus(
+        CancellationToken cancellationToken = default)
     {
         return GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,
             false, cancellationToken);
     }
 
-    public Task<OneOf<bool, Err[]>> CancelCurrentProcess(CancellationToken cancellationToken = default)
+    public Task<OneOf<bool, IEnumerable<Err>>> CancelCurrentProcess(CancellationToken cancellationToken = default)
     {
         return PostAsyncReturn<bool>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CancelCurrentProcess,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,7 +36,8 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         return entType?.GetTableName();
     }
 
-    public async Task<OneOf<int, Err[]>> ExecuteSqlRawRetOneOfAsync(string sql, CancellationToken cancellationToken = default)
+    public async Task<OneOf<int, IEnumerable<Err>>> ExecuteSqlRawRetOneOfAsync(string sql,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -47,7 +49,8 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         }
     }
 
-    protected async Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default)
+    protected async Task<Option<IEnumerable<Err>>> ExecuteSqlRawRetOptionAsync(string sql,
+        CancellationToken cancellationToken = default)
     {
         try
         {

@@ -3,6 +3,7 @@
 public sealed class ProcessMonitoringManager
 {
     private static ProcessMonitoringManager? _instance;
+
     private static readonly object SyncRoot = new();
     //private WaitKeyboardEscapeBackgroundService? _waitKeyboardEscapeBackgroundService;
 
@@ -28,11 +29,6 @@ public sealed class ProcessMonitoringManager
         }
     }
 
-    public static void SetTestInstance(ProcessMonitoringManager newInstance)
-    {
-        _instance = newInstance;
-    }
-
     //public bool StopWaitingKeyboard(CancellationToken cancellationToken = default)
     //{
     //    if (_waitKeyboardEscapeBackgroundService is null)
@@ -49,4 +45,9 @@ public sealed class ProcessMonitoringManager
     //}
 
     public bool ProcessIsRunning { get; set; }
+
+    public static void SetTestInstance(ProcessMonitoringManager newInstance)
+    {
+        _instance = newInstance;
+    }
 }

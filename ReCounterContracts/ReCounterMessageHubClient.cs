@@ -15,8 +15,8 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private static int _lastLength;
     private static string? _lastProcName;
     private readonly string? _apiKey;
-    private string? _accessToken;
     private readonly string _server;
+    private string? _accessToken;
 
     private HubConnection? _connection;
 
@@ -103,7 +103,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     {
         try
         {
-            if (_connection is null) 
+            if (_connection is null)
                 return true;
 
             await _connection.StopAsync(cancellationToken);

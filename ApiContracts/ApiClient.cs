@@ -1,9 +1,4 @@
-﻿using ApiContracts.Errors;
-using LanguageExt;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using OneOf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -11,6 +6,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiContracts.Errors;
+using LanguageExt;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using OneOf;
 using SystemToolsShared;
 using SystemToolsShared.Errors;
 

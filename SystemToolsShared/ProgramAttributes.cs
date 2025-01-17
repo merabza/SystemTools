@@ -34,13 +34,13 @@ public sealed class ProgramAttributes
         }
     }
 
+    public string AppName { get; set; } = null!;
+    public string AppKey { get; set; } = null!;
+
     public static void SetTestInstance(ProgramAttributes newInstance)
     {
         _instance = newInstance;
     }
-
-    public string AppName { get; set; } = null!;
-    public string AppKey { get; set; } = null!;
 
     public void SetAttribute<TC>(string attributeName, TC attributeValue) where TC : notnull
     {

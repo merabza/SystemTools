@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.IO;
+using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
-using System;
-using System.IO;
-using System.Text;
 
 namespace SystemToolsShared;
 
@@ -48,8 +48,7 @@ public /*open*/ class ServicesCreator
 
                 logFileName += extension;
                 Log.Logger = new LoggerConfiguration().WriteTo.Console(consoleLogEventLevel).WriteTo
-                    .File(logFileName, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day)
-                    .CreateLogger();
+                    .File(logFileName, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day).CreateLogger();
             }
 
             var serviceCollection = new ServiceCollection();

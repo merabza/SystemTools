@@ -24,8 +24,7 @@ public static class DateTimeExtend
             case EPeriodType.Month:
                 return new DateTime(forDate.Year, forDate.Month, 1);
             case EPeriodType.Week:
-                var ci =
-                    Thread.CurrentThread.CurrentCulture;
+                var ci = Thread.CurrentThread.CurrentCulture;
                 var firstDayOfWeek = ci.DateTimeFormat.FirstDayOfWeek;
                 var dayOfWeek = forDate.DayOfWeek;
                 return forDate.AddDays(firstDayOfWeek - dayOfWeek).Date;

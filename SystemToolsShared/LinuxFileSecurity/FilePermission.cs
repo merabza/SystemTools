@@ -30,11 +30,9 @@ public sealed class FilePermission
     //{
     //}
 
-    public static FilePermission? SetPermission(string filePath, FileAccess user, FileAccess group,
-        FileAccess others)
+    public static FilePermission? SetPermission(string filePath, FileAccess user, FileAccess group, FileAccess others)
     {
-        var permission = new FilePermission(filePath)
-        { Flags = new FilePermissionFlag(user, group, others) };
+        var permission = new FilePermission(filePath) { Flags = new FilePermissionFlag(user, group, others) };
         return permission.Apply();
     }
 
@@ -61,8 +59,7 @@ public sealed class FilePermission
         try
         {
             var permission = ToString();
-            var filePermission =
-                new ProcessStartInfo(Command, permission);
+            var filePermission = new ProcessStartInfo(Command, permission);
             Process.Start(filePermission);
             return this;
         }

@@ -1,10 +1,10 @@
-﻿using ApiContracts;
+﻿using System.Threading.Tasks;
+using ApiContracts;
 using ApiContracts.Errors;
 using ApiKeysManagement.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 // ReSharper disable ReplaceWithPrimaryConstructorParameter
 

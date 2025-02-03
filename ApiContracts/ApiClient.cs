@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,19 +46,23 @@ public /*open*/ abstract class ApiClient : IApiClient
 
 
     private async ValueTask<Option<IEnumerable<Err>>> LogResponseErrorMessage(HttpResponseMessage response,
-        CancellationToken cancellationToken = default)
+        string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         if (response.IsSuccessStatusCode)
             return null;
 
         if (_useConsole)
+        {
             StShared.WriteErrorLine(
                 $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true,
                 null, false);
 
-        if (_useConsole)
+            if (!string.IsNullOrWhiteSpace(bodyJsonData))
+                StShared.WriteErrorLine($"request body was : {bodyJsonData}", true, null, false);
+
             StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null,
                 false);
+        }
 
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -114,7 +119,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return null;
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, null, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -133,7 +138,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return null;
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, null, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -164,7 +169,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, null, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -187,7 +192,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return null;
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, null, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -221,7 +226,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         using var content = bodyJsonData is null
             ? null
             // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, "application/json");
+            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
@@ -232,7 +237,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return null;
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -258,7 +263,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         using var content = bodyJsonData is null
             ? null
             // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, "application/json");
+            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
         // ReSharper disable once using
         var response = await _client.PutAsync(uri, content, cancellationToken);
@@ -269,7 +274,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return null;
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -301,7 +306,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         using var content = bodyJsonData is null
             ? null
             // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, "application/json");
+            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
         // ReSharper disable once using
         var response = await _client.PostAsync(uri, content, cancellationToken);
@@ -312,7 +317,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (response.IsSuccessStatusCode)
             return await response.Content.ReadAsStringAsync(cancellationToken);
 
-        var respResult = await LogResponseErrorMessage(response, cancellationToken);
+        var respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
         if (respResult.IsSome)
             return (Err[])respResult;
         return new[] { ApiClientErrors.ApiUnknownError };
@@ -344,7 +349,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         using var content = bodyJsonData is null
             ? null
             // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, "application/json");
+            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
         // ReSharper disable once using
         using var response = await _client.PostAsync(uri, content, cancellationToken);
@@ -354,7 +359,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (!response.IsSuccessStatusCode)
         {
-            var respResult = await LogResponseErrorMessage(response, cancellationToken);
+            var respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
             return new[] { ApiClientErrors.ApiUnknownError };
@@ -385,7 +390,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (!response.IsSuccessStatusCode)
         {
-            var respResult = await LogResponseErrorMessage(response, cancellationToken);
+            var respResult = await LogResponseErrorMessage(response, null, cancellationToken);
             if (respResult.IsSome)
                 return (Err[])respResult;
             return new[] { ApiClientErrors.ApiUnknownError };

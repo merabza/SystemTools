@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

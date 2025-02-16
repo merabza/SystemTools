@@ -38,31 +38,27 @@ public class ProcessorWorkerServiceApiClient : RecounterApiClient
     {
         return await PostAsync(
             ProcessorWorkerServiceApiRoutes.ReCounterRoute.ReCounterBase +
-            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRedundantLemmas,
-            cancellationToken);
+            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRedundantLemmas, cancellationToken);
     }
 
     public async Task<Option<Err[]>> ClearRedundantWords(CancellationToken cancellationToken)
     {
         return await PostAsync(
             ProcessorWorkerServiceApiRoutes.ReCounterRoute.ReCounterBase +
-            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRedundantWords,
-            cancellationToken);
+            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRedundantWords, cancellationToken);
     }
 
     public async Task<Option<Err[]>> ClearWordsByLemmas(CancellationToken cancellationToken)
     {
         return await PostAsync(
             ProcessorWorkerServiceApiRoutes.ReCounterRoute.ReCounterBase +
-            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearWordsByLemmas,
-            cancellationToken);
+            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearWordsByLemmas, cancellationToken);
     }
 
     public async Task<Option<Err[]>> ClearRawWordsByLemmas(CancellationToken cancellationToken)
     {
         return await PostAsync(
             ProcessorWorkerServiceApiRoutes.ReCounterRoute.ReCounterBase +
-            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRawWordsByLemmas,
-            cancellationToken);
+            ProcessorWorkerServiceApiRoutes.ReCounterRoute.ClearRawWordsByLemmas, cancellationToken);
     }
 }

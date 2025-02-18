@@ -74,7 +74,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             foreach (var err in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
-        var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).GetAwaiter().GetResult();
+        var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
 
         return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];

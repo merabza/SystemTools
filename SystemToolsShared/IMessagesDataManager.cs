@@ -5,7 +5,7 @@ namespace SystemToolsShared;
 
 public interface IMessagesDataManager
 {
-    ValueTask SendMessage(string? userName, string message, CancellationToken cancellationToken = default);
+    Task SendMessage(string? userName, string message, CancellationToken cancellationToken = default);
     void UserConnected(string connectionId, string userName);
     void UserDisconnected(string connectionId, string userName);
 }

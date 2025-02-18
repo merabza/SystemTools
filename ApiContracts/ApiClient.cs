@@ -27,6 +27,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly bool _useConsole;
 
     //protected იყენებს SystemTools
+    // ReSharper disable once MemberCanBePrivate.Global
     protected string? AccessToken = null;
 
     // ReSharper disable once ConvertToPrimaryConstructor
@@ -74,11 +75,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             foreach (var err in errors)
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
-<<<<<<< HEAD
-        var errorMessage = response.Content.ReadAsStringAsync(cancellationToken).Result;
-=======
         var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
->>>>>>> 4fa49cf81e1d4143965e229828edb355c535aa16
         _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
 
         return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];

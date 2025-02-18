@@ -6,15 +6,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-// ReSharper disable ReplaceWithPrimaryConstructorParameter
-
 namespace ApiKeysManagement;
 
-// ReSharper disable once ClassNeverInstantiated.Global
-public sealed class ApiKeysChecker(ILoggerFactory loggerFactory, IConfiguration configuration) : IEndpointFilter
+// ReSharper disable once UnusedType.Global
+public sealed class ApiKeysChecker : IEndpointFilter
 {
-    private readonly IConfiguration _configuration = configuration;
-    private readonly ILogger _logger = loggerFactory.CreateLogger<ApiKeysChecker>();
+    private readonly IConfiguration _configuration;
+    private readonly ILogger _logger;
+
+    // ReSharper disable once ConvertToPrimaryConstructor
+    public ApiKeysChecker(ILoggerFactory loggerFactory, IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _logger = loggerFactory.CreateLogger<ApiKeysChecker>();
+    }
 
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {

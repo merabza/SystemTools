@@ -1,6 +1,7 @@
 ﻿using System.Text;
+using SystemToolsShared;
 
-namespace SystemToolsShared;
+namespace DatabaseToolsShared;
 
 public static class ConfigurationHelper
 {
@@ -33,6 +34,13 @@ public static class ConfigurationHelper
     public static string CreateConstraintName(this string tableName, string relatedTableName, string relatedFieldName)
     {
         return $"{ForeignKeyPrefix}{tableName}_{relatedTableName.Pluralize()}_{relatedFieldName}";
+    }
+
+    public static string CreateConstraintName(this string tableName, string relatedTableName,
+        string[] relatedFieldNames)
+    {
+        var fieldNamesInRow = relatedFieldNames.Length > 0 ? string.Join('_', relatedFieldNames) : string.Empty;
+        return $"{ForeignKeyPrefix}{tableName}_{relatedTableName.Pluralize()}_{fieldNamesInRow}";
     }
 
     public static string CreateSelfRelatedConstraintName(this string tableName, int number)

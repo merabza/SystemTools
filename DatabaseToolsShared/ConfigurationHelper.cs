@@ -40,12 +40,7 @@ public static class ConfigurationHelper
         string[] relatedFieldNames)
     {
         var fieldNamesInRow = relatedFieldNames.Length > 0 ? string.Join('_', relatedFieldNames) : string.Empty;
-<<<<<<< HEAD:DatabaseToolsShared/ConfigurationHelper.cs
         return $"{ForeignKeyPrefix}{tableName}_{relatedTableName.Pluralize()}_{fieldNamesInRow}";
-=======
-        return
-            $"{ForeignKeyPrefix}{tableName}_{relatedTableName.Pluralize()}_{fieldNamesInRow}";
->>>>>>> ad7b15c5261f855b6b56560ffa3ae55251171aff:SystemToolsShared/ConfigurationHelper.cs
     }
 
     public static string CreateSelfRelatedConstraintName(this string tableName, int number)

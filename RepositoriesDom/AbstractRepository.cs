@@ -20,6 +20,11 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         _ctx = ctx;
     }
 
+    public void ChangeCommandTimeOut(TimeSpan timeout)
+    {
+        _ctx.Database.SetCommandTimeout(timeout);
+    }
+
     public Task<IDbContextTransaction> GetTransaction(CancellationToken cancellationToken = default)
     {
         return _ctx.Database.BeginTransactionAsync(cancellationToken);

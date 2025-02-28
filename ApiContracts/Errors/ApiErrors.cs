@@ -29,8 +29,8 @@ public static class ApiErrors
         return $"{propertyNameLocalized} შევსებული უნდა იყოს";
     }
 
-    public static string IsLongerThenErrMessage(string propertyNameLocalized)
+    public static string IsLongerThenErrMessage(string propertyNameLocalized, int maxLength)
     {
-        return propertyNameLocalized + " სიგრძე არ შეიძლება იყოს {MaxLength} სიმბოლოზე მეტი";
+        return  $"{propertyNameLocalized} სიგრძე არ შეიძლება იყოს {maxLength} სიმბოლოზე მეტი";
     }
 }

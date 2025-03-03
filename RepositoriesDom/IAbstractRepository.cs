@@ -11,5 +11,4 @@ public interface IAbstractRepository
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
     string? GetTableName<T>();
     void ChangeCommandTimeOut(TimeSpan timeout);
-
 }

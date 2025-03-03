@@ -31,6 +31,6 @@ public static class ApiErrors
 
     public static string IsLongerThenErrMessage(string propertyNameLocalized, int maxLength)
     {
-        return  $"{propertyNameLocalized} სიგრძე არ შეიძლება იყოს {maxLength} სიმბოლოზე მეტი";
+        return $"{propertyNameLocalized} სიგრძე არ შეიძლება იყოს {maxLength} სიმბოლოზე მეტი";
     }
 }

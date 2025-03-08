@@ -24,7 +24,7 @@ public class ProgressData
 
     public void Add(string name, int value)
     {
-        if (value == default)
+        if (value == 0)
             IntData.Remove(name);
         else
             IntData[name] = value;

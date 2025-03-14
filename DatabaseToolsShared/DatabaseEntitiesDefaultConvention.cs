@@ -26,6 +26,11 @@ public class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
             {
                 tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
                 entityType.SetTableName(tableNameAnnotation);
+                Console.WriteLine("Entity table name changes to " + tableNameAnnotation);
+            }
+            else
+            {
+                Console.WriteLine("Entity table has name " + tableNameAnnotation);
             }
 
             //ველების სახელების დაყენება

@@ -18,20 +18,21 @@ public class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
         //თითოეული ენტიტის ტიპისთვის
         foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
         {
-            //დავადგინოთ არის თუ არა უკვე მინიჭებული ცხრილის სახელი
+            ////დავადგინოთ არის თუ არა უკვე მინიჭებული ცხრილის სახელი
             var tableNameAnnotation = entityType.GetTableName();
-            //თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
-            //ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
+            ////თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
+            ////ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
             if (string.IsNullOrEmpty(tableNameAnnotation))
-            {
-                tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
-                entityType.SetTableName(tableNameAnnotation);
-                Console.WriteLine("Entity table name changes to " + tableNameAnnotation);
-            }
-            else
-            {
-                Console.WriteLine("Entity table has name " + tableNameAnnotation);
-            }
+                continue;
+            //{
+            //    tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
+            //    entityType.SetTableName(tableNameAnnotation);
+            //    Console.WriteLine("Entity table name changes to " + tableNameAnnotation);
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Entity table has name " + tableNameAnnotation);
+            //}
 
             //ველების სახელების დაყენება
             SetFieldNames(entityType);

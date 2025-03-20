@@ -73,18 +73,15 @@ public static class FileStat
         }
     }
 
-
     public static string RemoveNotNeedLeadPart(this string dest, char removeLead)
     {
         return dest.StartsWith(removeLead) ? dest[1..] : dest;
     }
 
-
     public static string RemoveNotNeedLastPart(this string dest, char removeLast)
     {
         return dest.EndsWith(removeLast) ? dest[..^1] : dest;
     }
-
 
     public static string AddNeedLeadPart(this string dest, string mustLead)
     {
@@ -120,7 +117,6 @@ public static class FileStat
         var toRet = mask.IsMatch(sFileName);
         return toRet;
     }
-
 
     //string maskFirstVersion = "yyyyMMddHHmmssfffffff";
     public static (DateTime, string?) GetDateTimeAndPatternByDigits(this string fileName, string maskFirstVersion)
@@ -182,7 +178,6 @@ public static class FileStat
 
         return DateTime.MinValue;
     }
-
 
     // This method accepts two strings the represent two files to
     // compare. A return value of true indicates that the contents of the files
@@ -286,7 +281,6 @@ public static class FileStat
     {
         Console.WriteLine($"Copying files from {sourceFolderPath} to {destinationFolderPath}...");
 
-
         if (!Directory.Exists(sourceFolderPath))
         {
             StShared.WriteErrorLine($"source folder {destinationFolderPath} does not exists", useConsole, logger);
@@ -321,7 +315,6 @@ public static class FileStat
         }
 
         Console.WriteLine("Coping files Finished");
-
 
         return true;
     }

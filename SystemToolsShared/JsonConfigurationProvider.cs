@@ -25,7 +25,6 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
         //if (appSetEnKeysList is null || appSetEnKeysList.Keys is null)
         //    return;
 
-
         var appSetEnKeysList = KeysListDomain.LoadFromFile(_source.AppSetEnKeysFileName);
         if (appSetEnKeysList?.Keys is null)
             return;

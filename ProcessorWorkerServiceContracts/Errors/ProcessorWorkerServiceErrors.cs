@@ -76,7 +76,6 @@ public static class ProcessorWorkerServiceErrors
         ErrorMessage = "სხვათა სიტყვის მორფემების განახლება დასრულდა შეცდომებით"
     };
 
-
     //public static readonly Err SameParametersAreEmpty = new()
     //    { ErrorCode = nameof(SameParametersAreEmpty), ErrorMessage = "Same Parameters are Empty" };
 

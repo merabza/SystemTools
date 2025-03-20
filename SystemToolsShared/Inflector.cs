@@ -77,7 +77,6 @@ public static class Inflector
 
     #endregion
 
-
     private static void AddIrregular(string singular, string plural)
     {
         AddPlural("(" + singular[0] + ")" + singular[1..] + "$", "$1" + plural[1..]);
@@ -208,12 +207,10 @@ public static class Inflector
         };
     }
 
-
     public static string Dasherize(this string underscoredWord)
     {
         return underscoredWord.Replace('_', '-');
     }
-
 
     public static string[] SplitUpperCase(this string source)
     {

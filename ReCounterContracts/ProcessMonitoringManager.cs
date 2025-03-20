@@ -7,12 +7,10 @@ public sealed class ProcessMonitoringManager
     private static readonly object SyncRoot = new();
     //private WaitKeyboardEscapeBackgroundService? _waitKeyboardEscapeBackgroundService;
 
-
     // ReSharper disable once MemberCanBePrivate.Global
     private ProcessMonitoringManager()
     {
     }
-
 
     public static ProcessMonitoringManager Instance
     {

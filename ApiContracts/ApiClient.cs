@@ -45,7 +45,6 @@ public /*open*/ abstract class ApiClient : IApiClient
     //protected იყენებს SystemTools
     protected IMessageHubClient? MessageHubClient { get; }
 
-
     private async ValueTask<Option<IEnumerable<Err>>> LogResponseErrorMessage(HttpResponseMessage response,
         string? bodyJsonData, CancellationToken cancellationToken = default)
     {

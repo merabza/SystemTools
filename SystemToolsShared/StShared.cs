@@ -58,7 +58,6 @@ public static class StShared
         }
         //message = "output for '{0} {1}' is{2}{3}";
 
-
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
         {
             ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
@@ -73,14 +72,12 @@ public static class StShared
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
-
     private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)
     {
         if (exitCode == 0)
             return true;
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
-
 
     public static Option<IEnumerable<Err>> RunProcess(bool useConsole, ILogger? logger, string programFileName,
         string arguments, int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
@@ -137,7 +134,6 @@ public static class StShared
         return false;
     }
 
-
     public static void Pause()
     {
         Console.WriteLine("press any key...");
@@ -152,7 +148,6 @@ public static class StShared
             return;
         ConsoleWriteFormattedLine(message, args);
     }
-
 
     private static void ConsoleWriteFormattedLine(string message, params object?[] args)
     {
@@ -346,7 +341,6 @@ public static class StShared
 
         Console.WriteLine($"Serilog WriteTo File Path is: {path.Value}");
     }
-
 
     public static string? GetMainModulePath()
     {

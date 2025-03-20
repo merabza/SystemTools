@@ -24,7 +24,6 @@ public sealed class FileLoader
         return reader.ReadToEnd();
     }
 
-
     private T? DeserializeResolve<T>(string fileName)
     {
         try

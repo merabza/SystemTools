@@ -15,7 +15,6 @@ public sealed class KeysListDomain
 
     public List<string> Keys { get; set; }
 
-
     public static KeysListDomain? LoadFromFile(string filename)
     {
         if (string.IsNullOrWhiteSpace(filename))
@@ -29,7 +28,6 @@ public sealed class KeysListDomain
 
         List<string> keys = [];
         keys.AddRange(appSetEnKeysList.Keys.OfType<string>());
-
 
         return new KeysListDomain(keys);
     }

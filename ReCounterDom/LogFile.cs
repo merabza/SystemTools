@@ -54,7 +54,6 @@ public sealed class LogFile
                     fileInfo.Delete(); //ნაპოვნი ძველი ფაილის წაშლა
             }
 
-
         try
         {
             lock
@@ -90,7 +89,6 @@ public sealed class LogFile
             _lastLogSaveDate = DateTime.Now;
         }
     }
-
 
     private string LogWithAdditionalInfo(string strLog)
     {

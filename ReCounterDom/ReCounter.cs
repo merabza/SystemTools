@@ -29,7 +29,6 @@ public class ReCounter
         _progressDataManager = progressDataManager;
     }
 
-
     protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken = default)
     {
         foreach (var error in errors)

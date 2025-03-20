@@ -38,7 +38,6 @@ public class ReCounterLogger
         _logFile.SaveLogToFile(message);
     }
 
-
     private static string CreateFolder(string strLogFolderName)
     {
         if (string.IsNullOrWhiteSpace(strLogFolderName))

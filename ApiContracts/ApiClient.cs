@@ -21,7 +21,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 {
     private readonly string? _apiKey;
     private readonly HttpClient _client;
-    private readonly ILogger _logger;
+    private readonly ILogger? _logger;
     private readonly string _server;
 
     private readonly bool _useConsole;
@@ -31,7 +31,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     protected string? AccessToken = null;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected ApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
+    protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
         IMessageHubClient? messageHubClient, bool useConsole)
     {
         _logger = logger;
@@ -75,7 +75,7 @@ public /*open*/ abstract class ApiClient : IApiClient
                 StShared.WriteErrorLine($"Error from server: {err.ErrorMessage}", true);
 
         var errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
-        _logger.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
+        _logger?.LogError("Returned error message from ApiClient: {errorMessage}", errorMessage);
 
         return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];
     }

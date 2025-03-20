@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using OneOf;
 using SystemToolsShared.Errors;
 
-namespace MessagingAbstractions;
+namespace MediatRMessagingAbstractions;
 
 public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, OneOf<Unit, IEnumerable<Err>>>
     where TCommand : ICommand;

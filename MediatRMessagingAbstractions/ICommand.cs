@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using OneOf;
 using SystemToolsShared.Errors;
 
-namespace MessagingAbstractions;
+namespace MediatRMessagingAbstractions;
 
 public interface ICommand : IRequest<OneOf<Unit, IEnumerable<Err>>>;
 

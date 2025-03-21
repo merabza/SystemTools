@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
@@ -101,12 +100,14 @@ public class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
         //ენტიტის თითოეული ველისთვის 
         foreach (var property in entityType.GetProperties())
         {
-            //ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
-            property.SetColumnName(property.Name.UnCapitalize());
+            ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
+            //property.SetColumnName(property.Name.UnCapitalize());
             //თუ ველის ტიპი არის DateTime, მაშინ სვეტის ტიპი იყოს datetime
-            if (property.ClrType == typeof(DateTime)) property.SetColumnType("datetime");
+            if (property.ClrType == typeof(DateTime))
+                property.SetColumnType("datetime");
             //თუ ველის ტიპი არის decimal, მაშინ სვეტის ტიპი იყოს money
-            if (property.ClrType == typeof(decimal)) property.SetColumnType("money");
+            if (property.ClrType == typeof(decimal))
+                property.SetColumnType("money");
         }
     }
 

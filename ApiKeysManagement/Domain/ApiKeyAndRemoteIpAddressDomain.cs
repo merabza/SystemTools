@@ -2,16 +2,9 @@
 
 public sealed class ApiKeyAndRemoteIpAddressDomain
 {
-    // ReSharper disable once ConvertToPrimaryConstructor
-    public ApiKeyAndRemoteIpAddressDomain(string apiKey, string remoteIpAddress)
-    {
-        ApiKey = apiKey;
-        RemoteIpAddress = remoteIpAddress;
-    }
-
     //აპის გასაღები
-    public string ApiKey { get; }
+    public required string ApiKey { get; set; }
 
     //IP მისამართი, საიდანაც ამ აპის გასაღების საშუალებით შეძლებენ შემოსვლას
-    public string RemoteIpAddress { get; }
+    public required string RemoteIpAddress { get; set;  }
 }

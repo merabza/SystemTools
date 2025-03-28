@@ -34,8 +34,11 @@ public sealed class ApiKeysDomain
                 continue;
             }
 
-            apiKeysDomain.ApiKeys.Add(new ApiKeyAndRemoteIpAddressDomain(apiKeyByRemoteIpAddressModel.ApiKey,
-                apiKeyByRemoteIpAddressModel.RemoteIpAddress));
+            apiKeysDomain.ApiKeys.Add(new ApiKeyAndRemoteIpAddressDomain
+            {
+                ApiKey = apiKeyByRemoteIpAddressModel.ApiKey,
+                RemoteIpAddress = apiKeyByRemoteIpAddressModel.RemoteIpAddress
+            });
         }
 
         return apiKeysDomain;

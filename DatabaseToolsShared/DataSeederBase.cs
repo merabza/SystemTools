@@ -1,11 +1,11 @@
 ﻿namespace DatabaseToolsShared;
 
-public abstract class DataSeeder
+public abstract class DataSeederBase
 {
     private readonly bool _checkOnly;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected DataSeeder(bool checkOnly)
+    protected DataSeederBase(bool checkOnly)
     {
         _checkOnly = checkOnly;
     }

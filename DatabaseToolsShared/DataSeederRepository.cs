@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CarcassDb;
-using CarcassDb.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SystemToolsShared;
 
-namespace CarcassDataSeeding;
+namespace DatabaseToolsShared;
 
 public /*open*/ class DataSeederRepository : IDataSeederRepository
 {
-    private readonly CarcassDbContext _context;
+    private readonly DbContext _context;
     private readonly ILogger<DataSeederRepository> _logger;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected DataSeederRepository(CarcassDbContext ctx, ILogger<DataSeederRepository> logger)
+    protected DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger)
     {
         _context = ctx;
         _logger = logger;

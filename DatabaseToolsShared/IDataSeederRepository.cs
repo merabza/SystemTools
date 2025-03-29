@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CarcassDataSeeding;
+namespace DatabaseToolsShared;
 
 public interface IDataSeederRepository
 {

@@ -10,7 +10,7 @@ using TestApiContracts.V1.Routes;
 
 namespace TestApiContracts;
 
-public class TestApiClient : ApiClient
+public sealed class TestApiClient : ApiClient
 {
     //public const string ApiName = "TestApi";
 

@@ -9,7 +9,7 @@ namespace DatabaseToolsShared;
 
 //ამ კლასის დანიშნულებაა გააკეთოს საბოლოო ცვლილებები ბაზის ცხრილების მოდელების კონფიგურაციებში
 //ეს ისეთი ცვლილებებია, რომლებიც ზოგადად ყველა მოდელისთვის მისაღებია. თუმცა გათვალისწინებულია გამონაკლისებიც
-public class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
+public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
 {
     public void ProcessModelFinalizing(IConventionModelBuilder modelBuilder,
         IConventionContext<IConventionModelBuilder> context)

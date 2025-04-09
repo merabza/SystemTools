@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ReCounterContracts;
 
-public class ProgressData
+public sealed class ProgressData
 {
     [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
     public Dictionary<string, bool> BoolData { get; set; } = [];

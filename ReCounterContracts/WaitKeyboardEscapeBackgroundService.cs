@@ -2,7 +2,7 @@
 
 //namespace ReCounterContracts;
 
-//public class WaitKeyboardEscapeBackgroundService : BackgroundService
+//public sealed class WaitKeyboardEscapeBackgroundService : BackgroundService
 //{
 //    protected override Task ExecuteAsync(CancellationToken stoppingToken)
 //    {

@@ -6,7 +6,7 @@ using SystemToolsShared.Errors;
 
 namespace JetBrainsResharperGlobalToolsWork;
 
-public class JetBrainsResharperGlobalToolsProcessor
+public sealed class JetBrainsResharperGlobalToolsProcessor
 {
     private const string Jb = "jb";
     private readonly ILogger? _logger;

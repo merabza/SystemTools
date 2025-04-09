@@ -7,7 +7,7 @@ using SystemToolsShared.Errors;
 
 namespace SystemToolsShared;
 
-public class MessageLogger
+public /*open*/ class MessageLogger
 {
     private readonly ILogger? _logger;
     private readonly IMessagesDataManager? _messagesDataManager;

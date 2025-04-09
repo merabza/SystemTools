@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ApiKeysManagement;
 
-public class ApiKeyByConfigFinder : IApiKeyFinder
+public sealed class ApiKeyByConfigFinder : IApiKeyFinder
 {
     private readonly ILogger<ApiKeyByConfigFinder> _logger;
     private readonly IConfiguration _configuration;

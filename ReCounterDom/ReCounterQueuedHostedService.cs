@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ReCounterDom;
 
-public class ReCounterQueuedHostedService : BackgroundService, IReCounterServiceStopper
+public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounterServiceStopper
 {
     private readonly ILogger _logger;
 

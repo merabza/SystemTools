@@ -3,7 +3,7 @@ using System.IO;
 
 namespace ReCounterDom;
 
-public class ReCounterLogger
+public sealed class ReCounterLogger
 {
     private readonly LogFile _logFile;
 

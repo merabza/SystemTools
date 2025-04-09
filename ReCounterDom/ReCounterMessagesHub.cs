@@ -7,7 +7,7 @@ using ReCounterContracts;
 namespace ReCounterDom;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class ReCounterMessagesHub : Hub<IProgressDataMessenger>
+public sealed class ReCounterMessagesHub : Hub<IProgressDataMessenger>
 {
     private readonly ILogger<ReCounterMessagesHub> _logger;
     private readonly IProgressDataManager _progressDataManager;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ReCounterDom;
 
-public class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
+public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
 {
     private readonly SemaphoreSlim _signal = new(0);
     private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new();

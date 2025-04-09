@@ -7,7 +7,7 @@ using SystemToolsShared.Errors;
 
 namespace ReCounterDom;
 
-public class ReCounter
+public /*open*/ class ReCounter
 {
     private readonly string _processName;
     private readonly IProgressDataManager _progressDataManager;

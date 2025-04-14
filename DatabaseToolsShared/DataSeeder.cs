@@ -31,7 +31,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
         if (checkOnly)
             return AdditionalCheck(LoadFromJsonFile());
 
-        //ეს ის ვარიანტია, როცა არც არსებულ ჩანაწერებს ვამოწმებთ და არც Json-დან შემოგვაქვს
+        //ვამოწმებთ არის თუ არა ჩანაწერები ბაზაში. ვაგრძელებთ მაშინ თუ ჩანაწერები არ არის
         if (CheckRecordsExists())
             return false;
 

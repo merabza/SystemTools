@@ -29,7 +29,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     public bool Create(bool checkOnly)
     {
         if (checkOnly)
-            return AdditionalCheck(LoadFromJsonFile());
+            return AdditionalCheck(LoadFromJsonFile(), []);
 
         //ვამოწმებთ არის თუ არა ჩანაწერები ბაზაში. ვაგრძელებთ მაშინ თუ ჩანაწერები არ არის
         if (CheckRecordsExists())
@@ -80,7 +80,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
 
         //აქ დამატებით ვუშვებ მონაცემების შემოწმებას და თუ რომელიმე აუცილებელი ჩანაწერი აკლია, რაც ლოგიკით განისაზღვრება,
         //მაშინ ისინიც ჩაემატება. ან თუ არასწორად არის რომელიმე ჩანაწერი, შეიცვლება. ან თუ ზედმეტია წაიშლება
-        return AdditionalCheck(seedData);
+        return AdditionalCheck(seedData, dataList);
     }
 
     //virtual methods
@@ -89,7 +89,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ან თუ შენახვის მერე რაიმე დამატებით არის გასაკეთებელი, რომ გააკეთოს
     //List<TJMo> seedData საჭიროა შესადარებლად.
     //თუ ბაზიდან საჭიროა ინფორმაცია, გადატვირთულმა მეთოდმა თვითონ უნდა ჩატვირთოს
-    protected virtual bool AdditionalCheck(List<TJMo> seedData)
+    protected virtual bool AdditionalCheck(List<TJMo> seedData, List<TDst> savedData)
     {
         return true;
     }

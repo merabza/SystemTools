@@ -89,7 +89,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ან თუ შენახვის მერე რაიმე დამატებით არის გასაკეთებელი, რომ გააკეთოს
     //List<TJMo> seedData საჭიროა შესადარებლად.
     //თუ ბაზიდან საჭიროა ინფორმაცია, გადატვირთულმა მეთოდმა თვითონ უნდა ჩატვირთოს
-    protected virtual bool AdditionalCheck(List<TJMo> seedData, List<TDst> savedData)
+    protected virtual bool AdditionalCheck(List<TJMo> jsonData, List<TDst> savedData)
     {
         return true;
     }

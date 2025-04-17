@@ -43,7 +43,6 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 LoadFromJsonFile(),
-            ESeedDataType.None => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -52,7 +51,6 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 Adapt(seedData),
-            ESeedDataType.None => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -61,7 +59,6 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             ESeedDataType.OnlyJson => [],
             ESeedDataType.OnlyRules or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 CreateListByRules(),
-            ESeedDataType.None => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -71,7 +68,6 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             ESeedDataType.OnlyRules => dataListByRules,
             ESeedDataType.RulesHasMorePriority => Adjust(dataListByRules, dataListByJson),
             ESeedDataType.JsonHasMorePriority => Adjust(dataListByJson, dataListByRules),
-            ESeedDataType.None => throw new ArgumentOutOfRangeException(),
             _ => throw new ArgumentOutOfRangeException()
         };
 

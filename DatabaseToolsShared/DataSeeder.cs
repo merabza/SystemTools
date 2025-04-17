@@ -102,6 +102,9 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //დანარჩენ შემთხვევაში საჭიროა გადატვირთვა
     protected virtual List<TDst> Adapt(List<TJMo> appClaimsSeedData)
     {
+        if (appClaimsSeedData.Count == 0)
+            return [];
+
         var jsonModelType = typeof(TJMo);
         var jsonModelTypeProperties = jsonModelType.GetProperties();
 
@@ -195,8 +198,8 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
         var retList = new List<TDst>();
         retList.AddRange(priorDictionary.Values);
 
-        var extraKeys = priorDictionary.Keys.Except(secondDictionary.Keys).ToList();
-        retList.AddRange(extraKeys.Select(key => priorDictionary[key]));
+        var extraKeys = secondDictionary.Keys.Except(priorDictionary.Keys).ToList();
+        retList.AddRange(extraKeys.Select(key => secondDictionary[key]));
 
         return retList;
 

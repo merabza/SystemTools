@@ -15,6 +15,9 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
 
+    //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
+    //როცა გამოყენებულია Adjust მეთოდი,
+    //ანუ როცა გამოყენებულია RulesHasMorePriority, ან JsonHasMorePriority
     protected DataSeeder(string dataSeedFolder, IDataSeederRepository repo,
         ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
     {

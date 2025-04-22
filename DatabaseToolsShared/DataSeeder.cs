@@ -9,11 +9,11 @@ namespace DatabaseToolsShared;
 
 public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : class where TJMo : class
 {
-    protected readonly IDataSeederRepository Repo;
     private readonly string _dataSeedFolder;
     private readonly List<string> _keyFieldNamesList;
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
+    protected readonly IDataSeederRepository Repo;
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,

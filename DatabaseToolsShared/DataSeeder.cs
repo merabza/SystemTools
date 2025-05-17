@@ -13,7 +13,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     private readonly List<string> _keyFieldNamesList;
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
-    protected readonly IDataSeederRepository Repo;
+    protected readonly IDataSeederRepository DataSeederRepo;
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
@@ -22,10 +22,10 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
         ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
     {
         _dataSeedFolder = dataSeedFolder;
-        Repo = repo;
+        DataSeederRepo = repo;
         _seedDataType = seedDataType;
         _keyFieldNamesList = keyFieldNamesList ?? [];
-        _tableName = Repo.GetTableName<TDst>();
+        _tableName = DataSeederRepo.GetTableName<TDst>();
     }
 
     //ეს არის ძირითადი მეთოდი, რომლის საშუალებითაც ხდება ერთი ცხრილის შესაბამისი ინფორმაციის ჩატვირთვა ბაზაში
@@ -74,7 +74,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             _ => throw new ArgumentOutOfRangeException()
         };
 
-        if (!Repo.CreateEntities(dataList))
+        if (!DataSeederRepo.CreateEntities(dataList))
             throw new Exception($"{_tableName} entities cannot be created");
 
         //აქ დამატებით ვუშვებ მონაცემების შემოწმებას და თუ რომელიმე აუცილებელი ჩანაწერი აკლია, რაც ლოგიკით განისაზღვრება,
@@ -153,7 +153,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //მეთოდი ამოწმებს ბაზაში უკვე არის თუ არა შეასაბამის ცხრილში ჩანაწერები
     private bool CheckRecordsExists()
     {
-        return Repo.HaveAnyRecord<TDst>();
+        return DataSeederRepo.HaveAnyRecord<TDst>();
     }
 
     //ამ მეთოდის დანიშნულებაა ბაზაში ჩასაწერი სია მიიყვანოს უპირატესი სიის მიხედვით

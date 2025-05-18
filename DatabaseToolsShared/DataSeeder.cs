@@ -32,7 +32,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     public bool Create(bool checkOnly)
     {
         if (checkOnly)
-            return AdditionalCheck(LoadFromJsonFile(), []);
+            return AdditionalCheck(LoadFromJsonFile(), []) && DataSeederRepo.SaveChanges();
 
         //ვამოწმებთ არის თუ არა ჩანაწერები ბაზაში. ვაგრძელებთ მაშინ თუ ჩანაწერები არ არის
         if (CheckRecordsExists())
@@ -41,6 +41,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
         if (_seedDataType == ESeedDataType.None)
             return true;
 
+        //Json-დან ჩატვირთვა
         var seedData = _seedDataType switch
         {
             ESeedDataType.OnlyRules => [],
@@ -49,6 +50,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        //Json-ის მოდელის გადაყვანა ბაზის მოდელში
         var dataListByJson = _seedDataType switch
         {
             ESeedDataType.OnlyRules => [],
@@ -57,6 +59,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        //წესების მიხედვით შექმნა
         var dataListByRules = _seedDataType switch
         {
             ESeedDataType.OnlyJson => [],
@@ -65,6 +68,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        //დაყვანა
         var dataList = _seedDataType switch
         {
             ESeedDataType.OnlyJson => dataListByJson,
@@ -74,12 +78,13 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        //შენახვა ბაზაში
         if (!DataSeederRepo.CreateEntities(dataList))
             throw new Exception($"{_tableName} entities cannot be created");
 
         //აქ დამატებით ვუშვებ მონაცემების შემოწმებას და თუ რომელიმე აუცილებელი ჩანაწერი აკლია, რაც ლოგიკით განისაზღვრება,
         //მაშინ ისინიც ჩაემატება. ან თუ არასწორად არის რომელიმე ჩანაწერი, შეიცვლება. ან თუ ზედმეტია წაიშლება
-        return AdditionalCheck(seedData, dataList);
+        return AdditionalCheck(seedData, dataList) && DataSeederRepo.SaveChanges();
     }
 
     //virtual methods

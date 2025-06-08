@@ -234,7 +234,7 @@ public static class FileStat
         return file1Byte - file2Byte == 0;
     }
 
-    public static void DeleteDirectory(string targetDir)
+    public static void DeleteDirectoryWithNormaliseAttributes(string targetDir)
     {
         Console.WriteLine($"Deleting {targetDir} ...");
         var files = Directory.GetFiles(targetDir);
@@ -246,11 +246,25 @@ public static class FileStat
             File.Delete(file);
         }
 
-        foreach (var dir in dirs) DeleteDirectory(dir);
+        foreach (var dir in dirs) 
+            DeleteDirectoryWithNormaliseAttributes(dir);
 
         Directory.Delete(targetDir, false);
         Console.WriteLine($"Deleted {targetDir}");
     }
+
+    
+    public static void DeleteDirectoryIfExists(string directoryPath)
+    {
+        if (!Directory.Exists(directoryPath)) 
+            return;
+
+        Console.WriteLine($"Deleting {directoryPath} ...");
+        Directory.Delete(directoryPath, true);
+        Console.WriteLine($"Deleted {directoryPath}");
+    }
+
+
 
     public static void ClearFolder(string targetFolder, string[] excludes)
     {
@@ -270,7 +284,7 @@ public static class FileStat
         {
             if (excludes.Any(exclude => dir.Contains(exclude)))
                 continue;
-            DeleteDirectory(dir);
+            DeleteDirectoryWithNormaliseAttributes(dir);
         }
 
         Console.WriteLine($"Cleared {targetFolder}");

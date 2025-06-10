@@ -246,25 +246,22 @@ public static class FileStat
             File.Delete(file);
         }
 
-        foreach (var dir in dirs) 
+        foreach (var dir in dirs)
             DeleteDirectoryWithNormaliseAttributes(dir);
 
         Directory.Delete(targetDir, false);
         Console.WriteLine($"Deleted {targetDir}");
     }
 
-    
     public static void DeleteDirectoryIfExists(string directoryPath)
     {
-        if (!Directory.Exists(directoryPath)) 
+        if (!Directory.Exists(directoryPath))
             return;
 
         Console.WriteLine($"Deleting {directoryPath} ...");
         Directory.Delete(directoryPath, true);
         Console.WriteLine($"Deleted {directoryPath}");
     }
-
-
 
     public static void ClearFolder(string targetFolder, string[] excludes)
     {

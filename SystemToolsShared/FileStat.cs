@@ -263,6 +263,16 @@ public static class FileStat
         Console.WriteLine($"Deleted {directoryPath}");
     }
 
+    public static void DeleteFileIfExists(string filePath)
+    {
+        if (!File.Exists(filePath))
+            return;
+
+        Console.WriteLine($"Deleting {filePath} ...");
+        File.Delete(filePath);
+        Console.WriteLine($"Deleted {filePath}");
+    }
+
     public static void ClearFolder(string targetFolder, string[] excludes)
     {
         Console.WriteLine($"Clearing {targetFolder} ...");

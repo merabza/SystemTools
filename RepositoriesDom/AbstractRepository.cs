@@ -35,10 +35,15 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         return _ctx.SaveChangesAsync(cancellationToken);
     }
 
-    public string? GetTableName<T>()
+    public string GetTableName<T>()
     {
         var entType = _ctx.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
-        return entType?.GetTableName();
+        if (entType == null)
+            throw new Exception($"Entity type not found for {typeof(T).Name}.");
+        var tableName = entType.GetTableName();
+        if (string.IsNullOrEmpty(tableName))
+            throw new Exception($"Table name not found for entity type {tableName}.");
+        return tableName;
     }
 
     public async Task<OneOf<int, IEnumerable<Err>>> ExecuteSqlRawRetOneOfAsync(string sql,

@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RepositoriesDom;
 using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
-public /*open*/ class DataSeederRepository : IDataSeederRepository
+public /*open*/ class DataSeederRepository : AbstractRepository, IDataSeederRepository
 {
     private readonly DbContext _context;
     private readonly ILogger<DataSeederRepository> _logger;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger)
+    protected DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger) : base(ctx)
     {
         _context = ctx;
         _logger = logger;
@@ -27,12 +28,6 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     public bool HaveAnyRecord<T>() where T : class
     {
         return _context.Set<T>().Any();
-    }
-
-    public string GetTableName<T>() where T : class
-    {
-        var entType = _context.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
-        return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 
     public bool CreateEntities<T>(List<T> entities) where T : class

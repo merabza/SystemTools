@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
-using SystemToolsShared;
 using SystemToolsShared.Errors;
 
 namespace SystemToolsShared.Tests;

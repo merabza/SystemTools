@@ -16,10 +16,10 @@ public sealed class FileStatTests
     }
 
     [Theory]
-    [InlineData("/home/merab/ApAgentData/DatabaseFullBackups/", "D:\\HOME\\MERAB\\APAGENTDATA\\DATABASEFULLBACKUPS")]
+    [InlineData("/home/merab/ApAgentData/DatabaseFullBackups/", @"D:\HOME\MERAB\APAGENTDATA\DATABASEFULLBACKUPS")]
     [InlineData("ftp://cyberia.ge:2150/MerinsonBU", "ftp://cyberia.ge:2150/MerinsonBU")]
     [InlineData("FTP://CYBERIA.ge:2150/MerinsonBU/", "ftp://cyberia.ge:2150/MerinsonBU")]
-    [InlineData("D:\\1WorkDotnetCore\\ApAgent\\SystemTools", "D:\\1WORKDOTNETCORE\\APAGENT\\SYSTEMTOOLS")]
+    [InlineData(@"D:\1WorkDotnetCore\ApAgent\SystemTools", @"D:\1WORKDOTNETCORE\APAGENT\SYSTEMTOOLS")]
     public void NormalizePathTest(string path, string result)
     {
         //if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

@@ -4,8 +4,8 @@ namespace SystemToolsShared.Tests;
 
 public sealed class TestServicesCreator : ServicesCreator
 {
-    public TestServicesCreator(string? logFolder, string? logFileName, string appName) 
-        : base(logFolder, logFileName, appName)
+    public TestServicesCreator(string? logFolder, string? logFileName, string appName) : base(logFolder, logFileName,
+        appName)
     {
     }
 

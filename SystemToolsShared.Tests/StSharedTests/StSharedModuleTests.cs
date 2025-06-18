@@ -16,5 +16,4 @@ public sealed class StSharedModuleTests
         Assert.NotNull(path);
         Assert.True(Directory.Exists(path));
     }
-
 }

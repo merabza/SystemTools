@@ -1,5 +1,5 @@
 ﻿namespace DatabaseToolsShared;
 
-public interface IDataSeedersFabric
+public interface IDataSeedersFactory
 {
 }

@@ -21,7 +21,8 @@ public sealed class RuleTests
     [InlineData("t[e]st", "replacement", "test", "replacement")]
     [InlineData("TEST", "replacement", "test", "replacement")] // Testing case insensitivity
     [InlineData("t.st", "replacement", "test", "replacement")] // Testing regex pattern
-    public void Apply_WithMatchingPattern_ReturnsReplacement(string pattern, string replacement, string input, string expected)
+    public void Apply_WithMatchingPattern_ReturnsReplacement(string pattern, string replacement, string input,
+        string expected)
     {
         // Arrange
         var rule = new Rule(pattern, replacement);
@@ -53,7 +54,8 @@ public sealed class RuleTests
     [InlineData(@"(\w+)", "$1_suffix", "word", "word_suffix")] // Add suffix
     [InlineData(@"(\w+)", "prefix_$1", "word", "prefix_word")] // Add prefix
     [InlineData(@"(\w+)_(\w+)", "$2_$1", "first_second", "second_first")] // Swap parts
-    public void Apply_WithRegexGroups_ReplacesCorrectly(string pattern, string replacement, string input, string expected)
+    public void Apply_WithRegexGroups_ReplacesCorrectly(string pattern, string replacement, string input,
+        string expected)
     {
         // Arrange
         var rule = new Rule(pattern, replacement);

@@ -32,13 +32,10 @@ public sealed class StSharedConsoleTests
         var output = _stringWriter.ToString();
         Assert.Contains("[warning]", output);
         Assert.Contains(warningText, output);
-        _mockLogger.Verify(x => x.Log(
-            LogLevel.Warning,
-            It.IsAny<EventId>(),
-            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(warningText)),
-            null,
-            It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
+        _mockLogger.Verify(
+            x => x.Log(LogLevel.Warning, It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(warningText)), null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
     }
 
     [Fact]
@@ -55,13 +52,10 @@ public sealed class StSharedConsoleTests
         var output = _stringWriter.ToString();
         Assert.Contains("[ERROR]", output);
         Assert.Contains(errorText, output);
-        _mockLogger.Verify(x => x.Log(
-            LogLevel.Error,
-            It.IsAny<EventId>(),
-            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(errorText)),
-            null,
-            It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-            Times.Once);
+        _mockLogger.Verify(
+            x => x.Log(LogLevel.Error, It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(errorText)), null,
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
     }
 
     [Fact]

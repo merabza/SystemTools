@@ -62,7 +62,8 @@ public static class SystemToolsErrors
     public static Err UnexpectedApiException(Exception e)
     {
         var errorId = Guid.NewGuid();
-        Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine, e.StackTrace);
+        Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
+            e.StackTrace);
         return new Err
         {
             ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}"
@@ -77,7 +78,8 @@ public static class SystemToolsErrors
     public static Err UnexpectedDatabaseException(Exception e)
     {
         var errorId = Guid.NewGuid();
-        Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine, e.StackTrace);
+        Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
+            e.StackTrace);
         return new Err
         {
             ErrorCode = nameof(UnexpectedDatabaseException),

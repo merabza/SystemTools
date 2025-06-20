@@ -103,10 +103,17 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
             //property.SetColumnName(property.Name.UnCapitalize());
             //თუ ველის ტიპი არის DateTime, მაშინ სვეტის ტიპი იყოს datetime
-            if (property.ClrType == typeof(DateTime))
+
+            var clrType = property.ClrType;
+
+            var isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
+            if (isNullable)
+                clrType = clrType.GetGenericArguments()[0];
+
+            if (clrType == typeof(DateTime))
                 property.SetColumnType("datetime");
             //თუ ველის ტიპი არის decimal, მაშინ სვეტის ტიპი იყოს money
-            if (property.ClrType == typeof(decimal))
+            if (clrType == typeof(decimal))
                 property.SetColumnType("money");
         }
     }

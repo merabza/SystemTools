@@ -1,19 +1,19 @@
-﻿//using System;
+﻿using System;
 
-//namespace SystemToolsShared;
+namespace SystemToolsShared;
 
-//public sealed class ProjectException : Exception
-//{
-//    public ProjectException()
-//    {
-//    }
+public sealed class ProjectException : Exception
+{
+    public ProjectException()
+    {
+    }
 
-//    public ProjectException(string message) : base(message)
-//    {
-//    }
+    public ProjectException(string message) : base(message)
+    {
+    }
 
-//    public ProjectException(string message, Exception inner) : base(message, inner)
-//    {
-//    }
-//}
+    public ProjectException(string message, Exception inner) : base(message, inner)
+    {
+    }
+}
 

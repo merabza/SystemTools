@@ -16,6 +16,11 @@ public struct Err : IEquatable<Err>
     //    ErrorCode = errorCode;
     //    ErrorMessage = errorMessage;
     //}
+    public static Err[] Create(Err err)
+    {
+        return [err];
+    }
+
 
     public static Err[] RecreateErrors(IEnumerable<Err> haveErrors, Err addError)
     {

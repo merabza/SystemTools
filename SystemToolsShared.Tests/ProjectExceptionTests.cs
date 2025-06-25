@@ -5,7 +5,6 @@ namespace SystemToolsShared.Tests;
 
 public sealed class ProjectExceptionTests
 {
-
     [Fact]
     public void Constructor_WithMessage_SetsMessage()
     {

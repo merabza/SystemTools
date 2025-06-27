@@ -21,6 +21,11 @@ public struct Err : IEquatable<Err>
         return [err];
     }
 
+    public static Err[] CreateArr(Err err)
+    {
+        return [err];
+    }
+
     public static Err[] RecreateErrors(IEnumerable<Err> haveErrors, Err addError)
     {
         var errors = new List<Err>();

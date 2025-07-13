@@ -2,21 +2,21 @@
 
 public struct FilePermissionFlag
 {
-    public FileAccess User { get; }
-    public FileAccess Group { get; }
-    public FileAccess Others { get; }
+    public LinuxFileAccess User { get; }
+    public LinuxFileAccess Group { get; }
+    public LinuxFileAccess Others { get; }
 
-    internal FilePermissionFlag(FileAccess user, FileAccess group, FileAccess others)
+    internal FilePermissionFlag(LinuxFileAccess user, LinuxFileAccess group, LinuxFileAccess others)
     {
         User = ToValidAccess(user);
         Group = ToValidAccess(group);
         Others = ToValidAccess(others);
     }
 
-    public static FileAccess ToValidAccess(FileAccess access)
+    public static LinuxFileAccess ToValidAccess(LinuxFileAccess access)
     {
         //file access should be 0 to 7
         var num = (int)access;
-        return (FileAccess)(num < 0 ? 0 : num > 7 ? 7 : num);
+        return (LinuxFileAccess)(num < 0 ? 0 : num > 7 ? 7 : num);
     }
 }

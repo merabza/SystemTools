@@ -30,6 +30,10 @@ public sealed class FileLoader
         {
             return JsonConvert.DeserializeObject<T>(Load(fileName));
         }
+        catch(JsonReaderException jre)
+        {
+            StShared.WriteException(jre, "The file could not be deserialized:", _useConsole);
+        }
         catch (IOException e)
         {
             StShared.WriteException(e, "The file could not be read:", _useConsole);

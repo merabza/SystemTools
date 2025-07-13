@@ -7,17 +7,22 @@ namespace SystemToolsShared.LinuxFileSecurity;
 public sealed class FilePermission
 {
     private const string Command = "chmod";
+    public string FilePath { get; }
+    public FilePermissionFlag Flags { get; private set; }
 
+    // ReSharper disable once ConvertToPrimaryConstructor
     public FilePermission(string filePath)
     {
-        if (!File.Exists(filePath))
-            throw new FileLoadException("error loading " + filePath, filePath);
         FilePath = filePath;
     }
 
-    public string FilePath { get; }
+    public static FilePermission Create(string filePath)
+    {
+        if (!File.Exists(filePath))
+            throw new FileLoadException("error loading " + filePath, filePath);
+        return new FilePermission(filePath);
+    }
 
-    public FilePermissionFlag Flags { get; private set; }
 
     public override string ToString()
     {
@@ -25,24 +30,19 @@ public sealed class FilePermission
             $"{(int)FilePermissionFlag.ToValidAccess(Flags.User)}{(int)FilePermissionFlag.ToValidAccess(Flags.Group)}{(int)FilePermissionFlag.ToValidAccess(Flags.Others)} {FilePath}";
     }
 
-    //public FilePermission(FilePermission permission, FileAccess user, FileAccess group, FileAccess others)
-    //    : this(permission.Process, user, group, others)
-    //{
-    //}
-
-    public static FilePermission? SetPermission(string filePath, FileAccess user, FileAccess group, FileAccess others)
+    public static FilePermission? SetPermission(string filePath, LinuxFileAccess user, LinuxFileAccess group, LinuxFileAccess others)
     {
         var permission = new FilePermission(filePath) { Flags = new FilePermissionFlag(user, group, others) };
         return permission.Apply();
     }
 
-    public void Apply(FileAccess user, FileAccess group, FileAccess others)
+    public void Apply(LinuxFileAccess user, LinuxFileAccess group, LinuxFileAccess others)
     {
         Flags = new FilePermissionFlag(user, group, others);
         Apply();
     }
 
-    private FilePermission? Apply()
+    public FilePermission? Apply()
     {
         if (string.IsNullOrWhiteSpace(FilePath) || string.IsNullOrWhiteSpace(FilePath))
         {

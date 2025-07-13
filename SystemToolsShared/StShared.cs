@@ -31,6 +31,11 @@ public static class StShared
     public static OneOf<(string, int), IEnumerable<Err>> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
+        
+        //var option = CheckFileExists(programFileName);
+        //if (option.IsSome) 
+        //    return (Err[])option;
+
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
 
@@ -84,6 +89,10 @@ public static class StShared
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
+        //var option = CheckFileExists(programFileName);
+        //if (option.IsSome) 
+        //    return option;
+
         // ReSharper disable once using
         using var proc = Process.Start(programFileName, arguments);
 
@@ -105,6 +114,24 @@ public static class StShared
 
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
+
+    //private static Option<IEnumerable<Err>> CheckFileExists(string programFileName)
+    //{
+    //    // Check if the program file exists before starting the process
+    //    if (!File.Exists(programFileName))
+    //    {
+    //        var errorMsg = $"File not found: {programFileName}";
+    //        return Err.CreateArr(new Err { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //    }
+
+    //    //also check if the file exists in the current directory
+    //    if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), programFileName)))
+    //    {
+    //        var errorMsg = $"File not found in current directory: {programFileName}";
+    //        return Err.CreateArr(new Err { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //    }
+    //    return null;
+    //}
 
     public static bool RunCmdProcess(string command, string? projectPath = null)
     {

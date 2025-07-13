@@ -34,10 +34,14 @@ public /*open*/ class ServicesCreator
         try
         {
             string? logFileName = null;
-            if (_logFileName is not null)
+            if (!string.IsNullOrWhiteSpace(_logFileName))
                 logFileName = _logFileName;
             else if (_logFolder is not null)
                 logFileName = Path.Combine(_logFolder, _appName, $"{_appName}.log");
+
+            ////check with regex logFileName is valid filename
+            //if (!FileNameValidator.IsValidFileName(logFileName))
+            //    return null;
 
             if (logFileName is not null)
             {

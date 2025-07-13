@@ -53,7 +53,7 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
         // But you have to make your own MyEncryptionLibrary, not included here
     }
 
-    private static bool IsRelevant(string dataKey, string dk)
+    public static bool IsRelevant(string dataKey, string dk)
     {
         var keys = dataKey.Split(":");
         var dKeys = dk.Split(":");

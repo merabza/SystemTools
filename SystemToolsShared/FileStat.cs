@@ -165,7 +165,7 @@ public static class FileStat
         return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
     }
 
-    private static DateTime TryGetDate(string strDate, string mask)
+    public static DateTime TryGetDate(string strDate, string mask)
     {
         try
         {

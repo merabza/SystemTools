@@ -3,7 +3,7 @@
 namespace SystemToolsShared.LinuxFileSecurity;
 
 [Flags]
-public enum FileAccess
+public enum LinuxFileAccess
 {
     None = 0,
     Execute = 1,

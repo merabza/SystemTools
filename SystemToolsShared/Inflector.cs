@@ -7,7 +7,6 @@ namespace SystemToolsShared;
 
 public static class Inflector
 {
-
     static Inflector()
     {
         AddPlural("$", "s");
@@ -73,7 +72,6 @@ public static class Inflector
         AddUncountable("deer");
         AddUncountable("aircraft");
     }
-
 
     public static void AddIrregular(string singular, string plural)
     {

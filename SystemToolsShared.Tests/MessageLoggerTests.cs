@@ -24,8 +24,8 @@ public sealed class MessageLoggerTests
         }
 
         // Expose protected methods for testing
-        public new ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
-            => base.LogInfoAndSendMessage(message, cancellationToken);
+        public new ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default) =>
+            base.LogInfoAndSendMessage(message, cancellationToken);
 
         public new ValueTask LogInfoAndSendMessage(string message, object? arg1,
             CancellationToken cancellationToken = default) =>

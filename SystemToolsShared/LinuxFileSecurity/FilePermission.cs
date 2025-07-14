@@ -23,14 +23,14 @@ public sealed class FilePermission
         return new FilePermission(filePath);
     }
 
-
     public override string ToString()
     {
         return
             $"{(int)FilePermissionFlag.ToValidAccess(Flags.User)}{(int)FilePermissionFlag.ToValidAccess(Flags.Group)}{(int)FilePermissionFlag.ToValidAccess(Flags.Others)} {FilePath}";
     }
 
-    public static FilePermission? SetPermission(string filePath, LinuxFileAccess user, LinuxFileAccess group, LinuxFileAccess others)
+    public static FilePermission? SetPermission(string filePath, LinuxFileAccess user, LinuxFileAccess group,
+        LinuxFileAccess others)
     {
         var permission = new FilePermission(filePath) { Flags = new FilePermissionFlag(user, group, others) };
         return permission.Apply();

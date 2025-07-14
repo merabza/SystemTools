@@ -31,7 +31,6 @@ public static class StShared
     public static OneOf<(string, int), IEnumerable<Err>> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
-        
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 
         //    return (Err[])option;

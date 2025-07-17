@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Microsoft.Extensions.Logging;
-using Moq;
 using Xunit;
 
 namespace SystemToolsShared.Tests.StSharedTests;

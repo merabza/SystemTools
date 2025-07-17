@@ -41,12 +41,8 @@ public sealed class SystemStatTests
         // This test will only pass on Windows. On other platforms, it will fail.
         // If you want platform-independent tests, consider using mocking frameworks.
         if (OperatingSystem.IsWindows())
-        {
             Assert.True(result);
-        }
         else
-        {
             Assert.False(result);
-        }
     }
 }

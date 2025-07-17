@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RepositoriesDom;
+
+namespace RepositoriesDom.Tests;
 
 public class TestEntity
 {

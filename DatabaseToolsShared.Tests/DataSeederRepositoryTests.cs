@@ -1,19 +1,22 @@
-using DatabaseToolsShared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
+
+namespace DatabaseToolsShared.Tests;
 
 public class DataSeederRepositoryTests
 {
     private Mock<DbContext> CreateDbContextMock(List<DummyEntity>? setData = null)
     {
         var dbSetMock = new Mock<DbSet<DummyEntity>>();
-        var data = setData ?? new List<DummyEntity>();
+        var data = setData ?? [];
         var queryable = data.AsQueryable();
         dbSetMock.As<IQueryable<DummyEntity>>().Setup(m => m.Provider).Returns(queryable.Provider);
         dbSetMock.As<IQueryable<DummyEntity>>().Setup(m => m.Expression).Returns(queryable.Expression);
         dbSetMock.As<IQueryable<DummyEntity>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-        dbSetMock.As<IQueryable<DummyEntity>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
+        // ReSharper disable once using
+        using var enumerator = queryable.GetEnumerator();
+        dbSetMock.As<IQueryable<DummyEntity>>().Setup(m => m.GetEnumerator()).Returns(enumerator);
         var dbContextMock = new Mock<DbContext>();
         dbContextMock.Setup(c => c.Set<DummyEntity>()).Returns(dbSetMock.Object);
         return dbContextMock;

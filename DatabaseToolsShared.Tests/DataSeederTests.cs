@@ -1,5 +1,6 @@
-using DatabaseToolsShared;
 using Moq;
+
+namespace DatabaseToolsShared.Tests;
 
 public class DataSeederTests
 {
@@ -8,8 +9,7 @@ public class DataSeederTests
     {
         var repoMock = new Mock<IDataSeederRepository>();
         repoMock.Setup(r => r.GetTableName<DummyDst>()).Returns("DummyDst");
-        var seeder = new DataSeeder<DummyDst, DummyJMo>("folder", repoMock.Object, ESeedDataType.OnlyJson,
-            new List<string> { "Id" });
+        var seeder = new DataSeeder<DummyDst, DummyJMo>("folder", repoMock.Object, ESeedDataType.OnlyJson, ["Id"]);
         Assert.NotNull(seeder);
     }
 
@@ -26,8 +26,7 @@ public class DataSeederTests
     {
         var repoMock = new Mock<IDataSeederRepository>();
         repoMock.Setup(r => r.GetTableName<DummyDst>()).Returns("DummyDst");
-        var seeder = new DataSeeder<DummyDst, DummyJMo>("folder", repoMock.Object, ESeedDataType.OnlyJson,
-            new List<string> { "Id" });
+        var seeder = new DataSeeder<DummyDst, DummyJMo>("folder", repoMock.Object, ESeedDataType.OnlyJson, ["Id"]);
         var priority = new List<DummyDst> { new() { Id = 1, Name = "A" } };
         var secondary = new List<DummyDst> { new() { Id = 2, Name = "B" } };
         var result = seeder.Adjust(priority, secondary);

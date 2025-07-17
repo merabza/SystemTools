@@ -14,7 +14,7 @@ public /*open*/ class DataSeederRepository : AbstractRepository, IDataSeederRepo
     private readonly ILogger<DataSeederRepository> _logger;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger) : base(ctx)
+    public DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger) : base(ctx)
     {
         _context = ctx;
         _logger = logger;

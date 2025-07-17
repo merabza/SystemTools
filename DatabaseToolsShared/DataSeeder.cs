@@ -18,7 +18,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
     //ანუ როცა გამოყენებულია RulesHasMorePriority, ან JsonHasMorePriority
-    protected DataSeeder(string dataSeedFolder, IDataSeederRepository repo,
+    public DataSeeder(string dataSeedFolder, IDataSeederRepository repo,
         ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
     {
         _dataSeedFolder = dataSeedFolder;
@@ -93,14 +93,14 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ან თუ შენახვის მერე რაიმე დამატებით არის გასაკეთებელი, რომ გააკეთოს
     //List<TJMo> seedData საჭიროა შესადარებლად.
     //თუ ბაზიდან საჭიროა ინფორმაცია, გადატვირთულმა მეთოდმა თვითონ უნდა ჩატვირთოს
-    protected virtual bool AdditionalCheck(List<TJMo> jsonData, List<TDst> savedData)
+    public virtual bool AdditionalCheck(List<TJMo> jsonData, List<TDst> savedData)
     {
         return true;
     }
 
     //ამ ვირტუალური მეთოდის დანიშნულებაა შექმნას სპეციალური წესების მიხედვით. 
     //როცა ასეთი წესები გვაქვს.
-    protected virtual List<TDst> CreateListByRules()
+    public virtual List<TDst> CreateListByRules()
     {
         return [];
     }
@@ -108,7 +108,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ამ ვირტუალური მეთიდის დანიშნულებაა ჯეისონიდან ჩატვირთული ინფორმაცია აქციოს ბაზის ინფორმაციად
     //ეს რეალიზაცია გამოდგება მხოლოდ იმ შემთხვევებისთვის, როცა მოდელები ერთი ერთში გადადიან ერთმანეთში
     //დანარჩენ შემთხვევაში საჭიროა გადატვირთვა
-    protected virtual List<TDst> Adapt(List<TJMo> appClaimsSeedData)
+    public virtual List<TDst> Adapt(List<TJMo> appClaimsSeedData)
     {
         if (appClaimsSeedData.Count == 0)
             return [];
@@ -141,7 +141,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     }
 
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია და აქციოს მოდელების სიად
-    protected static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
+    public static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
     {
         var jsonFullFileName = Path.Combine(folderName, fileName);
         return File.Exists(jsonFullFileName)
@@ -150,19 +150,19 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     }
 
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია კონკრეტული მოდელისათვის
-    private List<TJMo> LoadFromJsonFile()
+    public List<TJMo> LoadFromJsonFile()
     {
         return LoadFromJsonFile<TJMo>(_dataSeedFolder, $"{_tableName.Capitalize()}.json");
     }
 
     //მეთოდი ამოწმებს ბაზაში უკვე არის თუ არა შეასაბამის ცხრილში ჩანაწერები
-    private bool CheckRecordsExists()
+    public bool CheckRecordsExists()
     {
         return DataSeederRepo.HaveAnyRecord<TDst>();
     }
 
     //ამ მეთოდის დანიშნულებაა ბაზაში ჩასაწერი სია მიიყვანოს უპირატესი სიის მიხედვით
-    private List<TDst> Adjust(List<TDst> listWithMorePriority, List<TDst> listWithLessPriority)
+    public List<TDst> Adjust(List<TDst> listWithMorePriority, List<TDst> listWithLessPriority)
     {
         if (_keyFieldNamesList is null || _keyFieldNamesList.Count == 0)
             throw new Exception($"key field name List is not set for {_tableName}");

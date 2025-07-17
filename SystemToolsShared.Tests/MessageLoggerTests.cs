@@ -5,8 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Xunit;
 using SystemToolsShared.Errors;
+using Xunit;
 
 namespace SystemToolsShared.Tests;
 
@@ -15,57 +15,6 @@ public sealed class MessageLoggerTests
     private readonly Mock<ILogger> _mockLogger = new();
     private readonly Mock<IMessagesDataManager> _mockMessagesDataManager = new();
     private readonly string _userName = "testUser";
-
-    private class TestMessageLogger : MessageLogger
-    {
-        public TestMessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
-            bool useConsole) : base(logger, messagesDataManager, userName, useConsole)
-        {
-        }
-
-        // Expose protected methods for testing
-        public new ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default) =>
-            base.LogInfoAndSendMessage(message, cancellationToken);
-
-        public new ValueTask LogInfoAndSendMessage(string message, object? arg1,
-            CancellationToken cancellationToken = default) =>
-            base.LogInfoAndSendMessage(message, arg1, cancellationToken);
-
-        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2,
-            CancellationToken cancellationToken = default) =>
-            base.LogInfoAndSendMessage(message, arg1, arg2, cancellationToken);
-
-        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
-            CancellationToken cancellationToken = default) =>
-            base.LogInfoAndSendMessage(message, arg1, arg2, arg3, cancellationToken);
-
-        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
-            object? arg4, CancellationToken cancellationToken = default) =>
-            base.LogInfoAndSendMessage(message, arg1, arg2, arg3, arg4, cancellationToken);
-
-        public new ValueTask LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default) =>
-            base.LogWarningAndSendMessage(message, cancellationToken);
-
-        public new ValueTask LogWarningAndSendMessage(string message, object? arg1,
-            CancellationToken cancellationToken = default) =>
-            base.LogWarningAndSendMessage(message, arg1, cancellationToken);
-
-        public new ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
-            CancellationToken cancellationToken = default) =>
-            base.LogWarningAndSendMessage(message, arg1, arg2, cancellationToken);
-
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(string errorCode, string message,
-            CancellationToken cancellationToken = default) =>
-            base.LogErrorAndSendMessageFromError(errorCode, message, cancellationToken);
-
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(Err error,
-            CancellationToken cancellationToken = default) =>
-            base.LogErrorAndSendMessageFromError(error, cancellationToken);
-
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromException(Exception ex, string methodName,
-            CancellationToken cancellationToken = default) =>
-            base.LogErrorAndSendMessageFromException(ex, methodName, cancellationToken);
-    }
 
     [Fact]
     public async Task LogInfoAndSendMessage_Console_WritesToConsole()
@@ -147,5 +96,78 @@ public sealed class MessageLoggerTests
             Assert.Equal("ErrorCaught", err.ErrorCode);
             Assert.Contains("Error in TestMethod", err.ErrorMessage);
         });
+    }
+
+    private class TestMessageLogger : MessageLogger
+    {
+        public TestMessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
+            bool useConsole) : base(logger, messagesDataManager, userName, useConsole)
+        {
+        }
+
+        // Expose protected methods for testing
+        public new ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
+        {
+            return base.LogInfoAndSendMessage(message, cancellationToken);
+        }
+
+        public new ValueTask LogInfoAndSendMessage(string message, object? arg1,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogInfoAndSendMessage(message, arg1, cancellationToken);
+        }
+
+        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogInfoAndSendMessage(message, arg1, arg2, cancellationToken);
+        }
+
+        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogInfoAndSendMessage(message, arg1, arg2, arg3, cancellationToken);
+        }
+
+        public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
+            object? arg4, CancellationToken cancellationToken = default)
+        {
+            return base.LogInfoAndSendMessage(message, arg1, arg2, arg3, arg4, cancellationToken);
+        }
+
+        public new ValueTask LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
+        {
+            return base.LogWarningAndSendMessage(message, cancellationToken);
+        }
+
+        public new ValueTask LogWarningAndSendMessage(string message, object? arg1,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogWarningAndSendMessage(message, arg1, cancellationToken);
+        }
+
+        public new ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogWarningAndSendMessage(message, arg1, arg2, cancellationToken);
+        }
+
+        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(string errorCode, string message,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogErrorAndSendMessageFromError(errorCode, message, cancellationToken);
+        }
+
+        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(Err error,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogErrorAndSendMessageFromError(error, cancellationToken);
+        }
+
+        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+            CancellationToken cancellationToken = default)
+        {
+            return base.LogErrorAndSendMessageFromException(ex, methodName, cancellationToken);
+        }
     }
 }

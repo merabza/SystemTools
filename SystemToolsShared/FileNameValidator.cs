@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+namespace SystemToolsShared;
+
 public static class FileNameValidator
 {
     public static bool IsValidFileName(string? fileName)

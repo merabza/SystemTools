@@ -42,8 +42,9 @@ public sealed class ErrTests
     {
         var err = new Err { ErrorCode = "E", ErrorMessage = "M" };
         var result = Err.Create(err);
-        Assert.Single(result);
-        Assert.Equal(err, result.First());
+        var collection = result as Err[] ?? result.ToArray();
+        Assert.Single(collection);
+        Assert.Equal(err, collection.First());
     }
 
     [Fact]
@@ -84,8 +85,9 @@ public sealed class ErrTests
     {
         var err1 = new Err { ErrorCode = "A", ErrorMessage = "B" };
         var err2 = new Err { ErrorCode = "C", ErrorMessage = "D" };
+        // ReSharper disable once using
         using var sw = new StringWriter();
-        var originalOut = Console.Out;
+        using var originalOut = Console.Out;
         Console.SetOut(sw);
         try
         {

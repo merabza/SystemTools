@@ -7,6 +7,10 @@ namespace SystemToolsShared;
 
 public static class Inflector
 {
+    private static readonly List<Rule> Plurals = [];
+    private static readonly List<Rule> Singulars = [];
+    private static readonly List<string> Uncountables = [];
+
     static Inflector()
     {
         AddPlural("$", "s");
@@ -93,10 +97,6 @@ public static class Inflector
     {
         Singulars.Add(new Rule(rule, replacement));
     }
-
-    private static readonly List<Rule> Plurals = [];
-    private static readonly List<Rule> Singulars = [];
-    private static readonly List<string> Uncountables = [];
 
     public static string Pluralize(this string word)
     {

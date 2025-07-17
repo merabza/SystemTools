@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using Xunit;
+using Newtonsoft.Json;
 using SystemToolsShared.Domain;
 using SystemToolsShared.Models;
-using Newtonsoft.Json;
+using Xunit;
 
 namespace SystemToolsShared.Tests.Domain;
 

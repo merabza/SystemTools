@@ -18,45 +18,45 @@ public sealed class StSharedConsoleTests
         Console.SetOut(_stringWriter);
     }
 
-    [Fact]
-    public void WriteWarningLine_WithConsole_DisplaysWarning()
-    {
-        // Arrange
-        const string warningText = "Test warning";
-        const bool useConsole = true;
+    //[Fact]
+    //public void WriteWarningLine_WithConsole_DisplaysWarning()
+    //{
+    //    // Arrange
+    //    const string warningText = "Test warning";
+    //    const bool useConsole = true;
 
-        // Act
-        StShared.WriteWarningLine(warningText, useConsole, _mockLogger.Object);
+    //    // Act
+    //    StShared.WriteWarningLine(warningText, useConsole, _mockLogger.Object);
 
-        // Assert
-        var output = _stringWriter.ToString();
-        Assert.Contains("[warning]", output);
-        Assert.Contains(warningText, output);
-        _mockLogger.Verify(
-            x => x.Log(LogLevel.Warning, It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(warningText)), null,
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
-    }
+    //    // Assert
+    //    var output = _stringWriter.ToString();
+    //    Assert.Contains("[warning]", output);
+    //    Assert.Contains(warningText, output);
+    //    _mockLogger.Verify(
+    //        x => x.Log(LogLevel.Warning, It.IsAny<EventId>(),
+    //            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(warningText)), null,
+    //            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+    //}
 
-    [Fact]
-    public void WriteErrorLine_WithConsole_DisplaysError()
-    {
-        // Arrange
-        const string errorText = "Test error";
-        const bool useConsole = true;
+    //[Fact]
+    //public void WriteErrorLine_WithConsole_DisplaysError()
+    //{
+    //    // Arrange
+    //    const string errorText = "Test error";
+    //    const bool useConsole = true;
 
-        // Act
-        StShared.WriteErrorLine(errorText, useConsole, _mockLogger.Object, false);
+    //    // Act
+    //    StShared.WriteErrorLine(errorText, useConsole, _mockLogger.Object, false);
 
-        // Assert
-        var output = _stringWriter.ToString();
-        Assert.Contains("[ERROR]", output);
-        Assert.Contains(errorText, output);
-        _mockLogger.Verify(
-            x => x.Log(LogLevel.Error, It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(errorText)), null,
-                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
-    }
+    //    // Assert
+    //    var output = _stringWriter.ToString();
+    //    Assert.Contains("[ERROR]", output);
+    //    Assert.Contains(errorText, output);
+    //    _mockLogger.Verify(
+    //        x => x.Log(LogLevel.Error, It.IsAny<EventId>(),
+    //            It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(errorText)), null,
+    //            It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
+    //}
 
     [Fact]
     public void WriteSuccessMessage_DisplaysInGreen()

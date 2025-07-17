@@ -7,14 +7,15 @@ namespace SystemToolsShared.LinuxFileSecurity;
 public sealed class FilePermission
 {
     private const string Command = "chmod";
-    public string FilePath { get; }
-    public FilePermissionFlag Flags { get; private set; }
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public FilePermission(string filePath)
     {
         FilePath = filePath;
     }
+
+    public string FilePath { get; }
+    public FilePermissionFlag Flags { get; private set; }
 
     public static FilePermission Create(string filePath)
     {

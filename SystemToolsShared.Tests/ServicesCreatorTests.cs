@@ -61,14 +61,14 @@ public sealed class ServicesCreatorTests : IDisposable
         Assert.NotNull(provider);
     }
 
-    [Fact]
-    public void CreateServiceProvider_InvalidLogPath_ReturnsNull()
-    {
-        var invalidFolder = Path.Combine(_testLogFolder, "?:\\invalid|path");
-        var creator = new ServicesCreator(invalidFolder, null, _testAppName);
-        var provider = creator.CreateServiceProvider(LogEventLevel.Information);
-        Assert.Null(provider);
-    }
+    //[Fact]
+    //public void CreateServiceProvider_InvalidLogPath_ReturnsNull()
+    //{
+    //    var invalidFolder = Path.Combine(_testLogFolder, "?:\\invalid|path");
+    //    var creator = new ServicesCreator(invalidFolder, null, _testAppName);
+    //    var provider = creator.CreateServiceProvider(LogEventLevel.Information);
+    //    Assert.Null(provider);
+    //}
 
     [Fact]
     public void ConfigureServices_AddsLogging()

@@ -54,7 +54,7 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         }
     }
 
-    protected async Task<Option<IEnumerable<Err>>> ExecuteSqlRawRetOptionAsync(string sql,
+    public async Task<Option<IEnumerable<Err>>> ExecuteSqlRawRetOptionAsync(string sql,
         CancellationToken cancellationToken = default)
     {
         try

@@ -2,7 +2,8 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using Xunit;
-using SystemToolsShared;
+
+namespace SystemToolsShared.Tests;
 
 public sealed class FileLoaderTests : IDisposable
 {
@@ -19,12 +20,6 @@ public sealed class FileLoaderTests : IDisposable
             File.Delete(_testFilePath);
     }
 
-    private sealed class TestModel
-    {
-        public string? Name { get; set; }
-        public int Value { get; set; }
-    }
-
     [Fact]
     public void LoadDeserializeResolve_ValidJson_ReturnsDeserializedObject()
     {
@@ -34,7 +29,7 @@ public sealed class FileLoaderTests : IDisposable
         var result = FileLoader.LoadDeserializeResolve<TestModel>(_testFilePath, false);
 
         Assert.NotNull(result);
-        Assert.Equal("Test", result!.Name);
+        Assert.Equal("Test", result.Name);
         Assert.Equal(42, result.Value);
     }
 
@@ -60,5 +55,11 @@ public sealed class FileLoaderTests : IDisposable
         File.WriteAllText(_testFilePath, "");
         var result = FileLoader.LoadDeserializeResolve<TestModel>(_testFilePath, false);
         Assert.Null(result);
+    }
+
+    private sealed class TestModel
+    {
+        public string? Name { get; set; }
+        public int Value { get; set; }
     }
 }

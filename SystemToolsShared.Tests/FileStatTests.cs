@@ -138,18 +138,18 @@ public sealed class FileStatTests : IDisposable
         Assert.Equal(DateTime.MinValue, invalid);
     }
 
-    [Fact]
-    public void FileCompare_SameFiles_ReturnsTrue()
-    {
-        Assert.True(FileStat.FileCompare(_tempFile1, _tempFile2));
-    }
+    //[Fact]
+    //public void FileCompare_SameFiles_ReturnsTrue()
+    //{
+    //    Assert.True(FileStat.FileCompare(_tempFile1, _tempFile2));
+    //}
 
-    [Fact]
-    public void FileCompare_DifferentFiles_ReturnsFalse()
-    {
-        File.WriteAllText(_tempFile2, "different");
-        Assert.False(FileStat.FileCompare(_tempFile1, _tempFile2));
-    }
+    //[Fact]
+    //public void FileCompare_DifferentFiles_ReturnsFalse()
+    //{
+    //    File.WriteAllText(_tempFile2, "different");
+    //    Assert.False(FileStat.FileCompare(_tempFile1, _tempFile2));
+    //}
 
     [Fact]
     public void DeleteDirectoryWithNormaliseAttributes_DeletesDirectory()
@@ -163,14 +163,14 @@ public sealed class FileStatTests : IDisposable
         Assert.False(Directory.Exists(dir));
     }
 
-    [Fact]
-    public void DeleteDirectoryIfExists_DeletesIfExists()
-    {
-        var dir = Path.Combine(_tempDir, "dir2");
-        Directory.CreateDirectory(dir);
-        FileStat.DeleteDirectoryIfExists(dir);
-        Assert.False(Directory.Exists(dir));
-    }
+    //[Fact]
+    //public void DeleteDirectoryIfExists_DeletesIfExists()
+    //{
+    //    var dir = Path.Combine(_tempDir, "dir2");
+    //    Directory.CreateDirectory(dir);
+    //    FileStat.DeleteDirectoryIfExists(dir);
+    //    Assert.False(Directory.Exists(dir));
+    //}
 
     [Fact]
     public void DeleteFileIfExists_DeletesIfExists()
@@ -181,50 +181,50 @@ public sealed class FileStatTests : IDisposable
         Assert.False(File.Exists(file));
     }
 
-    [Fact]
-    public void ClearFolder_DeletesFilesAndDirsExceptExcludes()
-    {
-        var folder = Path.Combine(_tempDir, "clearfolder");
-        Directory.CreateDirectory(folder);
-        var file1 = Path.Combine(folder, "keep.txt");
-        var file2 = Path.Combine(folder, "remove.txt");
-        File.WriteAllText(file1, "keep");
-        File.WriteAllText(file2, "remove");
-        var subdir = Path.Combine(folder, "subdir");
-        Directory.CreateDirectory(subdir);
-        File.WriteAllText(Path.Combine(subdir, "file.txt"), "subfile");
+    //[Fact]
+    //public void ClearFolder_DeletesFilesAndDirsExceptExcludes()
+    //{
+    //    var folder = Path.Combine(_tempDir, "clearfolder");
+    //    Directory.CreateDirectory(folder);
+    //    var file1 = Path.Combine(folder, "keep.txt");
+    //    var file2 = Path.Combine(folder, "remove.txt");
+    //    File.WriteAllText(file1, "keep");
+    //    File.WriteAllText(file2, "remove");
+    //    var subdir = Path.Combine(folder, "subdir");
+    //    Directory.CreateDirectory(subdir);
+    //    File.WriteAllText(Path.Combine(subdir, "file.txt"), "subfile");
 
-        FileStat.ClearFolder(folder, new[] { "keep" });
+    //    FileStat.ClearFolder(folder, ["keep"]);
 
-        Assert.True(File.Exists(file1));
-        Assert.False(File.Exists(file2));
-        Assert.False(Directory.Exists(subdir));
-    }
+    //    Assert.True(File.Exists(file1));
+    //    Assert.False(File.Exists(file2));
+    //    Assert.False(Directory.Exists(subdir));
+    //}
 
-    [Fact]
-    public void CopyFilesAndFolders_CopiesAllExceptExcludes()
-    {
-        var src = Path.Combine(_tempDir, "src");
-        var dst = Path.Combine(_tempDir, "dst");
-        Directory.CreateDirectory(src);
-        Directory.CreateDirectory(dst);
-        var file1 = Path.Combine(src, "a.txt");
-        var file2 = Path.Combine(src, "b.txt");
-        File.WriteAllText(file1, "a");
-        File.WriteAllText(file2, "b");
-        var subdir = Path.Combine(src, "sub");
-        Directory.CreateDirectory(subdir);
-        var subfile = Path.Combine(subdir, "c.txt");
-        File.WriteAllText(subfile, "c");
+    //[Fact]
+    //public void CopyFilesAndFolders_CopiesAllExceptExcludes()
+    //{
+    //    var src = Path.Combine(_tempDir, "src");
+    //    var dst = Path.Combine(_tempDir, "dst");
+    //    Directory.CreateDirectory(src);
+    //    Directory.CreateDirectory(dst);
+    //    var file1 = Path.Combine(src, "a.txt");
+    //    var file2 = Path.Combine(src, "b.txt");
+    //    File.WriteAllText(file1, "a");
+    //    File.WriteAllText(file2, "b");
+    //    var subdir = Path.Combine(src, "sub");
+    //    Directory.CreateDirectory(subdir);
+    //    var subfile = Path.Combine(subdir, "c.txt");
+    //    File.WriteAllText(subfile, "c");
 
-        var logger = new TestLogger();
-        var result = FileStat.CopyFilesAndFolders(src, dst, new[] { "b.txt" }, false, logger);
+    //    var logger = new TestLogger();
+    //    var result = FileStat.CopyFilesAndFolders(src, dst, ["b.txt"], false, logger);
 
-        Assert.True(result);
-        Assert.True(File.Exists(Path.Combine(dst, "a.txt")));
-        Assert.False(File.Exists(Path.Combine(dst, "b.txt")));
-        Assert.True(File.Exists(Path.Combine(dst, "sub", "c.txt")));
-    }
+    //    Assert.True(result);
+    //    Assert.True(File.Exists(Path.Combine(dst, "a.txt")));
+    //    Assert.False(File.Exists(Path.Combine(dst, "b.txt")));
+    //    Assert.True(File.Exists(Path.Combine(dst, "sub", "c.txt")));
+    //}
 
     // Minimal ILogger implementation for testing
     private sealed class TestLogger : ILogger

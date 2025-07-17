@@ -2,7 +2,8 @@ using System;
 using System.Globalization;
 using System.Threading;
 using Xunit;
-using SystemToolsShared;
+
+namespace SystemToolsShared.Tests;
 
 public sealed class DateTimeExtendTests
 {

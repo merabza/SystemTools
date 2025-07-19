@@ -20,7 +20,10 @@ public sealed class MessageLoggerTests
     public async Task LogInfoAndSendMessage_Console_WritesToConsole()
     {
         var logger = new TestMessageLogger(null, null, null, true);
-        using var sw = new StringWriter();
+
+        // ReSharper disable once using
+        // ReSharper disable once DisposableConstructor
+        await using var sw = new StringWriter();
         Console.SetOut(sw);
 
         await logger.LogInfoAndSendMessage("Hello Console");

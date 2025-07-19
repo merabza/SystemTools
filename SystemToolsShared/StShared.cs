@@ -51,7 +51,7 @@ public static class StShared
             CreateNoWindow = true
         };
 
-        StringBuilder sb = new();
+        var sb = new StringBuilder();
         proc.Start();
         while (!proc.StandardOutput.EndOfStream)
         {

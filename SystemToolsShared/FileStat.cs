@@ -35,7 +35,7 @@ public static class FileStat
             if (sf.DirectoryName is null)
                 return false;
 
-            DirectoryInfo destDir = new(sf.DirectoryName);
+            var destDir = new DirectoryInfo(sf.DirectoryName);
 
             if (destDir.Exists)
                 return true;
@@ -56,7 +56,7 @@ public static class FileStat
     {
         try
         {
-            DirectoryInfo destDir = new(folderName);
+            var destDir = new DirectoryInfo(folderName);
 
             if (destDir.Exists)
                 return destDir.FullName;
@@ -113,7 +113,7 @@ public static class FileStat
             regexFileMask += '$';
         if (!sFileMask.StartsWith('*'))
             regexFileMask = '^' + regexFileMask;
-        Regex mask = new(regexFileMask);
+        var mask = new Regex(regexFileMask);
         var toRet = mask.IsMatch(sFileName);
         return toRet;
     }
@@ -121,7 +121,7 @@ public static class FileStat
     //string maskFirstVersion = "yyyyMMddHHmmssfffffff";
     public static (DateTime, string?) GetDateTimeAndPatternByDigits(this string fileName, string maskFirstVersion)
     {
-        StringBuilder sbMask = new();
+        var sbMask = new StringBuilder();
         var position = 0;
         var maskPosition = 0;
         var maskPositionInName = 0;
@@ -198,9 +198,11 @@ public static class FileStat
 
         // Open the two files.
         // ReSharper disable once using
-        using FileStream fs1 = new(file1, FileMode.Open);
+        // ReSharper disable once DisposableConstructor
+        using var fs1 = new FileStream(file1, FileMode.Open);
         // ReSharper disable once using
-        using FileStream fs2 = new(file2, FileMode.Open);
+        // ReSharper disable once DisposableConstructor
+        using var fs2 = new FileStream(file2, FileMode.Open);
 
         // Check the file sizes. If they are not the same, the files
         // are not the same.

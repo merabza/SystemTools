@@ -1,10 +1,12 @@
-﻿namespace ReCounterContracts;
+﻿using System.Threading;
+
+namespace ReCounterContracts;
 
 public sealed class ProcessMonitoringManager
 {
     private static ProcessMonitoringManager? _instance;
 
-    private static readonly object SyncRoot = new();
+    private static readonly Lock SyncRoot = new();
     //private WaitKeyboardEscapeBackgroundService? _waitKeyboardEscapeBackgroundService;
 
     // ReSharper disable once MemberCanBePrivate.Global

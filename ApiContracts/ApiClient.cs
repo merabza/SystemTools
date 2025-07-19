@@ -405,7 +405,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     private Uri CreateUri(string afterServerAddress)
     {
-        Uri uri = new($"{_server}{afterServerAddress}");
+        var uri = new Uri($"{_server}{afterServerAddress}");
         if (!string.IsNullOrWhiteSpace(_apiKey))
             uri = string.IsNullOrEmpty(uri.Query)
                 ? new Uri($"{uri}?apikey={_apiKey}")

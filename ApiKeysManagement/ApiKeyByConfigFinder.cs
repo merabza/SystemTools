@@ -1,14 +1,14 @@
-﻿using ApiKeysManagement.Domain;
+﻿using System.Threading.Tasks;
+using ApiKeysManagement.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
 
 namespace ApiKeysManagement;
 
 public sealed class ApiKeyByConfigFinder : IApiKeyFinder
 {
-    private readonly ILogger<ApiKeyByConfigFinder> _logger;
     private readonly IConfiguration _configuration;
+    private readonly ILogger<ApiKeyByConfigFinder> _logger;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public ApiKeyByConfigFinder(ILogger<ApiKeyByConfigFinder> logger, IConfiguration configuration)

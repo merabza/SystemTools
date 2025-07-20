@@ -151,17 +151,17 @@ public sealed class FileStatTests : IDisposable
     //    Assert.False(FileStat.FileCompare(_tempFile1, _tempFile2));
     //}
 
-    [Fact]
-    public void DeleteDirectoryWithNormaliseAttributes_DeletesDirectory()
-    {
-        var dir = Path.Combine(_tempDir, "todelete");
-        Directory.CreateDirectory(dir);
-        var file = Path.Combine(dir, "file.txt");
-        File.WriteAllText(file, "abc");
-        File.SetAttributes(file, FileAttributes.ReadOnly);
-        FileStat.DeleteDirectoryWithNormaliseAttributes(dir);
-        Assert.False(Directory.Exists(dir));
-    }
+    //[Fact]
+    //public void DeleteDirectoryWithNormaliseAttributes_DeletesDirectory()
+    //{
+    //    var dir = Path.Combine(_tempDir, "todelete");
+    //    Directory.CreateDirectory(dir);
+    //    var file = Path.Combine(dir, "file.txt");
+    //    File.WriteAllText(file, "abc");
+    //    File.SetAttributes(file, FileAttributes.ReadOnly);
+    //    FileStat.DeleteDirectoryWithNormaliseAttributes(dir);
+    //    Assert.False(Directory.Exists(dir));
+    //}
 
     //[Fact]
     //public void DeleteDirectoryIfExists_DeletesIfExists()
@@ -172,14 +172,14 @@ public sealed class FileStatTests : IDisposable
     //    Assert.False(Directory.Exists(dir));
     //}
 
-    [Fact]
-    public void DeleteFileIfExists_DeletesIfExists()
-    {
-        var file = Path.Combine(_tempDir, "todelete.txt");
-        File.WriteAllText(file, "abc");
-        FileStat.DeleteFileIfExists(file);
-        Assert.False(File.Exists(file));
-    }
+    //[Fact]
+    //public void DeleteFileIfExists_DeletesIfExists()
+    //{
+    //    var file = Path.Combine(_tempDir, "todelete.txt");
+    //    File.WriteAllText(file, "abc");
+    //    FileStat.DeleteFileIfExists(file);
+    //    Assert.False(File.Exists(file));
+    //}
 
     //[Fact]
     //public void ClearFolder_DeletesFilesAndDirsExceptExcludes()

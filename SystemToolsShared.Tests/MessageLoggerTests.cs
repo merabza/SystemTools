@@ -12,9 +12,9 @@ namespace SystemToolsShared.Tests;
 
 public sealed class MessageLoggerTests
 {
+    private const string UserName = "testUser";
     private readonly Mock<ILogger> _mockLogger = new();
     private readonly Mock<IMessagesDataManager> _mockMessagesDataManager = new();
-    private readonly string _userName = "testUser";
 
     [Fact]
     public async Task LogInfoAndSendMessage_Console_WritesToConsole()
@@ -34,33 +34,33 @@ public sealed class MessageLoggerTests
     [Fact]
     public async Task LogInfoAndSendMessage_SendsMessage()
     {
-        var logger = new TestMessageLogger(null, _mockMessagesDataManager.Object, _userName, false);
+        var logger = new TestMessageLogger(null, _mockMessagesDataManager.Object, UserName, false);
 
         await logger.LogInfoAndSendMessage("Test message");
 
-        _mockMessagesDataManager.Verify(m => m.SendMessage(_userName, "Test message", It.IsAny<CancellationToken>()),
+        _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Test message", It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
     [Fact]
     public async Task LogWarningAndSendMessage_LogsWarningAndSends()
     {
-        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, _userName, false);
+        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
 
         await logger.LogWarningAndSendMessage("Warn!");
 
-        _mockMessagesDataManager.Verify(m => m.SendMessage(_userName, "Warn!", It.IsAny<CancellationToken>()),
+        _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Warn!", It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
     [Fact]
     public async Task LogErrorAndSendMessageFromError_LogsErrorAndSends()
     {
-        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, _userName, false);
+        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
 
         var result = await logger.LogErrorAndSendMessageFromError("E1", "Error message");
 
-        _mockMessagesDataManager.Verify(m => m.SendMessage(_userName, "Error message", It.IsAny<CancellationToken>()),
+        _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Error message", It.IsAny<CancellationToken>()),
             Times.Once);
         Assert.Collection(result, err =>
         {
@@ -72,7 +72,7 @@ public sealed class MessageLoggerTests
     [Fact]
     public async Task LogErrorAndSendMessageFromError_ReturnsError_WhenNoDataManager()
     {
-        var logger = new TestMessageLogger(_mockLogger.Object, null, _userName, false);
+        var logger = new TestMessageLogger(_mockLogger.Object, null, UserName, false);
 
         var result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
 
@@ -86,13 +86,13 @@ public sealed class MessageLoggerTests
     [Fact]
     public async Task LogErrorAndSendMessageFromException_LogsAndSends()
     {
-        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, _userName, false);
+        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
         var ex = new InvalidOperationException("fail");
 
         var result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
 
         _mockMessagesDataManager.Verify(
-            m => m.SendMessage(_userName, It.Is<string>(s => s.Contains("Error in TestMethod")),
+            m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("Error in TestMethod")),
                 It.IsAny<CancellationToken>()), Times.Once);
         Assert.Collection(result, err =>
         {

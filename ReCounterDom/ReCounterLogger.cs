@@ -23,7 +23,7 @@ public sealed class ReCounterLogger
         var logFileName = Path.Combine(strLogFolder, reCounterName + "-logs.txt");
         if (string.IsNullOrWhiteSpace(logFileName))
             return null;
-        LogFile logFile = new(logFileName);
+        var logFile = new LogFile(logFileName);
         return new ReCounterLogger(logFile);
     }
 
@@ -44,7 +44,7 @@ public sealed class ReCounterLogger
             return string.Empty;
         try
         {
-            DirectoryInfo logFolderDir = new(strLogFolderName);
+            var logFolderDir = new DirectoryInfo(strLogFolderName);
             //თუ ფოლდერი არ არსებობს შევქმნათ
             if (!logFolderDir.Exists)
                 logFolderDir.Create();

@@ -26,7 +26,7 @@ public sealed class LogFile
     public void SaveLogToFile(string strLog)
     {
         string? rename = null;
-        FileInfo checkFile = new(_fileName);
+        var checkFile = new FileInfo(_fileName);
         if (checkFile.Directory != null && _autoCrateFolder && !checkFile.Directory.Exists)
             checkFile.Directory.Create();
         if (checkFile.Directory is null || !checkFile.Directory.Exists)
@@ -64,7 +64,8 @@ public sealed class LogFile
                     File.Move(_fileName, rename);
 
                 // ReSharper disable once using
-                using StreamWriter sw = new(_fileName, true, Encoding.UTF8);
+                // ReSharper disable once DisposableConstructor
+                using var sw = new StreamWriter(_fileName, true, Encoding.UTF8);
                 try
                 {
                     sw.WriteLine(LogWithAdditionalInfo(strLog));

@@ -28,7 +28,7 @@ public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounter
 
     public bool IsProcessRunning()
     {
-        return base.ExecuteTask is not null;
+        return ExecuteTask is not null;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

@@ -14,8 +14,12 @@ public sealed class StSharedConsoleTests
     public StSharedConsoleTests()
     {
         _mockLogger = new Mock<ILogger>();
-        _stringWriter = new StringWriter();
-        Console.SetOut(_stringWriter);
+        // ReSharper disable once DisposableConstructor
+        using (_stringWriter = new StringWriter())
+        {
+            Console.SetOut(_stringWriter);
+        }
+        ;
     }
 
     //[Fact]

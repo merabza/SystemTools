@@ -28,10 +28,11 @@ public class TestRepository : AbstractRepository
 
 public class AbstractRepositoryTests
 {
-    private TestDbContext CreateDbContext()
+    private static TestDbContext CreateDbContext()
     {
         var options = new DbContextOptionsBuilder<TestDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
+        // ReSharper disable once DisposableConstructor
         return new TestDbContext(options);
     }
 
@@ -57,7 +58,8 @@ public class AbstractRepositoryTests
     [Fact]
     public async Task SaveChangesAsync_SavesEntity()
     {
-        using var ctx = CreateDbContext();
+        // ReSharper disable once using
+        await using var ctx = CreateDbContext();
         var repo = new TestRepository(ctx);
         ctx.TestEntities.Add(new TestEntity { Name = "Test" });
         await repo.SaveChangesAsync();
@@ -67,6 +69,7 @@ public class AbstractRepositoryTests
     [Fact]
     public void GetTableName_ReturnsTableName()
     {
+        // ReSharper disable once using
         using var ctx = CreateDbContext();
         var repo = new TestRepository(ctx);
         var tableName = repo.GetTableName<TestEntity>();
@@ -76,7 +79,8 @@ public class AbstractRepositoryTests
     [Fact]
     public async Task ExecuteSqlRawRetOneOfAsync_ReturnsIntOrError()
     {
-        using var ctx = CreateDbContext();
+        // ReSharper disable once using
+        await using var ctx = CreateDbContext();
         var repo = new TestRepository(ctx);
         var result = await repo.ExecuteSqlRawRetOneOfAsync("SELECT 1");
         Assert.True(result.IsT0 || result.IsT1);
@@ -85,7 +89,8 @@ public class AbstractRepositoryTests
     [Fact]
     public async Task ExecuteSqlRawRetOptionAsync_ReturnsNullOrError()
     {
-        using var ctx = CreateDbContext();
+        // ReSharper disable once using
+        await using var ctx = CreateDbContext();
         var repo = new TestRepository(ctx);
         var result = await repo.ExecuteSqlRawRetOptionAsync("SELECT 1");
         Assert.True(result == null || result.IsSome);

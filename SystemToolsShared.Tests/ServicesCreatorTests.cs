@@ -37,7 +37,8 @@ public sealed class ServicesCreatorTests : IDisposable
     {
         var logFileName = Path.Combine(_testLogFolder, "test.log");
         var creator = new ServicesCreator(null, logFileName, _testAppName);
-        var provider = creator.CreateServiceProvider(LogEventLevel.Information);
+        // ReSharper disable once using
+        using var provider = creator.CreateServiceProvider(LogEventLevel.Information);
         Assert.NotNull(provider);
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
@@ -47,7 +48,8 @@ public sealed class ServicesCreatorTests : IDisposable
     public void CreateServiceProvider_WithLogFolder_CreatesProviderAndLogger()
     {
         var creator = new ServicesCreator(_testLogFolder, null, _testAppName);
-        var provider = creator.CreateServiceProvider(LogEventLevel.Warning);
+        // ReSharper disable once using
+        using var provider = creator.CreateServiceProvider(LogEventLevel.Warning);
         Assert.NotNull(provider);
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
@@ -57,7 +59,8 @@ public sealed class ServicesCreatorTests : IDisposable
     public void CreateServiceProvider_WithNoLogConfig_CreatesProvider()
     {
         var creator = new ServicesCreator(null, null, _testAppName);
-        var provider = creator.CreateServiceProvider(LogEventLevel.Error);
+        // ReSharper disable once using
+        using var provider = creator.CreateServiceProvider(LogEventLevel.Error);
         Assert.NotNull(provider);
     }
 
@@ -76,7 +79,8 @@ public sealed class ServicesCreatorTests : IDisposable
         var creator = new TestServicesCreator(_testLogFolder, null, _testAppName);
         var services = new ServiceCollection();
         creator.TestConfigureServices(services);
-        var provider = services.BuildServiceProvider();
+        // ReSharper disable once using
+        using var provider = services.BuildServiceProvider();
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
     }

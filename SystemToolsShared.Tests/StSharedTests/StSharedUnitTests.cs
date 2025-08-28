@@ -127,6 +127,8 @@ public sealed class StSharedUnitTests
     [Fact]
     public void WriteSuccessMessage_WritesInGreen()
     {
+        // ReSharper disable once using
+        // ReSharper disable once DisposableConstructor
         using var sw = new StringWriter();
         Console.SetOut(sw);
         StShared.WriteSuccessMessage("Success!");

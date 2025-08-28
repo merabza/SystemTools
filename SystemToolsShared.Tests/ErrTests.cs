@@ -86,7 +86,9 @@ public sealed class ErrTests
         var err1 = new Err { ErrorCode = "A", ErrorMessage = "B" };
         var err2 = new Err { ErrorCode = "C", ErrorMessage = "D" };
         // ReSharper disable once using
+        // ReSharper disable once DisposableConstructor
         using var sw = new StringWriter();
+        // ReSharper disable once using
         using var originalOut = Console.Out;
         Console.SetOut(sw);
         try

@@ -8,17 +8,15 @@ namespace SystemToolsShared.Tests;
 public sealed class FileStatTests : IDisposable
 {
     private readonly string _tempDir;
-    private readonly string _tempFile1;
-    private readonly string _tempFile2;
 
     public FileStatTests()
     {
         _tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(_tempDir);
-        _tempFile1 = Path.Combine(_tempDir, "file1.txt");
-        _tempFile2 = Path.Combine(_tempDir, "file2.txt");
-        File.WriteAllText(_tempFile1, "abc");
-        File.WriteAllText(_tempFile2, "abc");
+        var tempFile1 = Path.Combine(_tempDir, "file1.txt");
+        var tempFile2 = Path.Combine(_tempDir, "file2.txt");
+        File.WriteAllText(tempFile1, "abc");
+        File.WriteAllText(tempFile2, "abc");
     }
 
     public void Dispose()

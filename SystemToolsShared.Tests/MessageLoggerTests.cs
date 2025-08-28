@@ -62,11 +62,9 @@ public sealed class MessageLoggerTests
 
         _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Error message", It.IsAny<CancellationToken>()),
             Times.Once);
-        Assert.Collection(result, err =>
-        {
-            Assert.Equal("E1", err.ErrorCode);
-            Assert.Equal("Error message", err.ErrorMessage);
-        });
+        var err = Assert.Single(result);
+        Assert.Equal("E1", err.ErrorCode);
+        Assert.Equal("Error message", err.ErrorMessage);
     }
 
     [Fact]
@@ -76,11 +74,9 @@ public sealed class MessageLoggerTests
 
         var result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
 
-        Assert.Collection(result, err =>
-        {
-            Assert.Equal("E2", err.ErrorCode);
-            Assert.Equal("No manager", err.ErrorMessage);
-        });
+        var err = Assert.Single(result);
+        Assert.Equal("E2", err.ErrorCode);
+        Assert.Equal("No manager", err.ErrorMessage);
     }
 
     [Fact]
@@ -94,11 +90,10 @@ public sealed class MessageLoggerTests
         _mockMessagesDataManager.Verify(
             m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("Error in TestMethod")),
                 It.IsAny<CancellationToken>()), Times.Once);
-        Assert.Collection(result, err =>
-        {
-            Assert.Equal("ErrorCaught", err.ErrorCode);
-            Assert.Contains("Error in TestMethod", err.ErrorMessage);
-        });
+
+        var err = Assert.Single(result);
+        Assert.Equal("ErrorCaught", err.ErrorCode);
+        Assert.Contains("Error in TestMethod", err.ErrorMessage);
     }
 
     private class TestMessageLogger : MessageLogger

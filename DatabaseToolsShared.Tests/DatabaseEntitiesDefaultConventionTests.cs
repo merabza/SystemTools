@@ -36,7 +36,7 @@ public class DatabaseEntitiesDefaultConventionTests
         var method =
             typeof(DatabaseEntitiesDefaultConvention).GetMethod("SetFieldNames",
                 BindingFlags.NonPublic | BindingFlags.Static);
-        method.Invoke(null, [entityTypeMock.Object]);
+        method?.Invoke(null, [entityTypeMock.Object]);
         //dateTimePropMock.Verify(p => p.SetColumnType("datetime"), Times.Once);
         //decimalPropMock.Verify(p => p.SetColumnType("money"), Times.Once);
     }

@@ -11,8 +11,8 @@ public /*open*/ class MessageLogger
 {
     private readonly ILogger? _logger;
     private readonly IMessagesDataManager? _messagesDataManager;
-    protected readonly bool UseConsole;
     private readonly string? _userName;
+    protected readonly bool UseConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
@@ -127,15 +127,15 @@ public /*open*/ class MessageLogger
         return [error];
     }
 
-    protected async ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+    protected async ValueTask<Err> LogErrorAndSendMessageFromException(Exception ex, string methodName,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
         var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
-            return [error];
+            return error;
 
         await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
-        return [error];
+        return error;
     }
 }

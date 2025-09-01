@@ -91,9 +91,8 @@ public sealed class MessageLoggerTests
             m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("Error in TestMethod")),
                 It.IsAny<CancellationToken>()), Times.Once);
 
-        var err = Assert.Single(result);
-        Assert.Equal("ErrorCaught", err.ErrorCode);
-        Assert.Contains("Error in TestMethod", err.ErrorMessage);
+        Assert.Equal("ErrorCaught", result.ErrorCode);
+        Assert.Contains("Error in TestMethod", result.ErrorMessage);
     }
 
     private class TestMessageLogger : MessageLogger
@@ -162,7 +161,7 @@ public sealed class MessageLoggerTests
             return base.LogErrorAndSendMessageFromError(error, cancellationToken);
         }
 
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+        public new ValueTask<Err> LogErrorAndSendMessageFromException(Exception ex, string methodName,
             CancellationToken cancellationToken = default)
         {
             return base.LogErrorAndSendMessageFromException(ex, methodName, cancellationToken);

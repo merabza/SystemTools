@@ -19,7 +19,6 @@ public sealed class StSharedConsoleTests
         {
             Console.SetOut(_stringWriter);
         }
-        ;
     }
 
     //[Fact]

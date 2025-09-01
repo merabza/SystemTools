@@ -227,7 +227,7 @@ public sealed class FileStatTests : IDisposable
     // Minimal ILogger implementation for testing
     private sealed class TestLogger : ILogger
     {
-        public IDisposable BeginScope<TState>(TState state)
+        public IDisposable BeginScope<T>(T state)
         {
             return NullScope.Instance;
         }

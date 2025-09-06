@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ApiContracts;
+using Microsoft.AspNetCore.SignalR.Client;
+using StringMessagesApiContracts.V1.Routes;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiContracts;
-using Microsoft.AspNetCore.SignalR.Client;
-using StringMessagesApiContracts.V1.Routes;
+using SystemToolsShared;
 
 namespace StringMessagesApiContracts;
 
@@ -19,16 +20,15 @@ public sealed class StringMessageHubClient : IMessageHubClient
     // ReSharper disable once ConvertToPrimaryConstructor
     public StringMessageHubClient(string server, string? apiKey)
     {
-        _server = server;
+        _server = server.RemoveNotNeedLastPart('/');
         _apiKey = apiKey;
     }
 
     public async Task<bool> RunMessages(CancellationToken cancellationToken = default)
     {
-        _connection = new HubConnectionBuilder()
-            .WithUrl(
-                $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}")
-            .Build();
+        var url =
+            $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}";
+        _connection = new HubConnectionBuilder().WithUrl(url).Build();
 
         _connection.On<string>(StringEvents.MessageReceived, message => Console.WriteLine($"[{_server}]: {message}"));
 
@@ -37,9 +37,9 @@ public sealed class StringMessageHubClient : IMessageHubClient
             await _connection.StartAsync(cancellationToken);
             return true;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
-            Console.WriteLine("Error when connecting");
+            Console.WriteLine($"Error when connecting {ex.Message}");
         }
         catch (Exception e)
         {

@@ -15,7 +15,7 @@ public /*open*/ class MessageLogger
     protected readonly bool UseConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    protected MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
+    public MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
         bool useConsole)
     {
         _logger = logger;
@@ -24,7 +24,7 @@ public /*open*/ class MessageLogger
         UseConsole = useConsole;
     }
 
-    protected async ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
+    public async ValueTask LogInfoAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         if (UseConsole)
             Console.WriteLine(message);
@@ -115,7 +115,7 @@ public /*open*/ class MessageLogger
         return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
     }
 
-    protected async ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(Err error,
+    public async ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(Err error,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(error.ErrorMessage, UseConsole, _logger);

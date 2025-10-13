@@ -4,9 +4,10 @@ namespace SystemToolsShared;
 
 public sealed class ConsoleFormatter
 {
+    private static int _lastPrefixMaxLength;
     private int _lastClearLength;
     private int _lastLineLength;
-    private static int _lastPrefixMaxLength;
+    private bool _useCurrentLine;
 
     public void WriteFirstLine(string text)
     {
@@ -21,13 +22,21 @@ public sealed class ConsoleFormatter
         Console.SetCursorPosition(0, currentLine - linesUp);
     }
 
+    public void UseCurrentLine()
+    {
+        _useCurrentLine = true;
+    }
+
     public void WriteInSameLine(string prefix, string text)
     {
         var prefixLength = prefix.Length + 1;
         if (prefixLength > _lastPrefixMaxLength)
             _lastPrefixMaxLength = prefixLength;
         var allText = $"{prefix}{new string(' ', _lastPrefixMaxLength - prefix.Length)}{text}";
-        Clear();
+        if (_useCurrentLine)
+            _useCurrentLine = false;
+        else
+            Clear();
         var forClear = string.Empty;
         _lastClearLength = 0;
         if (_lastLineLength > allText.Length)

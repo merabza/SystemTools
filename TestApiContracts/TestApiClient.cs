@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiContracts;
@@ -20,13 +19,13 @@ public sealed class TestApiClient : ApiClient
     {
     }
 
-    public Task<OneOf<string, IEnumerable<Err>>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
+    public Task<OneOf<string, Err[]>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetAppSettingsVersion,
             cancellationToken);
     }
 
-    public Task<OneOf<string, IEnumerable<Err>>> GetVersion(CancellationToken cancellationToken = default)
+    public Task<OneOf<string, Err[]>> GetVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
     }

@@ -1,7 +1,6 @@
 ﻿//using FilesProcessing;
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -28,7 +27,7 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static OneOf<(string, int), IEnumerable<Err>> RunProcessWithOutput(bool useConsole, ILogger? logger,
+    public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
         //var option = CheckFileExists(programFileName);
@@ -83,8 +82,8 @@ public static class StShared
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
-    public static Option<IEnumerable<Err>> RunProcess(bool useConsole, ILogger? logger, string programFileName,
-        string arguments, int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
+    public static Option<Err[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
+        int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
@@ -114,7 +113,7 @@ public static class StShared
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
-    //private static Option<IEnumerable<Err>> CheckFileExists(string programFileName)
+    //private static Option<Err[]> CheckFileExists(string programFileName)
     //{
     //    // Check if the program file exists before starting the process
     //    if (!File.Exists(programFileName))

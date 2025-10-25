@@ -41,7 +41,7 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 
-    public async Task<OneOf<int, IEnumerable<Err>>> ExecuteSqlRawRetOneOfAsync(string sql,
+    public async Task<OneOf<int, Err[]>> ExecuteSqlRawRetOneOfAsync(string sql,
         CancellationToken cancellationToken = default)
     {
         try
@@ -54,7 +54,7 @@ public /*open*/ class AbstractRepository : IAbstractRepository
         }
     }
 
-    public async Task<Option<IEnumerable<Err>>> ExecuteSqlRawRetOptionAsync(string sql,
+    public async Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql,
         CancellationToken cancellationToken = default)
     {
         try

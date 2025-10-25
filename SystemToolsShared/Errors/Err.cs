@@ -16,7 +16,7 @@ public struct Err : IEquatable<Err>
     //    ErrorCode = errorCode;
     //    ErrorMessage = errorMessage;
     //}
-    public static IEnumerable<Err> Create(Err err)
+    public static Err[] Create(Err err)
     {
         return [err];
     }
@@ -31,7 +31,7 @@ public struct Err : IEquatable<Err>
         var errors = new List<Err>();
         errors.AddRange(haveErrors);
         errors.Add(addError);
-        return [.. errors];
+        return errors.ToArray();
     }
 
     public static Err[] RecreateErrors(IEnumerable<Err> haveErrors, IEnumerable<Err> addError)
@@ -39,7 +39,7 @@ public struct Err : IEquatable<Err>
         var errors = new List<Err>();
         errors.AddRange(haveErrors);
         errors.AddRange(addError);
-        return [.. errors];
+        return errors.ToArray();
     }
 
     public static void PrintErrorsOnConsole(IEnumerable<Err> errors)

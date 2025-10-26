@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using LanguageExt;
+﻿using LanguageExt;
 using Microsoft.Extensions.Logging;
 using SystemToolsShared;
 using SystemToolsShared.Errors;
@@ -19,7 +18,7 @@ public sealed class JetBrainsResharperGlobalToolsProcessor
         _useConsole = useConsole;
     }
 
-    public Option<IEnumerable<Err>> Cleanupcode(string path, bool includeJson = false)
+    public Option<Err[]> Cleanupcode(string path, bool includeJson = false)
     {
         return StShared.RunProcess(_useConsole, _logger, Jb,
             $"cleanupcode{(includeJson ? "" : " --exclude=\"**.json\"")} {path}");

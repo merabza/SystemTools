@@ -149,13 +149,13 @@ public sealed class MessageLoggerTests
             return base.LogWarningAndSendMessage(message, arg1, arg2, cancellationToken);
         }
 
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(string errorCode, string message,
+        public new ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
             CancellationToken cancellationToken = default)
         {
             return base.LogErrorAndSendMessageFromError(errorCode, message, cancellationToken);
         }
 
-        public new ValueTask<IEnumerable<Err>> LogErrorAndSendMessageFromError(Err error,
+        public new ValueTask<Err[]> LogErrorAndSendMessageFromError(Err error,
             CancellationToken cancellationToken = default)
         {
             return base.LogErrorAndSendMessageFromError(error, cancellationToken);

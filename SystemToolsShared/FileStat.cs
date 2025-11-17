@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 
 namespace SystemToolsShared;
@@ -14,7 +11,7 @@ public static class FileStat
     public static bool IsFileSchema(string fileStoragePath)
     {
         var uriCreated = Uri.TryCreate(fileStoragePath, UriKind.Absolute, out var uri);
-        return !uriCreated || uri is null || uri.Scheme.ToLower() == "file";
+        return !uriCreated || uri is null || uri.Scheme.Equals("file", StringComparison.CurrentCultureIgnoreCase);
     }
 
     public static string NormalizePath(string path)
@@ -73,111 +70,7 @@ public static class FileStat
         }
     }
 
-    public static string RemoveNotNeedLeadPart(this string dest, char removeLead)
-    {
-        return dest.StartsWith(removeLead) ? dest[1..] : dest;
-    }
-
-    public static string RemoveNotNeedLastPart(this string dest, char removeLast)
-    {
-        return dest.EndsWith(removeLast) ? dest[..^1] : dest;
-    }
-
-    public static string AddNeedLeadPart(this string dest, string mustLead)
-    {
-        if (dest.StartsWith(mustLead))
-            return dest;
-        return mustLead + dest;
-    }
-
-    public static string AddNeedLastPart(this string dest, string mustLast)
-    {
-        if (dest.EndsWith(mustLast))
-            return dest;
-        return dest + mustLast;
-    }
-
-    public static string AddNeedLastPart(this string dest, char mustLast)
-    {
-        if (dest.EndsWith(mustLast))
-            return dest;
-        return dest + mustLast;
-    }
-
-    public static bool FitsMask(this string sFileName, string sFileMask)
-    {
-        if (string.IsNullOrWhiteSpace(sFileMask))
-            return true;
-        var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
-        if (!sFileMask.EndsWith('*'))
-            regexFileMask += '$';
-        if (!sFileMask.StartsWith('*'))
-            regexFileMask = '^' + regexFileMask;
-        var mask = new Regex(regexFileMask);
-        var toRet = mask.IsMatch(sFileName);
-        return toRet;
-    }
-
     //string maskFirstVersion = "yyyyMMddHHmmssfffffff";
-    public static (DateTime, string?) GetDateTimeAndPatternByDigits(this string fileName, string maskFirstVersion)
-    {
-        var sbMask = new StringBuilder();
-        var position = 0;
-        var maskPosition = 0;
-        var maskPositionInName = 0;
-        foreach (var c in fileName)
-        {
-            if (char.IsDigit(c))
-            {
-                if (maskPosition == 0)
-                    maskPositionInName = position;
-                sbMask.Append(maskFirstVersion[maskPosition]);
-                maskPosition++;
-                if (maskPosition == maskFirstVersion.Length)
-                    break;
-            }
-            else if (c is '-' or '_' && maskPosition > 0 &&
-                     maskFirstVersion[maskPosition] != maskFirstVersion[maskPosition - 1])
-            {
-                sbMask.Append(c);
-            }
-            else if (maskPosition > 7)
-            {
-                break;
-            }
-            else if (maskPosition > 0)
-            {
-                maskPosition = 0;
-                sbMask.Clear();
-            }
-
-            position++;
-        }
-
-        //მინიმუმ 8 პოზიცია არის წელიწადი, თვე და დღე
-        if (maskPosition < 8)
-            return (DateTime.MinValue, null);
-        var mask = sbMask.ToString();
-        var strDate = fileName.Substring(maskPositionInName, mask.Length);
-        var pattern = fileName[..maskPositionInName] + mask + fileName[(maskPositionInName + mask.Length)..];
-
-        var dt = TryGetDate(strDate, mask);
-        return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
-    }
-
-    public static DateTime TryGetDate(string strDate, string mask)
-    {
-        try
-        {
-            return DateTime.ParseExact(strDate, mask, CultureInfo.InvariantCulture);
-        }
-        catch (Exception)
-        {
-            //Console.WriteLine(e);
-        }
-
-        return DateTime.MinValue;
-    }
 
     // This method accepts two strings the represent two files to
     // compare. A return value of true indicates that the contents of the files

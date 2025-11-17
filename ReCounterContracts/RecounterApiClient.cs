@@ -19,8 +19,7 @@ public /*open*/ class ReCounterApiClient : ApiClient
     {
     }
 
-    public Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(
-        CancellationToken cancellationToken = default)
+    public Task<OneOf<ProgressData, Err[]>> GetCurrentProcessStatus(CancellationToken cancellationToken = default)
     {
         return GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,

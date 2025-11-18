@@ -100,7 +100,7 @@ public static class StringExtensions
             return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
         }
     }
-    
+
     public static DateTime TryGetDate(string strDate, string mask)
     {
         try
@@ -114,5 +114,4 @@ public static class StringExtensions
 
         return DateTime.MinValue;
     }
-
 }

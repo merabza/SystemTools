@@ -1,6 +1,6 @@
 namespace DatabaseToolsShared.Tests;
 
-public class ConfigurationHelperTests
+public sealed class ConfigurationHelperTests
 {
     [Theory]
     [InlineData("Table", false, new[] { "Field1" }, "IX_Table_field1")]

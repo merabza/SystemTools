@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RepositoriesDom.Tests;
 
-public class TestEntity
+public sealed class TestEntity
 {
     public int Id { get; set; }
     public string Name { get; set; }
 }
 
-public class TestDbContext : DbContext
+public sealed class TestDbContext : DbContext
 {
     public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
     {
@@ -19,14 +19,14 @@ public class TestDbContext : DbContext
     public DbSet<TestEntity> TestEntities { get; set; }
 }
 
-public class TestRepository : AbstractRepository
+public sealed class TestRepository : AbstractRepository
 {
     public TestRepository(DbContext ctx) : base(ctx)
     {
     }
 }
 
-public class AbstractRepositoryTests
+public sealed class AbstractRepositoryTests
 {
     private static TestDbContext CreateDbContext()
     {

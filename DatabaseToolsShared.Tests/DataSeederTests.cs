@@ -4,7 +4,7 @@ using Moq;
 
 namespace DatabaseToolsShared.Tests;
 
-public class DataSeederTests
+public sealed class DataSeederTests
 {
     [Fact]
     public void Constructor_SetsPropertiesCorrectly()
@@ -112,13 +112,13 @@ public class DataSeederTests
         Assert.Empty(result);
     }
 
-    public class DummyDst
+    public sealed class DummyDst
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 
-    public class DummyJMo
+    public sealed class DummyJMo
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace StringMessagesApiContracts.Tests;
 
-public class StringMessageHubClientTests
+public sealed class StringMessageHubClientTests
 {
     private const string ServerUrl = "http://localhost";
     private const string ApiKey = "test-api-key";

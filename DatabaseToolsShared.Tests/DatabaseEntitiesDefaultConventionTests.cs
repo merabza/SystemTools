@@ -8,7 +8,7 @@ using Moq;
 
 namespace DatabaseToolsShared.Tests;
 
-public class DatabaseEntitiesDefaultConventionTests
+public sealed class DatabaseEntitiesDefaultConventionTests
 {
     [Fact]
     public void ProcessModelFinalizing_DoesNotThrow_WhenEntityTypesAreEmpty()

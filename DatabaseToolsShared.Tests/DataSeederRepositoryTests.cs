@@ -7,7 +7,7 @@ using Moq;
 
 namespace DatabaseToolsShared.Tests;
 
-public class DataSeederRepositoryTests
+public sealed class DataSeederRepositoryTests
 {
     private Mock<DbContext> CreateDbContextMock(List<DummyEntity>? setData = null)
     {
@@ -209,7 +209,7 @@ public class DataSeederRepositoryTests
         Assert.False(result);
     }
 
-    public class DummyEntity
+    public sealed class DummyEntity
     {
         public int Id { get; set; }
     }

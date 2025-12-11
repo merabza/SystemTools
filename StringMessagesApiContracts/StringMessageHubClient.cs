@@ -1,10 +1,10 @@
-﻿using ApiContracts;
-using Microsoft.AspNetCore.SignalR.Client;
-using StringMessagesApiContracts.V1.Routes;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiContracts;
+using Microsoft.AspNetCore.SignalR.Client;
+using StringMessagesApiContracts.V1.Routes;
 using SystemToolsShared;
 
 namespace StringMessagesApiContracts;

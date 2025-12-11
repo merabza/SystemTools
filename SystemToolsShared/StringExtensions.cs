@@ -7,6 +7,20 @@ namespace SystemToolsShared;
 
 public static class StringExtensions
 {
+    public static DateTime TryGetDate(string strDate, string mask)
+    {
+        try
+        {
+            return DateTime.ParseExact(strDate, mask, CultureInfo.InvariantCulture);
+        }
+        catch (Exception)
+        {
+            //Console.WriteLine(e);
+        }
+
+        return DateTime.MinValue;
+    }
+
     extension(string dest)
     {
         public string RemoveNotNeedLeadPart(char removeLead)
@@ -99,19 +113,5 @@ public static class StringExtensions
             var dt = TryGetDate(strDate, mask);
             return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
         }
-    }
-
-    public static DateTime TryGetDate(string strDate, string mask)
-    {
-        try
-        {
-            return DateTime.ParseExact(strDate, mask, CultureInfo.InvariantCulture);
-        }
-        catch (Exception)
-        {
-            //Console.WriteLine(e);
-        }
-
-        return DateTime.MinValue;
     }
 }

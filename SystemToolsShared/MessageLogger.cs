@@ -8,10 +8,10 @@ namespace SystemToolsShared;
 
 public /*open*/ class MessageLogger
 {
+    protected readonly bool UseConsole;
     private readonly ILogger? _logger;
     private readonly IMessagesDataManager? _messagesDataManager;
     private readonly string? _userName;
-    protected readonly bool UseConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName, bool useConsole)

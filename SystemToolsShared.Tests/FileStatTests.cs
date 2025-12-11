@@ -109,8 +109,8 @@ public sealed class FileStatTests : IDisposable
     [Fact]
     public void GetDateTimeAndPatternByDigits_ValidPattern_ParsesDate()
     {
-        var fileName = "backup_20230515123045.txt";
-        var mask = "yyyyMMddHHmmss";
+        const string fileName = "backup_20230515123045.txt";
+        const string mask = "yyyyMMddHHmmss";
         var (dt, pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
         Assert.NotEqual(DateTime.MinValue, dt);
         Assert.Contains(mask, pattern!);
@@ -119,8 +119,8 @@ public sealed class FileStatTests : IDisposable
     [Fact]
     public void GetDateTimeAndPatternByDigits_InvalidPattern_ReturnsMinValue()
     {
-        var fileName = "backup_file.txt";
-        var mask = "yyyyMMddHHmmss";
+        const string fileName = "backup_file.txt";
+        const string mask = "yyyyMMddHHmmss";
         var (dt, pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
         Assert.Equal(DateTime.MinValue, dt);
         Assert.Null(pattern);
@@ -138,7 +138,7 @@ public sealed class FileStatTests : IDisposable
 
     private sealed class TestLogger : ILogger
     {
-        public IDisposable BeginScope<T>(T state)
+        public IDisposable BeginScope<T>(T state) where T : notnull
         {
             return NullScope.Instance;
         }

@@ -7,13 +7,13 @@ using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
-public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : class where TJMo : class
+public /*open*/ class DataSeeder<TDst, TjMo> : ITableDataSeeder where TDst : class where TjMo : class
 {
-    protected readonly IDataSeederRepository DataSeederRepo;
     private readonly string _dataSeedFolder;
     private readonly List<string> _keyFieldNamesList;
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
+    protected readonly IDataSeederRepository DataSeederRepo;
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
@@ -93,7 +93,7 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ან თუ შენახვის მერე რაიმე დამატებით არის გასაკეთებელი, რომ გააკეთოს
     //List<TJMo> seedData საჭიროა შესადარებლად.
     //თუ ბაზიდან საჭიროა ინფორმაცია, გადატვირთულმა მეთოდმა თვითონ უნდა ჩატვირთოს
-    public virtual bool AdditionalCheck(List<TJMo> jsonData, List<TDst> savedData)
+    public virtual bool AdditionalCheck(List<TjMo> jsonData, List<TDst> savedData)
     {
         return true;
     }
@@ -108,12 +108,12 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     //ამ ვირტუალური მეთიდის დანიშნულებაა ჯეისონიდან ჩატვირთული ინფორმაცია აქციოს ბაზის ინფორმაციად
     //ეს რეალიზაცია გამოდგება მხოლოდ იმ შემთხვევებისთვის, როცა მოდელები ერთი ერთში გადადიან ერთმანეთში
     //დანარჩენ შემთხვევაში საჭიროა გადატვირთვა
-    public virtual List<TDst> Adapt(List<TJMo> appClaimsSeedData)
+    public virtual List<TDst> Adapt(List<TjMo> appClaimsSeedData)
     {
         if (appClaimsSeedData.Count == 0)
             return [];
 
-        var jsonModelType = typeof(TJMo);
+        var jsonModelType = typeof(TjMo);
         var jsonModelTypeProperties = jsonModelType.GetProperties();
 
         var tableDataType = typeof(TDst);
@@ -150,9 +150,9 @@ public /*open*/ class DataSeeder<TDst, TJMo> : ITableDataSeeder where TDst : cla
     }
 
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია კონკრეტული მოდელისათვის
-    public List<TJMo> LoadFromJsonFile()
+    public List<TjMo> LoadFromJsonFile()
     {
-        return LoadFromJsonFile<TJMo>(_dataSeedFolder, $"{_tableName.Capitalize()}.json");
+        return LoadFromJsonFile<TjMo>(_dataSeedFolder, $"{_tableName.Capitalize()}.json");
     }
 
     //მეთოდი ამოწმებს ბაზაში უკვე არის თუ არა შეასაბამის ცხრილში ჩანაწერები

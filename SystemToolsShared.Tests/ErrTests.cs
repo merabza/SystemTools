@@ -42,9 +42,8 @@ public sealed class ErrTests
     {
         var err = new Err { ErrorCode = "E", ErrorMessage = "M" };
         var result = Err.Create(err);
-        var collection = result as Err[] ?? result.ToArray();
-        Assert.Single(collection);
-        Assert.Equal(err, collection.First());
+        Assert.Single(result);
+        Assert.Equal(err, result.First());
     }
 
     [Fact]

@@ -23,6 +23,11 @@ public static class StringExtensions
 
     extension(string dest)
     {
+        public string CountDtKey()
+        {
+            return dest.ToLower().RemoveNotNeedLastPart("id");
+        }
+
         public string RemoveNotNeedLeadPart(char removeLead)
         {
             return dest.StartsWith(removeLead) ? dest[1..] : dest;
@@ -31,6 +36,11 @@ public static class StringExtensions
         public string RemoveNotNeedLastPart(char removeLast)
         {
             return dest.EndsWith(removeLast) ? dest[..^1] : dest;
+        }
+
+        public string RemoveNotNeedLastPart(string removeLast)
+        {
+            return dest.EndsWith(removeLast) ? dest[..^removeLast.Length] : dest;
         }
 
         public string AddNeedLeadPart(string mustLead)

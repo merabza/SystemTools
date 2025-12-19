@@ -23,10 +23,10 @@ public static class StringExtensions
 
     extension(string dest)
     {
-        public string CountDtKey()
-        {
-            return dest.ToLower().RemoveNotNeedLastPart("id");
-        }
+        //public string CountDtKey()
+        //{
+        //    return dest.ToLower().RemoveNotNeedLastPart("id");
+        //}
 
         public string RemoveNotNeedLeadPart(char removeLead)
         {

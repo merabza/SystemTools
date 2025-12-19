@@ -134,12 +134,12 @@ public static class Inflector
 
     public static string Titleize(this string word)
     {
-        return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])", match => match.Captures[0].Value.ToUpper());
+        return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])", match => match.Captures[0].Value.ToUpper());
     }
 
     public static string Humanize(this string lowercaseAndUnderscoredWord)
     {
-        return Capitalize(Regex.Replace(lowercaseAndUnderscoredWord, "_", " "));
+        return Regex.Replace(lowercaseAndUnderscoredWord, "_", " ").Capitalize();
     }
 
     public static string Pascalize(this string lowercaseAndUnderscoredWord)
@@ -149,7 +149,7 @@ public static class Inflector
 
     public static string Camelize(this string lowercaseAndUnderscoredWord)
     {
-        return UnCapitalize(Pascalize(lowercaseAndUnderscoredWord));
+        return lowercaseAndUnderscoredWord.Pascalize().UnCapitalize();
     }
 
     public static string Underscore(this string pascalCasedWord)

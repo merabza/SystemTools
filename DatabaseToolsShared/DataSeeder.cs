@@ -7,7 +7,7 @@ using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
-public /*open*/ class DataSeeder<TDst, TjMo> : ITableDataSeeder where TDst : class where TjMo : class
+public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : class where TMo : class
 {
     protected readonly IDataSeederRepository DataSeederRepo;
     private readonly string _dataSeedFolder;
@@ -93,7 +93,7 @@ public /*open*/ class DataSeeder<TDst, TjMo> : ITableDataSeeder where TDst : cla
     //ან თუ შენახვის მერე რაიმე დამატებით არის გასაკეთებელი, რომ გააკეთოს
     //List<TJMo> seedData საჭიროა შესადარებლად.
     //თუ ბაზიდან საჭიროა ინფორმაცია, გადატვირთულმა მეთოდმა თვითონ უნდა ჩატვირთოს
-    public virtual bool AdditionalCheck(List<TjMo> jsonData, List<TDst> savedData)
+    public virtual bool AdditionalCheck(List<TMo> jsonData, List<TDst> savedData)
     {
         return true;
     }
@@ -108,12 +108,12 @@ public /*open*/ class DataSeeder<TDst, TjMo> : ITableDataSeeder where TDst : cla
     //ამ ვირტუალური მეთიდის დანიშნულებაა ჯეისონიდან ჩატვირთული ინფორმაცია აქციოს ბაზის ინფორმაციად
     //ეს რეალიზაცია გამოდგება მხოლოდ იმ შემთხვევებისთვის, როცა მოდელები ერთი ერთში გადადიან ერთმანეთში
     //დანარჩენ შემთხვევაში საჭიროა გადატვირთვა
-    public virtual List<TDst> Adapt(List<TjMo> appClaimsSeedData)
+    public virtual List<TDst> Adapt(List<TMo> appClaimsSeedData)
     {
         if (appClaimsSeedData.Count == 0)
             return [];
 
-        var jsonModelType = typeof(TjMo);
+        var jsonModelType = typeof(TMo);
         var jsonModelTypeProperties = jsonModelType.GetProperties();
 
         var tableDataType = typeof(TDst);
@@ -150,9 +150,9 @@ public /*open*/ class DataSeeder<TDst, TjMo> : ITableDataSeeder where TDst : cla
     }
 
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია კონკრეტული მოდელისათვის
-    public List<TjMo> LoadFromJsonFile()
+    public List<TMo> LoadFromJsonFile()
     {
-        return LoadFromJsonFile<TjMo>(_dataSeedFolder, $"{_tableName.Capitalize()}.json");
+        return LoadFromJsonFile<TMo>(_dataSeedFolder, $"{_tableName.Capitalize()}.json");
     }
 
     //მეთოდი ამოწმებს ბაზაში უკვე არის თუ არა შეასაბამის ცხრილში ჩანაწერები

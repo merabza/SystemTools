@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
+        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

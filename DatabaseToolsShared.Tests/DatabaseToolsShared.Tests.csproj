@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\AppGrammarGe\SystemTools\DatabaseToolsShared\DatabaseToolsShared.csproj" />
+      <ProjectReference Include="..\DatabaseToolsShared\DatabaseToolsShared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

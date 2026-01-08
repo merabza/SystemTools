@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+      <ProjectReference Include="..\..\..\AppGrammarGe\SystemTools\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ReCounterDom;
+namespace ReCounterAbstraction;
 
 public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounterServiceStopper
 {

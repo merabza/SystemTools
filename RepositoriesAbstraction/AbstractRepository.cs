@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using OneOf;
 using SystemToolsShared.Errors;
 
-namespace RepositoriesDom;
+namespace RepositoriesAbstraction;
 
 public /*open*/ class AbstractRepository : IAbstractRepository
 {

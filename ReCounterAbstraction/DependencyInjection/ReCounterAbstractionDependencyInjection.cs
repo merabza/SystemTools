@@ -1,16 +1,16 @@
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
-namespace ReCounterDom.DependencyInjection;
+namespace ReCounterAbstraction.DependencyInjection;
 
 // ReSharper disable once UnusedType.Global
-public static class ReCounterDomDependencyInjection
+public static class ReCounterAbstractionDependencyInjection
 {
-    public static IServiceCollection AddReCounterDom(this IServiceCollection services, bool debugMode)
+    public static IServiceCollection AddReCounterAbstraction(this IServiceCollection services, bool debugMode)
     {
         if (debugMode)
-            Console.WriteLine($"{nameof(AddReCounterDom)} Started");
+            Console.WriteLine($"{nameof(AddReCounterAbstraction)} Started");
 
         services.AddSignalR()
             .AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; })
@@ -22,7 +22,7 @@ public static class ReCounterDomDependencyInjection
 
 
         if (debugMode)
-            Console.WriteLine($"{nameof(AddReCounterDom)} Finished");
+            Console.WriteLine($"{nameof(AddReCounterAbstraction)} Finished");
 
         return services;
     }

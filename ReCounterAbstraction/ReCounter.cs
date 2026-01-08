@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ReCounterContracts;
 using SystemToolsShared.Errors;
 
-namespace ReCounterDom;
+namespace ReCounterAbstraction;
 
 public /*open*/ class ReCounter
 {

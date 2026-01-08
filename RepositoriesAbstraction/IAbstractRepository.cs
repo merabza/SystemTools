@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace RepositoriesDom;
+namespace RepositoriesAbstraction;
 
 public interface IAbstractRepository
 {

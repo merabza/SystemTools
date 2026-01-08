@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ReCounterDom;
+namespace ReCounterAbstraction;
 
 public sealed class ReCounterLogger
 {

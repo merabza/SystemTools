@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace ReCounterDom;
+namespace ReCounterAbstraction;
 
 public sealed class LogFile
 {

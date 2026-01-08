@@ -12,5 +12,4 @@ public interface IDataSeederRepository : IAbstractRepository
     bool SetUpdates<T>(List<T> forUpdate) where T : class;
     bool RemoveNeedlessRecords<T>(List<T> needLessList) where T : class;
     bool SaveChanges();
-    string? GetTableName<TDst>() where TDst : class;
 }

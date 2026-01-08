@@ -1,3 +1,5 @@
+using DatabaseToolsShared;
+
 namespace DatabaseToolsShared.Tests;
 
 public sealed class ConfigurationHelperTests

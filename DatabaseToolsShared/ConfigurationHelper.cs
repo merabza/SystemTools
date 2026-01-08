@@ -3,7 +3,7 @@ using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
-public static class ConfigurationHelperTests
+public static class ConfigurationHelper
 {
     private const string ForeignKeyPrefix = "FK_";
     private const string IndexPrefix = "IX_";

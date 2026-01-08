@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SystemToolsShared.Errors;
 using Xunit;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace SystemToolsShared.Tests;
 

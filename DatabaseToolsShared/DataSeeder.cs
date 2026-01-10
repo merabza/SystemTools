@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using DomainShared.Repositories;
 using SystemToolsShared;
 
 namespace DatabaseToolsShared;
@@ -18,14 +19,14 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
     //ანუ როცა გამოყენებულია RulesHasMorePriority, ან JsonHasMorePriority
-    public DataSeeder(string dataSeedFolder, IDataSeederRepository repo,
+    public DataSeeder(string dataSeedFolder, IDataSeederRepository repo, IUnitOfWork unitOfWork,
         ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
     {
         _dataSeedFolder = dataSeedFolder;
         DataSeederRepo = repo;
         _seedDataType = seedDataType;
         _keyFieldNamesList = keyFieldNamesList ?? [];
-        _tableName = DataSeederRepo.GetTableName<TDst>();
+        _tableName = unitOfWork.GetTableName<TDst>();
     }
 
     //ეს არის ძირითადი მეთოდი, რომლის საშუალებითაც ხდება ერთი ცხრილის შესაბამისი ინფორმაციის ჩატვირთვა ბაზაში

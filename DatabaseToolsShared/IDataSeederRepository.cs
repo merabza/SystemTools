@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using RepositoriesAbstraction;
 
 namespace DatabaseToolsShared;
 
-public interface IDataSeederRepository : IAbstractRepository
+public interface IDataSeederRepository
 {
     bool HaveAnyRecord<T>() where T : class;
     bool CreateEntities<T>(List<T> entities) where T : class;

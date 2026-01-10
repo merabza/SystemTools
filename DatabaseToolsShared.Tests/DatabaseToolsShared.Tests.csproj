@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\AppGrammarGe\Carcass.Domain\Carcass.Domain.csproj" />
       <ProjectReference Include="..\DatabaseToolsShared\DatabaseToolsShared.csproj" />
     </ItemGroup>
 

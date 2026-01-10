@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RepositoriesAbstraction;
 using SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
-public /*open*/ class DataSeederRepository : AbstractRepository, IDataSeederRepository
+public /*open*/ class DataSeederRepository : IDataSeederRepository
 {
     private readonly DbContext _context;
     private readonly ILogger<DataSeederRepository> _logger;
 
     // ReSharper disable once ConvertToPrimaryConstructor
-    public DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger) : base(ctx)
+    public DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger)
     {
         _context = ctx;
         _logger = logger;

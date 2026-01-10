@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\SupportToolsServer\SupportToolsServer.Application\SupportToolsServer.Application.csproj" />
         <ProjectReference Include="..\DomainShared\DomainShared.csproj" />
         <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>

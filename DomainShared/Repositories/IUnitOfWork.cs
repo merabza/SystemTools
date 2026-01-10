@@ -1,7 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using LanguageExt;
+﻿using LanguageExt;
 using Microsoft.EntityFrameworkCore.Storage;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using SystemToolsShared.Errors;
 
 namespace DomainShared.Repositories;
@@ -12,5 +13,5 @@ public interface IUnitOfWork
     string GetTableName<T>() where T : class;
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default);
-
+    void SetCommandTimeout(TimeSpan timeout);
 }

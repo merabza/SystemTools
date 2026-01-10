@@ -1,14 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using DomainShared.Repositories;
+﻿using DomainShared.Repositories;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using SystemToolsShared.Errors;
 
-namespace DomainShared;
+namespace RepositoriesShared;
 
 public /*open*/ class UnitOfWork : IUnitOfWork
 {

@@ -22,7 +22,9 @@ public sealed class FileStatTests : IDisposable
     public void Dispose()
     {
         if (Directory.Exists(_tempDir))
+        {
             Directory.Delete(_tempDir, true);
+        }
     }
 
     [Theory]
@@ -130,12 +132,12 @@ public sealed class FileStatTests : IDisposable
     public void TryGetDate_ValidAndInvalid_ReturnsExpected()
     {
         var valid = StringExtensions.TryGetDate("20230515", "yyyyMMdd");
-        Assert.Equal(new DateTime(2023, 5, 15), valid);
+            Assert.Equal(new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified), valid);
 
         var invalid = StringExtensions.TryGetDate("notadate", "yyyyMMdd");
         Assert.Equal(DateTime.MinValue, invalid);
     }
-
+        
     private sealed class TestLogger : ILogger
     {
         public IDisposable BeginScope<T>(T state) where T : notnull

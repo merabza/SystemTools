@@ -10,7 +10,9 @@ public static class ReCounterAbstractionDependencyInjection
     public static IServiceCollection AddReCounterAbstraction(this IServiceCollection services, bool debugMode)
     {
         if (debugMode)
+        {
             Console.WriteLine($"{nameof(AddReCounterAbstraction)} Started");
+        }
 
         services.AddSignalR()
             .AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; })
@@ -22,7 +24,9 @@ public static class ReCounterAbstractionDependencyInjection
 
 
         if (debugMode)
+        {
             Console.WriteLine($"{nameof(AddReCounterAbstraction)} Finished");
+        }
 
         return services;
     }

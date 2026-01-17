@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,14 +34,20 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     public bool Create(bool checkOnly)
     {
         if (checkOnly)
+        {
             return AdditionalCheck(LoadFromJsonFile(), []) && DataSeederRepo.SaveChanges();
+        }
 
         //ვამოწმებთ არის თუ არა ჩანაწერები ბაზაში. ვაგრძელებთ მაშინ თუ ჩანაწერები არ არის
         if (CheckRecordsExists())
+        {
             return false;
+        }
 
         if (_seedDataType == ESeedDataType.None)
+        {
             return true;
+        }
 
         //Json-დან ჩატვირთვა
         var seedData = _seedDataType switch
@@ -48,7 +55,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 LoadFromJsonFile(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidOperationException()
         };
 
         //Json-ის მოდელის გადაყვანა ბაზის მოდელში
@@ -57,7 +64,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 Adapt(seedData),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidOperationException()
         };
 
         //წესების მიხედვით შექმნა
@@ -66,7 +73,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             ESeedDataType.OnlyJson => [],
             ESeedDataType.OnlyRules or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
                 CreateListByRules(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidOperationException()
         };
 
         //დაყვანა
@@ -76,12 +83,14 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             ESeedDataType.OnlyRules => dataListByRules,
             ESeedDataType.RulesHasMorePriority => Adjust(dataListByRules, dataListByJson),
             ESeedDataType.JsonHasMorePriority => Adjust(dataListByJson, dataListByRules),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidOperationException()
         };
 
         //შენახვა ბაზაში
         if (!DataSeederRepo.CreateEntities(dataList))
+        {
             throw new Exception($"{_tableName} entities cannot be created");
+        }
 
         //აქ დამატებით ვუშვებ მონაცემების შემოწმებას და თუ რომელიმე აუცილებელი ჩანაწერი აკლია, რაც ლოგიკით განისაზღვრება,
         //მაშინ ისინიც ჩაემატება. ან თუ არასწორად არის რომელიმე ჩანაწერი, შეიცვლება. ან თუ ზედმეტია წაიშლება
@@ -112,7 +121,9 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     public virtual List<TDst> Adapt(List<TMo> appClaimsSeedData)
     {
         if (appClaimsSeedData.Count == 0)
+        {
             return [];
+        }
 
         var jsonModelType = typeof(TMo);
         var jsonModelTypeProperties = jsonModelType.GetProperties();
@@ -127,13 +138,16 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         return appClaimsSeedData.Select(s =>
         {
             var instance = Activator.CreateInstance<TDst>();
-            foreach (var propName in commonProperties)
+            foreach (string propName in commonProperties)
             {
                 var jsonProp = jsonModelType.GetProperty(propName);
                 var tableProp = tableDataType.GetProperty(propName);
                 if (jsonProp == null || tableProp == null)
+                {
                     continue;
-                var value = jsonProp.GetValue(s);
+                }
+
+                object? value = jsonProp.GetValue(s);
                 tableProp.SetValue(instance, value);
             }
 
@@ -144,7 +158,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია და აქციოს მოდელების სიად
     public static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
     {
-        var jsonFullFileName = Path.Combine(folderName, fileName);
+        string jsonFullFileName = Path.Combine(folderName, fileName);
         return File.Exists(jsonFullFileName)
             ? FileLoader.LoadDeserializeResolve<List<T>>(jsonFullFileName, true) ?? []
             : [];
@@ -166,17 +180,17 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     public List<TDst> Adjust(List<TDst> listWithMorePriority, List<TDst> listWithLessPriority)
     {
         if (_keyFieldNamesList is null || _keyFieldNamesList.Count == 0)
+        {
             throw new Exception($"key field name List is not set for {_tableName}");
+        }
 
         var tableDataType = typeof(TDst);
 
         var keyPropertiesList = new List<PropertyInfo>();
 
-        foreach (var keyFieldName in _keyFieldNamesList)
+        foreach (string keyFieldName in _keyFieldNamesList)
         {
-            var keyProperty = tableDataType.GetProperty(keyFieldName);
-            if (keyProperty is null)
-                throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
+            var keyProperty = tableDataType.GetProperty(keyFieldName) ?? throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
             keyPropertiesList.Add(keyProperty);
         }
 
@@ -185,7 +199,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         if (duplicatePriorityKeys.Count != 0)
         {
-            var strKeyList = string.Join(", ", duplicatePriorityKeys);
+            string strKeyList = string.Join(", ", duplicatePriorityKeys);
             Console.WriteLine("Priority keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Priority keys contains duplicate keys");
         }
@@ -195,7 +209,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         if (duplicateSecondKeys.Count != 0)
         {
-            var strKeyList = string.Join(", ", duplicateSecondKeys);
+            string strKeyList = string.Join(", ", duplicateSecondKeys);
             Console.WriteLine("Secondary keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Secondary keys duplicate keys");
         }
@@ -212,18 +226,13 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         return retList;
 
-        string KeySelector(TDst item)
-        {
-            return string.Join('_', keyPropertiesList.Select(s =>
+        string KeySelector(TDst item) =>
+            string.Join('_', keyPropertiesList.Select(s =>
             {
-                var val = s.GetValue(item)?.ToString()?.ToLower();
-                if (val is null)
-                    throw new InvalidOperationException("Key property value cannot be null");
-                return val;
+                string? val = s.GetValue(item)?.ToString()?.ToLower(CultureInfo.CurrentCulture);
+                return val ?? throw new InvalidOperationException("Key property value cannot be null");
             }));
-
-            //return keyProperty.GetValue(item)?.ToString()?.ToLower() ??
-            //       throw new InvalidOperationException("Key property value cannot be null");
-        }
+        //return keyProperty.GetValue(item)?.ToString()?.ToLower() ??
+        //       throw new InvalidOperationException("Key property value cannot be null");
     }
 }

@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
+    <ProjectReference Include="..\ApiKeysManagement\ApiKeysManagement.csproj" />
+    <ProjectReference Include="..\DatabaseToolsShared\DatabaseToolsShared.csproj" />
+    <ProjectReference Include="..\DomainShared\DomainShared.csproj" />
+    <ProjectReference Include="..\JetBrainsResharperGlobalToolsWork\JetBrainsResharperGlobalToolsWork.csproj" />
+    <ProjectReference Include="..\MediatRMessagingAbstractions\MediatRMessagingAbstractions.csproj" />
+    <ProjectReference Include="..\ReCounterAbstraction\ReCounterAbstraction.csproj" />
+    <ProjectReference Include="..\ReCounterContracts\ReCounterContracts.csproj" />
+    <ProjectReference Include="..\RepositoriesShared\RepositoriesShared.csproj" />
+    <ProjectReference Include="..\StringMessagesApiContracts\StringMessagesApiContracts.csproj" />
+    <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+    <ProjectReference Include="..\TestApiContracts\TestApiContracts.csproj" />
+  </ItemGroup>
+
+    <PropertyGroup>
+        <PackageId>SystemTools</PackageId>
+        <Version>1.0.0</Version>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+</Project>

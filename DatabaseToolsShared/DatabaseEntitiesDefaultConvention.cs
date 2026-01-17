@@ -22,7 +22,9 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             ////თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
             ////ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
             if (string.IsNullOrEmpty(tableNameAnnotation))
+            {
                 continue;
+            }
             //{
             //    tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
             //    entityType.SetTableName(tableNameAnnotation);
@@ -54,7 +56,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             .Select(g => new { Value = g.Key, Count = g.Count() }).Where(w => w.Count > 1).Select(s => s.Value)
             .ToList();
 
-        var selfRelatedNumber = 0;
+        int selfRelatedNumber = 0;
         //თითოეული გამოცხადებული კავშირისთვის
         foreach (var foreignKey in entityType.GetForeignKeys())
         {
@@ -62,7 +64,9 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             var constraintNameAnnotation = foreignKey.GetConstraintName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
             if (!string.IsNullOrEmpty(constraintNameAnnotation))
+            {
                 continue;
+            }
 
             //დავადგინოთ ამ ტიპთან რელაციურ კავშირში მყოფი ცხრილის შესაბამისი ტიპი
             var relatedEntityType = foreignKey.PrincipalEntityType;
@@ -71,7 +75,9 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             var relatedTableName = relatedEntityType.GetTableName();
 
             if (relatedTableName is null)
+            {
                 continue;
+            }
 
             string constraintName;
 
@@ -106,15 +112,22 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
 
             var clrType = property.ClrType;
 
-            var isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
+            bool isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
             if (isNullable)
+            {
                 clrType = clrType.GetGenericArguments()[0];
+            }
 
             if (clrType == typeof(DateTime))
+            {
                 property.SetColumnType("datetime");
+            }
+
             //თუ ველის ტიპი არის decimal, მაშინ სვეტის ტიპი იყოს money
             if (clrType == typeof(decimal))
+            {
                 property.SetColumnType("money");
+            }
         }
     }
 
@@ -127,7 +140,9 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             var indexNameAnnotation = index.GetDatabaseName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
             if (!string.IsNullOrEmpty(indexNameAnnotation))
+            {
                 continue;
+            }
 
             //დავადგინოთ ინდექსში შემავალი ველების სახელები
             var properties = index.Properties.Select(p => p.GetColumnName()).ToArray();

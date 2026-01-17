@@ -1,0 +1,25 @@
+<Solution>
+    <Folder Name="/Solution Items/">
+        <File Path=".editorconfig" />
+        <File Path="Directory.Build.props" />
+        <File Path="Directory.Packages.props" />
+    </Folder>
+    <Folder Name="/Tests/">
+        <Project Path="DatabaseToolsShared.Tests/DatabaseToolsShared.Tests.csproj" />
+        <Project Path="StringMessagesApiContracts.Tests/StringMessagesApiContracts.Tests.csproj" />
+        <Project Path="SystemToolsShared.Tests/SystemToolsShared.Tests.csproj" />
+    </Folder>
+    <Project Path="ApiContracts/ApiContracts.csproj" />
+    <Project Path="ApiKeysManagement/ApiKeysManagement.csproj" />
+    <Project Path="DatabaseToolsShared/DatabaseToolsShared.csproj" />
+    <Project Path="DomainShared/DomainShared.csproj" />
+    <Project Path="JetBrainsResharperGlobalToolsWork/JetBrainsResharperGlobalToolsWork.csproj" />
+    <Project Path="MediatRMessagingAbstractions/MediatRMessagingAbstractions.csproj" />
+    <Project Path="ReCounterAbstraction/ReCounterAbstraction.csproj" />
+    <Project Path="ReCounterContracts/ReCounterContracts.csproj" />
+    <Project Path="RepositoriesShared/RepositoriesShared.csproj" />
+    <Project Path="StringMessagesApiContracts/StringMessagesApiContracts.csproj" />
+    <Project Path="SystemTools/SystemTools.csproj" Id="2621fdcb-807f-4fab-acee-a8ba54386fc6" />
+    <Project Path="SystemToolsShared/SystemToolsShared.csproj" />
+    <Project Path="TestApiContracts/TestApiContracts.csproj" />
+</Solution>

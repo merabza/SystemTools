@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ReCounterAbstraction;
 
-public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
+public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue, IDisposable
 {
     private readonly SemaphoreSlim _signal = new(0);
     private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new();
@@ -29,5 +29,10 @@ public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
     public void ClearQueue()
     {
         _workItems.Clear();
+    }
+
+    public void Dispose()
+    {
+        _signal.Dispose();
     }
 }

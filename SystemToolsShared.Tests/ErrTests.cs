@@ -43,7 +43,7 @@ public sealed class ErrTests
         var err = new Err { ErrorCode = "E", ErrorMessage = "M" };
         var result = Err.Create(err);
         Assert.Single(result);
-        Assert.Equal(err, result.First());
+        Assert.Equal(err, result[0]);
     }
 
     [Fact]

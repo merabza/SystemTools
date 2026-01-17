@@ -32,7 +32,9 @@ public /*open*/ class ReCounter
     protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken = default)
     {
         foreach (var error in errors)
+        {
             await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
+        }
     }
 
     protected ValueTask LogMessage(string name, string message, bool instantly,
@@ -134,7 +136,9 @@ public /*open*/ class ReCounter
     protected async ValueTask<bool> IsCancellationRequested(CancellationToken cancellationToken = default)
     {
         if (!cancellationToken.IsCancellationRequested)
+        {
             return false;
+        }
 
         await LogProcMessage($"{_processName} შეჩერებულია", cancellationToken);
         return true;
@@ -151,7 +155,9 @@ public /*open*/ class ReCounter
         {
             //შემოწმდეს გაჩერება ხომ არ მოითხოვეს
             if (await IsCancellationRequested(cancellationToken))
+            {
                 return;
+            }
 
             await SetProcessRun(true, cancellationToken);
 

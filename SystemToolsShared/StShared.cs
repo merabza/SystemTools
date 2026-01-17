@@ -18,10 +18,10 @@ public static class StShared
 {
     public static string TimeTakenMessage(DateTime startDateTime)
     {
-        var endDateTime = DateTime.Now; //პროცესის დასრულების დრო
-        var taken = endDateTime - startDateTime; //დავიანგარიშოთ რა დრო დასჭირდა მთლიანად პროცესს
-        var totalHours = (int)taken.TotalHours; //საათები თუ არ დასჭირდა რომ არ გამოვიტანოთ
-        var totalMinutes = (int)taken.TotalMinutes; //საათები თუ არ დასჭირდა რომ არ გამოვიტანოთ
+        DateTime endDateTime = DateTime.Now; //პროცესის დასრულების დრო
+        TimeSpan taken = endDateTime - startDateTime; //დავიანგარიშოთ რა დრო დასჭირდა მთლიანად პროცესს
+        int totalHours = (int)taken.TotalHours; //საათები თუ არ დასჭირდა რომ არ გამოვიტანოთ
+        int totalMinutes = (int)taken.TotalMinutes; //საათები თუ არ დასჭირდა რომ არ გამოვიტანოთ
         //დახარჯული დროის შესახებ ინფორმაციის გამოტანა ფორმაზე.
         return
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
@@ -54,9 +54,12 @@ public static class StShared
         proc.Start();
         while (!proc.StandardOutput.EndOfStream)
         {
-            var line = proc.StandardOutput.ReadLine();
+            string? line = proc.StandardOutput.ReadLine();
             if (useConsole)
+            {
                 Console.WriteLine(line);
+            }
+
             sb.AppendLine(line);
         }
         //message = "output for '{0} {1}' is{2}{3}";
@@ -68,9 +71,12 @@ public static class StShared
             return (sb.ToString(), proc.ExitCode);
         }
 
-        var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
+        string errorMessage =
+            $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
         if (useConsole || logger is not null)
+        {
             WriteErrorLine(errorMessage, useConsole, logger);
+        }
 
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
@@ -78,7 +84,10 @@ public static class StShared
     private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)
     {
         if (exitCode == 0)
+        {
             return true;
+        }
+
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
@@ -92,10 +101,12 @@ public static class StShared
         //    return option;
 
         // ReSharper disable once using
-        using var proc = Process.Start(programFileName, arguments);
+        using Process proc = Process.Start(programFileName, arguments);
 
         if (waitForExit == 0)
+        {
             return null;
+        }
 
         ConsoleWriteInformationLine(logger, useConsole, "Wait For Exit {0}", programFileName);
 
@@ -104,11 +115,16 @@ public static class StShared
         ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
 
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
+        {
             return null;
+        }
 
-        var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
+        string errorMessage =
+            $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
         if (useErrorLine && (useConsole || logger is not null))
+        {
             WriteErrorLine(errorMessage, useConsole, logger);
+        }
 
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
@@ -140,9 +156,12 @@ public static class StShared
             WorkingDirectory = projectPath ?? Directory.GetCurrentDirectory()
         };
         // ReSharper disable once using
-        using var pNpmRunDist = Process.Start(psiNpmRunDist);
+        using Process? pNpmRunDist = Process.Start(psiNpmRunDist);
         if (pNpmRunDist is null)
+        {
             return false;
+        }
+
         pNpmRunDist.StandardInput.WriteLine($"{command} & exit");
         pNpmRunDist.WaitForExit();
 
@@ -151,10 +170,13 @@ public static class StShared
 
     public static bool CreateFolder(string path, bool useConsole)
     {
-        var checkedPath = FileStat.CreateFolderIfNotExists(path, useConsole);
+        string? checkedPath = FileStat.CreateFolderIfNotExists(path, useConsole);
 
         if (checkedPath is not null)
+        {
             return true;
+        }
+
         WriteErrorLine($"Cannot create Folder {path}.", useConsole);
         return false;
     }
@@ -168,22 +190,27 @@ public static class StShared
     public static void ConsoleWriteInformationLine(ILogger? logger, bool useConsole, string message,
         params object?[] args)
     {
+#pragma warning disable CA2254 // Template should be a static expression
         logger?.LogInformation(message, args);
+#pragma warning restore CA2254 // Template should be a static expression
         if (!useConsole)
+        {
             return;
+        }
+
         ConsoleWriteFormattedLine(message, args);
     }
 
     private static void ConsoleWriteFormattedLine(string message, params object?[] args)
     {
         //var vsb = new StringBuilder(256);
-        var scanIndex = 0;
-        var endIndex = message.Length;
-        var argIndex = 0;
+        int scanIndex = 0;
+        int endIndex = message.Length;
+        int argIndex = 0;
 
         while (scanIndex < endIndex)
         {
-            var openBraceIndex = FindBraceIndex(message, '{', scanIndex, endIndex);
+            int openBraceIndex = FindBraceIndex(message, '{', scanIndex, endIndex);
             if (scanIndex == 0 && openBraceIndex == endIndex)
             {
                 // No holes found.
@@ -191,7 +218,7 @@ public static class StShared
                 return;
             }
 
-            var closeBraceIndex = FindBraceIndex(message, '}', openBraceIndex, endIndex);
+            int closeBraceIndex = FindBraceIndex(message, '}', openBraceIndex, endIndex);
 
             if (closeBraceIndex == endIndex)
             {
@@ -201,14 +228,22 @@ public static class StShared
             else
             {
                 if (openBraceIndex > scanIndex)
+                {
                     Console.Write(message[scanIndex..openBraceIndex]);
-                var existingColor = Console.ForegroundColor;
+                }
+
+                ConsoleColor existingColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 if (argIndex < args.Length)
+                {
                     Console.Write(args[argIndex++]);
+                }
                 else
-                    Console.Write(message.Substring(openBraceIndex + 1, closeBraceIndex - 1)); //value
+                {
+                    Console.Write(message.AsSpan(openBraceIndex + 1, closeBraceIndex - 1)); //value
+                }
+
                 Console.ForegroundColor = existingColor;
 
                 scanIndex = closeBraceIndex + 1;
@@ -221,9 +256,9 @@ public static class StShared
     private static int FindBraceIndex(string format, char brace, int startIndex, int endIndex)
     {
         // Example: {{prefix{{{Argument}}}suffix}}.
-        var braceIndex = endIndex;
-        var scanIndex = startIndex;
-        var braceOccurrenceCount = 0;
+        int braceIndex = endIndex;
+        int scanIndex = startIndex;
+        int braceOccurrenceCount = 0;
 
         while (scanIndex < endIndex)
         {
@@ -247,7 +282,9 @@ public static class StShared
                 {
                     if (braceOccurrenceCount == 0)
                         // For '}' pick the first occurrence.
+                    {
                         braceIndex = scanIndex;
+                    }
                 }
                 else
                     // For '{' pick the last occurrence.
@@ -267,35 +304,49 @@ public static class StShared
     public static void WriteWarningLine(string warningText, bool useConsole, ILogger? logger = null,
         bool pauseAfter = false)
     {
+#pragma warning disable CA2254 // Template should be a static expression
         logger?.LogWarning(warningText);
+#pragma warning restore CA2254 // Template should be a static expression
         if (!useConsole)
+        {
             return;
-        var existingColor = Console.ForegroundColor;
+        }
+
+        ConsoleColor existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("[warning] ");
         Console.ForegroundColor = existingColor;
         Console.WriteLine(warningText);
         if (pauseAfter)
+        {
             Pause();
+        }
     }
 
     public static void WriteErrorLine(string errorText, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
     {
+#pragma warning disable CA2254
         logger?.LogError(errorText);
+#pragma warning restore CA2254
         if (!useConsole)
+        {
             return;
-        var existingColor = Console.ForegroundColor;
+        }
+
+        ConsoleColor existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[ERROR] ");
         Console.ForegroundColor = existingColor;
         Console.WriteLine(errorText);
         if (pauseAfter)
+        {
             Pause();
+        }
     }
 
     public static void WriteSuccessMessage(string messageText)
     {
-        var currentColor = Console.ForegroundColor;
+        ConsoleColor currentColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine(messageText);
         Console.ForegroundColor = currentColor;
@@ -304,20 +355,30 @@ public static class StShared
     public static void WriteException(Exception? ex, string? additionalMessage, bool useConsole, ILogger? logger = null,
         bool pauseAfter = true)
     {
+#pragma warning disable CA2254
         logger?.LogError(ex, additionalMessage ?? string.Empty);
+#pragma warning restore CA2254
         if (!useConsole)
+        {
             return;
-        var existingColor = Console.ForegroundColor;
+        }
+
+        ConsoleColor existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[ERROR] ");
         Console.ForegroundColor = existingColor;
         if (!string.IsNullOrWhiteSpace(additionalMessage))
+        {
             Console.WriteLine(additionalMessage);
+        }
+
         Console.WriteLine($"{ex?.GetType().Name} thrown with message: {ex?.Message}");
         Console.WriteLine($"Error message is: {ex?.Message}");
         Console.WriteLine($"StackTrace: {ex?.StackTrace}");
         if (pauseAfter)
+        {
             Pause();
+        }
     }
 
     public static void WriteException(Exception? ex, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
@@ -327,7 +388,7 @@ public static class StShared
 
     public static void LogSerilogFilePath(IConfigurationRoot config)
     {
-        var serilogSettings = config.GetSection("Serilog");
+        IConfigurationSection serilogSettings = config.GetSection("Serilog");
 
         //if (serilogSettings is null)
         //{
@@ -335,7 +396,7 @@ public static class StShared
         //    return;
         //}
 
-        var writeToSection = serilogSettings.GetChildren().SingleOrDefault(s => s.Key == "WriteTo");
+        IConfigurationSection? writeToSection = serilogSettings.GetChildren().SingleOrDefault(s => s.Key == "WriteTo");
 
         if (writeToSection is null)
         {
@@ -343,21 +404,22 @@ public static class StShared
             return;
         }
 
-        var writeToWithNameFile = writeToSection.GetChildren().FirstOrDefault(child => child["Name"] == "File");
+        IConfigurationSection? writeToWithNameFile =
+            writeToSection.GetChildren().FirstOrDefault(child => child["Name"] == "File");
         if (writeToWithNameFile is null)
         {
             Console.WriteLine("Serilog WriteTo File Section not set");
             return;
         }
 
-        var argsSection = writeToWithNameFile.GetChildren().SingleOrDefault(s => s.Key == "Args");
+        IConfigurationSection? argsSection = writeToWithNameFile.GetChildren().SingleOrDefault(s => s.Key == "Args");
         if (argsSection is null)
         {
             Console.WriteLine("Serilog WriteTo File Args Section not set");
             return;
         }
 
-        var path = argsSection.GetChildren().SingleOrDefault(s => s.Key == "path");
+        IConfigurationSection? path = argsSection.GetChildren().SingleOrDefault(s => s.Key == "path");
         if (path is null)
         {
             Console.WriteLine("Serilog WriteTo File Args path not set");
@@ -370,16 +432,16 @@ public static class StShared
     public static string? GetMainModulePath()
     {
         // ReSharper disable once using
-        using var processModule = Process.GetCurrentProcess().MainModule;
-        var pathToExe = processModule?.FileName;
+        using ProcessModule? processModule = Process.GetCurrentProcess().MainModule;
+        string? pathToExe = processModule?.FileName;
         return pathToExe is not null ? Path.GetDirectoryName(pathToExe) : null;
     }
 
     public static string? GetMainModuleFileName()
     {
         // ReSharper disable once using
-        using var processModule = Process.GetCurrentProcess().MainModule;
-        var pathToExe = processModule?.FileName;
+        using ProcessModule? processModule = Process.GetCurrentProcess().MainModule;
+        string? pathToExe = processModule?.FileName;
         return pathToExe is not null ? Path.GetFileName(pathToExe) : null;
     }
 }

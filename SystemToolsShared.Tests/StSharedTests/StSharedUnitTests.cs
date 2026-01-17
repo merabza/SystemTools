@@ -55,7 +55,10 @@ public sealed class StSharedUnitTests
     {
         // Only run on Windows
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
             return;
+        }
+
         var result = StShared.RunCmdProcess("echo Hello");
         Assert.True(result);
     }
@@ -73,7 +76,9 @@ public sealed class StSharedUnitTests
         finally
         {
             if (Directory.Exists(tempDir))
+            {
                 Directory.Delete(tempDir, true);
+            }
         }
     }
 
@@ -177,6 +182,7 @@ public sealed class StSharedUnitTests
     {
         var fileName = StShared.GetMainModuleFileName();
         Assert.False(string.IsNullOrWhiteSpace(fileName));
-        Assert.True(fileName.EndsWith(".dll") || fileName.EndsWith(".exe"));
+        Assert.True(fileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ||
+                    fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase));
     }
 }

@@ -21,15 +21,18 @@ public sealed class ApiKeysDomain
         //var count = apiKeys?.AppSettingsByApiKey?.Count ?? 0;
         //logger.LogInformation("ApiKeys count is {count}", count);
         if (apiKeys?.AppSettingsByApiKey is null)
+        {
             return apiKeysDomain;
+        }
+
         foreach (var apiKeyByRemoteIpAddressModel in apiKeys.AppSettingsByApiKey)
         {
-            var apiKey = apiKeyByRemoteIpAddressModel.ApiKey;
-            var remoteIpAddress = apiKeyByRemoteIpAddressModel.RemoteIpAddress;
-            //logger.LogInformation("ApiKey={apiKey} for {remoteIpAddress}", apiKey, remoteIpAddress);
+            string? apiKey = apiKeyByRemoteIpAddressModel.ApiKey;
+            string? remoteIpAddress = apiKeyByRemoteIpAddressModel.RemoteIpAddress;
+            //logger.LogInformation("ApiKey={ApiKey} for {RemoteIpAddress}", apiKey, remoteIpAddress);
             if (apiKeyByRemoteIpAddressModel.ApiKey is null || apiKeyByRemoteIpAddressModel.RemoteIpAddress is null)
             {
-                logger.LogError("Invalid ApiKey or RemoteIpAddress ApiKey={apiKey} for {remoteIpAddress}", apiKey,
+                logger.LogError("Invalid ApiKey or RemoteIpAddress ApiKey={ApiKey} for {RemoteIpAddress}", apiKey,
                     remoteIpAddress);
                 continue;
             }

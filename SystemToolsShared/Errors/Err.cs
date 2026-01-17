@@ -44,7 +44,10 @@ public struct Err : IEquatable<Err>
 
     public static void PrintErrorsOnConsole(IEnumerable<Err> errors)
     {
-        foreach (var error in errors) StShared.WriteErrorLine(error.ErrorMessage, true, null, false);
+        foreach (var error in errors)
+        {
+            StShared.WriteErrorLine(error.ErrorMessage, true, null, false);
+        }
     }
 
     public bool Equals(Err other)
@@ -61,4 +64,8 @@ public struct Err : IEquatable<Err>
     {
         return HashCode.Combine(ErrorCode, ErrorMessage);
     }
+
+    public static bool operator ==(Err left, Err right) => left.Equals(right);
+
+    public static bool operator !=(Err left, Err right) => !(left == right);
 }

@@ -17,7 +17,9 @@ public sealed class FileLoaderTests : IDisposable
     public void Dispose()
     {
         if (File.Exists(_testFilePath))
+        {
             File.Delete(_testFilePath);
+        }
     }
 
     [Fact]

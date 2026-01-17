@@ -14,15 +14,18 @@ public static class ConfigurationHelper
     {
         var sb = new StringBuilder(IndexPrefix);
         sb.Append(tableName);
-        foreach (var fieldName in fieldNames)
+        foreach (string fieldName in fieldNames)
         {
             sb.Append('_');
             sb.Append(fieldName.UnCapitalize());
         }
 
         if (unique)
+        {
             sb.Append(UniqueText);
-        var indexName = sb.ToString();
+        }
+
+        string indexName = sb.ToString();
         return indexName.Length > 128 ? indexName[..128] : indexName;
     }
 
@@ -39,7 +42,7 @@ public static class ConfigurationHelper
     public static string CreateConstraintName(this string tableName, string relatedTableName,
         string[] relatedFieldNames)
     {
-        var fieldNamesInRow = relatedFieldNames.Length > 0 ? string.Join('_', relatedFieldNames) : string.Empty;
+        string fieldNamesInRow = relatedFieldNames.Length > 0 ? string.Join('_', relatedFieldNames) : string.Empty;
         return $"{ForeignKeyPrefix}{tableName}_{relatedTableName.Pluralize()}_{fieldNamesInRow}";
     }
 

@@ -16,18 +16,26 @@ public sealed class ProgressData
 
     public void Add(string name, string message)
     {
-        if (message == string.Empty)
+        if (string.IsNullOrEmpty(message))
+        {
             StrData.Remove(name);
+        }
         else
+        {
             StrData[name] = message;
+        }
     }
 
     public void Add(string name, int value)
     {
         if (value == 0)
+        {
             IntData.Remove(name);
+        }
         else
+        {
             IntData[name] = value;
+        }
     }
 
     public void Add(string name, bool value)

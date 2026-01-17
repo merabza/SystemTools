@@ -56,7 +56,7 @@ public sealed class StSharedProcessTests
     public void IsAllowExitCode_WithAllowedCode_ReturnsTrue()
     {
         // Arrange & Act
-        var result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", new[] { 1 });
+        var result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
 
         // Assert
         Assert.True(result.IsNone);

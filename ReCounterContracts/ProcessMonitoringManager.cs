@@ -19,10 +19,13 @@ public sealed class ProcessMonitoringManager
         get
         {
             if (_instance is not null)
+            {
                 return _instance;
+            }
+
             lock (SyncRoot) //thread safe singleton
             {
-                _instance ??= new ProcessMonitoringManager();
+                _instance = new ProcessMonitoringManager();
             }
 
             return _instance;
@@ -45,6 +48,8 @@ public sealed class ProcessMonitoringManager
     //}
 
     public bool ProcessIsRunning { get; set; }
+    public string? LastProcName { get; set; }
+    public int LastLength { get; set; }
 
     public static void SetTestInstance(ProcessMonitoringManager newInstance)
     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 
 namespace SystemToolsShared;
@@ -17,16 +18,16 @@ public static class DateTimeExtend
         switch (periodType)
         {
             case EPeriodType.Year:
-                return new DateTime(forDate.Year, 1, 1);
+                return new DateTime(forDate.Year, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Quarter:
-                var quarterNumber = (forDate.Month - 1) / 3 + 1;
-                return new DateTime(forDate.Year, (quarterNumber - 1) * 3 + 1, 1);
+                int quarterNumber = (forDate.Month - 1) / 3 + 1;
+                return new DateTime(forDate.Year, (quarterNumber - 1) * 3 + 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Month:
-                return new DateTime(forDate.Year, forDate.Month, 1);
+                return new DateTime(forDate.Year, forDate.Month, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Week:
-                var ci = Thread.CurrentThread.CurrentCulture;
-                var firstDayOfWeek = ci.DateTimeFormat.FirstDayOfWeek;
-                var dayOfWeek = forDate.DayOfWeek;
+                CultureInfo ci = Thread.CurrentThread.CurrentCulture;
+                DayOfWeek firstDayOfWeek = ci.DateTimeFormat.FirstDayOfWeek;
+                DayOfWeek dayOfWeek = forDate.DayOfWeek;
                 return forDate.AddDays(firstDayOfWeek - dayOfWeek).Date;
             case EPeriodType.Day:
                 return forDate.Date;
@@ -115,9 +116,9 @@ public static class DateTimeExtend
 
     public static long YearsDifference(this DateTime lValue, DateTime rValue)
     {
-        var zeroTime = new DateTime(1, 1, 1);
+        var zeroTime = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
 
-        var span = lValue - rValue;
+        TimeSpan span = lValue - rValue;
         return (zeroTime + span).Year - 1;
     }
 }

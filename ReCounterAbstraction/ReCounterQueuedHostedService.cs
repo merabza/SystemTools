@@ -19,11 +19,11 @@ public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounter
 
     private IReCounterBackgroundTaskQueue TaskQueue { get; }
 
-    public override Task StopAsync(CancellationToken token)
+    public override Task StopAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("ReCounter Queued Hosted Service is stopping.");
 
-        return base.StopAsync(token);
+        return base.StopAsync(cancellationToken);
     }
 
     public bool IsProcessRunning()
@@ -37,12 +37,14 @@ public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounter
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            var workItem = await TaskQueue.DequeueAsync(stoppingToken);
+            Func<CancellationToken, Task>? workItem = await TaskQueue.DequeueAsync(stoppingToken);
 
             try
             {
                 if (workItem is not null)
+                {
                     await workItem(stoppingToken);
+                }
             }
             catch (Exception ex)
             {

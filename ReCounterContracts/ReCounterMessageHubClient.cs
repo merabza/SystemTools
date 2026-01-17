@@ -12,8 +12,6 @@ namespace ReCounterContracts;
 
 public sealed class ReCounterMessageHubClient : IMessageHubClient
 {
-    private static int _lastLength;
-    private static string? _lastProcName;
     private readonly string? _apiKey;
     private readonly string _server;
     private string? _accessToken;
@@ -42,40 +40,42 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
         _connection.On<ProgressData>(RecounterEvents.ProgressDataReceived, progressData =>
         {
-            if (progressData.BoolData.Count > 0)
-                if (progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out var processIsRunning))
-                    ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
+            if (progressData.BoolData.Count > 0 &&
+                progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out bool processIsRunning))
+            {
+                ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
+            }
 
             if (progressData.StrData.Count > 0)
             {
-                var procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
-                if (_lastProcName != procName)
+                string? procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
+                if (ProcessMonitoringManager.Instance.LastProcName != procName)
                 {
                     Console.WriteLine(procName);
-
-                    _lastProcName = procName;
+                    ProcessMonitoringManager.Instance.LastProcName = procName;
                 }
             }
 
             int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-            var progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
+            string? progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
 
-            var lineNo = Console.CursorTop;
-            if (procPosition is not null && procLength is not null)
-                if ((decimal)procLength > 0)
+            int lineNo = Console.CursorTop;
+            if (procPosition is not null && procLength is not null && (decimal)procLength > 0)
+            {
+                decimal procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
+                string conMessage =
+                    $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
+                int conMessageLength = conMessage.Length;
+                if (ProcessMonitoringManager.Instance.LastLength > conMessageLength)
                 {
-                    var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
-                    var conMessage =
-                        $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
-                    var conMessageLength = conMessage.Length;
-                    if (_lastLength > conMessageLength)
-                        conMessage = conMessage.PadRight(_lastLength);
-
-                    _lastLength = conMessageLength;
-                    Console.Write(conMessage);
-                    Console.SetCursorPosition(0, lineNo);
+                    conMessage = conMessage.PadRight(ProcessMonitoringManager.Instance.LastLength);
                 }
+
+                ProcessMonitoringManager.Instance.LastLength = conMessageLength;
+                Console.Write(conMessage);
+                Console.SetCursorPosition(0, lineNo);
+            }
 
             Console.SetCursorPosition(0, lineNo);
         });
@@ -103,7 +103,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         try
         {
             if (_connection is null)
+            {
                 return true;
+            }
 
             await _connection.StopAsync(cancellationToken);
             return true;

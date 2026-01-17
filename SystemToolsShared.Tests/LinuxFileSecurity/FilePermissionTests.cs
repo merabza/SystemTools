@@ -18,7 +18,9 @@ public sealed class FilePermissionTests : IDisposable
     public void Dispose()
     {
         if (File.Exists(_testFilePath))
+        {
             File.Delete(_testFilePath);
+        }
     }
 
     [Fact]

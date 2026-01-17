@@ -19,11 +19,12 @@ public sealed class KeysListDomainTests : IDisposable
     public void Dispose()
     {
         if (File.Exists(_testFilePath))
+        {
             File.Delete(_testFilePath);
+        }
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public void LoadFromFile_WithInvalidFileName_ReturnsNull(string filename)

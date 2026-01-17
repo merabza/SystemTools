@@ -7,11 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LanguageExt.Core" Version="4.4.9" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 

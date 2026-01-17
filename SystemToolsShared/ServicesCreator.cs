@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,9 +36,13 @@ public /*open*/ class ServicesCreator
         {
             string? logFileName = null;
             if (!string.IsNullOrWhiteSpace(_logFileName))
+            {
                 logFileName = _logFileName;
+            }
             else if (_logFolder is not null)
+            {
                 logFileName = Path.Combine(_logFolder, _appName, $"{_appName}.log");
+            }
 
             ////check with regex logFileName is valid filename
             //if (!FileNameValidator.IsValidFileName(logFileName))
@@ -46,13 +51,21 @@ public /*open*/ class ServicesCreator
             if (logFileName is not null)
             {
                 const string extension = ".log";
-                if (logFileName.ToLower().EndsWith(".log") || logFileName.ToLower().EndsWith(".txt"))
+                if (logFileName.ToUpperInvariant().EndsWith(".LOG", StringComparison.Ordinal) || logFileName.ToUpperInvariant().EndsWith(".TXT", StringComparison.Ordinal))
                     //extension = logFileName.Substring(logFileName.Length - 5);
+                {
                     logFileName = logFileName[..^4];
+                }
 
                 logFileName += extension;
-                Log.Logger = new LoggerConfiguration().WriteTo.Console(consoleLogEventLevel).WriteTo
-                    .File(logFileName, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day).CreateLogger();
+                Log.Logger = new LoggerConfiguration()
+                    .WriteTo.Console(consoleLogEventLevel, formatProvider: CultureInfo.InvariantCulture)
+                    .WriteTo.File(
+                        logFileName,
+                        encoding: Encoding.UTF8,
+                        rollingInterval: RollingInterval.Day,
+                        formatProvider: CultureInfo.InvariantCulture)
+                    .CreateLogger();
             }
 
             var serviceCollection = new ServiceCollection();

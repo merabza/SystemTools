@@ -18,13 +18,17 @@ public sealed class KeysListDomain
     public static KeysListDomain? LoadFromFile(string filename)
     {
         if (string.IsNullOrWhiteSpace(filename))
+        {
             return null;
+        }
 
-        var appSetEnKeysJsonString = File.ReadAllText(filename);
+        string appSetEnKeysJsonString = File.ReadAllText(filename);
         var appSetEnKeysList = JsonConvert.DeserializeObject<KeysList>(appSetEnKeysJsonString);
 
         if (appSetEnKeysList?.Keys is null)
+        {
             return null;
+        }
 
         List<string> keys = [];
         keys.AddRange(appSetEnKeysList.Keys.OfType<string>());

@@ -22,10 +22,13 @@ public sealed class ProgramAttributes
             //შემდგომში მასში ცვლილებები არ შედის,
             //მაგრამ შეიძლება პროგრამამ თავისი მუშაობის განმავლობაში რამდენჯერმე გამოიყენოს აქ არსებული ინფორმაცია
             if (_instance is not null)
+            {
                 return _instance;
+            }
+
             lock (SyncRoot) //thread safe singleton
             {
-                _instance ??= new ProgramAttributes();
+                _instance = new ProgramAttributes();
             }
 
             return _instance;

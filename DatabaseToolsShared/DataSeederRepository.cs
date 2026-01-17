@@ -32,7 +32,9 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     public bool CreateEntities<T>(List<T> entities) where T : class
     {
         if (entities.Count == 0)
+        {
             return true;
+        }
 
         try
         {
@@ -49,12 +51,17 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     public bool DeleteEntities<T>(List<T> entities) where T : class
     {
         if (entities.Count == 0)
+        {
             return true;
+        }
 
         try
         {
             foreach (var entity in entities)
+            {
                 _context.Remove(entity);
+            }
+
             return SaveChanges();
         }
         catch (Exception e)
@@ -81,11 +88,17 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     public bool SetUpdates<T>(List<T> forUpdate) where T : class
     {
         if (forUpdate.Count == 0)
+        {
             return true;
+        }
+
         try
         {
             foreach (var rec in forUpdate)
+            {
                 _context.Update(rec);
+            }
+
             return SaveChanges();
         }
         catch (Exception e)
@@ -98,7 +111,9 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     public bool RemoveNeedlessRecords<T>(List<T> needLessList) where T : class
     {
         if (needLessList.Count == 0)
+        {
             return true;
+        }
 
         try
         {

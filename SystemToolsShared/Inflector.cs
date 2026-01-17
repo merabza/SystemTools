@@ -85,7 +85,7 @@ public static class Inflector
 
     public static void AddUncountable(string word)
     {
-        Uncountables.Add(word.ToLower());
+        Uncountables.Add(word.ToLower(System.Globalization.CultureInfo.CurrentCulture));
     }
 
     public static void AddPlural(string rule, string replacement)
@@ -120,21 +120,27 @@ public static class Inflector
 
     private static string ApplyRules(List<Rule> rules, string word)
     {
-        var result = word;
+        string result = word;
 
-        if (Uncountables.Contains(word.ToLower()))
+        if (Uncountables.Contains(word.ToLower(System.Globalization.CultureInfo.CurrentCulture)))
+        {
             return result;
+        }
 
-        for (var i = rules.Count - 1; i >= 0; i--)
+        for (int i = rules.Count - 1; i >= 0; i--)
+        {
             if ((result = rules[i].Apply(word)) is not null)
+            {
                 break;
+            }
+        }
 
         return result ?? word;
     }
 
     public static string Titleize(this string word)
     {
-        return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])", match => match.Captures[0].Value.ToUpper());
+        return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])", match => match.Captures[0].Value.ToUpper(System.Globalization.CultureInfo.CurrentCulture));
     }
 
     public static string Humanize(this string lowercaseAndUnderscoredWord)
@@ -144,7 +150,7 @@ public static class Inflector
 
     public static string Pascalize(this string lowercaseAndUnderscoredWord)
     {
-        return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)", match => match.Groups[1].Value.ToUpper());
+        return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)", match => match.Groups[1].Value.ToUpper(System.Globalization.CultureInfo.CurrentCulture));
     }
 
     public static string Camelize(this string lowercaseAndUnderscoredWord)
@@ -157,32 +163,32 @@ public static class Inflector
         return Regex
             .Replace(
                 Regex.Replace(Regex.Replace(pascalCasedWord, "([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                    "$1_$2"), @"[-\s]", "_").ToLower();
+                    "$1_$2"), @"[-\s]", "_").ToLower(System.Globalization.CultureInfo.CurrentCulture);
     }
 
     public static string Capitalize(this string word)
     {
-        return word[..1].ToUpper() + word[1..].ToLower();
+        return word[..1].ToUpper(System.Globalization.CultureInfo.CurrentCulture) + word[1..].ToLower(System.Globalization.CultureInfo.CurrentCulture);
     }
 
     public static string CapitalizeCamel(this string word)
     {
-        return word[..1].ToUpper() + word[1..];
+        return word[..1].ToUpper(System.Globalization.CultureInfo.CurrentCulture) + word[1..];
     }
 
     public static string UnCapitalize(this string word)
     {
-        return word[..1].ToLower() + word[1..];
+        return word[..1].ToLower(System.Globalization.CultureInfo.CurrentCulture) + word[1..];
     }
 
     public static string Ordinalize(this string numberString)
     {
-        return Ordanize(int.Parse(numberString), numberString);
+        return Ordanize(int.Parse(numberString, System.Globalization.CultureInfo.CurrentCulture), numberString);
     }
 
     public static string Ordinalize(this int number)
     {
-        return Ordanize(number, number.ToString());
+        return Ordanize(number, number.ToString(System.Globalization.CultureInfo.CurrentCulture));
     }
 
 //#if NET45 || NETFX_CORE
@@ -190,9 +196,12 @@ public static class Inflector
 //#endif
     public static string Ordanize(int number, string numberString)
     {
-        var nMod100 = number % 100;
+        int nMod100 = number % 100;
 
-        if (nMod100 >= 11 && nMod100 <= 13) return numberString + "th";
+        if (nMod100 >= 11 && nMod100 <= 13)
+        {
+            return numberString + "th";
+        }
 
         return (number % 10) switch
         {
@@ -214,17 +223,22 @@ public static class Inflector
         //    return new string[] {}; //Return empty array.
 
         if (source.Length == 0)
+        {
             return [string.Empty];
+        }
 
-        var words = new StringCollection();
-        var wordStartIndex = 0;
+        StringCollection words = new StringCollection();
+        int wordStartIndex = 0;
 
-        var letters = source.ToCharArray();
+        char[] letters = source.ToCharArray();
         // Skip the first letter. we don't care what case it is.
-        for (var i = 1; i < letters.Length; i++)
+        for (int i = 1; i < letters.Length; i++)
         {
             if (!char.IsUpper(letters[i]))
+            {
                 continue;
+            }
+
             //Grab everything before the current index.
             words.Add(new string(letters, wordStartIndex, i - wordStartIndex));
             wordStartIndex = i;
@@ -234,7 +248,7 @@ public static class Inflector
         words.Add(new string(letters, wordStartIndex, letters.Length - wordStartIndex));
 
         //Copy to a string array.
-        var wordArray = new string[words.Count];
+        string[] wordArray = new string[words.Count];
         words.CopyTo(wordArray, 0);
         return wordArray;
     }

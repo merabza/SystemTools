@@ -28,31 +28,40 @@ public sealed class LogFile
         string? rename = null;
         var checkFile = new FileInfo(_fileName);
         if (checkFile.Directory != null && _autoCrateFolder && !checkFile.Directory.Exists)
+        {
             checkFile.Directory.Create();
+        }
+
         if (checkFile.Directory is null || !checkFile.Directory.Exists)
+        {
             return;
+        }
 
         //შევამოწმოთ ახალი დღე ხომ არ დაიწყო
         var checkDate = DateTime.Now;
-        if (_lastLogSaveDate != DateTime.MinValue && _lastLogSaveDate.Date != checkDate.Date)
+        if (_lastLogSaveDate != DateTime.MinValue && _lastLogSaveDate.Date != checkDate.Date && checkFile.Exists)
+        {
             //შევამოწმოთ მოესწრო თუ არა ლოგების ფაილის შექმნა
-            if (checkFile.Exists)
+            //ფაილის სახელის ნაწილი თარიღის გარეშე
+            string fileNameWithoutDate = Path.GetFileNameWithoutExtension(_fileName) + "_";
+            //დავადგინოთ ფაილის გაფართოება
+            string fileExtension = Path.GetExtension(_fileName);
+            string? dirName = Path.GetDirectoryName(_fileName);
+            if (dirName is null)
             {
-                //ფაილის სახელის ნაწილი თარიღის გარეშე
-                var fileNameWithoutDate = Path.GetFileNameWithoutExtension(_fileName) + "_";
-                //დავადგინოთ ფაილის გაფართოება
-                var fileExtension = Path.GetExtension(_fileName);
-                var dirName = Path.GetDirectoryName(_fileName);
-                if (dirName is null)
-                    return;
-                //დავადგინოთ არქივის ფაილის სახელი სადაც მოხდება წინა დღის ლოგების გადანახვა.
-                rename = Path.Combine(dirName,
-                    fileNameWithoutDate + _lastLogSaveDate.ToString("yyyyMMdd") + fileExtension);
-                //შევამოწმოთ ხომ არ არსებობს ერთ თვეზე მეტი ხნის ლოგები და თუ არსებობს წავშალოთ
-                foreach (var fileInfo in checkFile.Directory.GetFiles(fileNameWithoutDate + "????????" + fileExtension)
-                             .Where(c => c.CreationTime.AddMonths(1) < checkDate))
-                    fileInfo.Delete(); //ნაპოვნი ძველი ფაილის წაშლა
+                return;
             }
+
+            //დავადგინოთ არქივის ფაილის სახელი სადაც მოხდება წინა დღის ლოგების გადანახვა.
+            rename = Path.Combine(dirName,
+                    fileNameWithoutDate + _lastLogSaveDate.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture) + fileExtension);
+            //შევამოწმოთ ხომ არ არსებობს ერთ თვეზე მეტი ხნის ლოგები და თუ არსებობს წავშალოთ
+            foreach (var fileInfo in checkFile.Directory.GetFiles(fileNameWithoutDate + "????????" + fileExtension)
+                         .Where(c => c.CreationTime.AddMonths(1) < checkDate))
+            {
+                fileInfo.Delete(); //ნაპოვნი ძველი ფაილის წაშლა
+            }
+        }
 
         try
         {
@@ -61,7 +70,9 @@ public sealed class LogFile
             {
                 //თუ განსაზღვრულია არქივის ფაილის სახელი, მოხდეს მიმდინარე ლოგის ფაილის გადარქმევა
                 if (rename != null)
+                {
                     File.Move(_fileName, rename);
+                }
 
                 // ReSharper disable once using
                 // ReSharper disable once DisposableConstructor
@@ -94,7 +105,10 @@ public sealed class LogFile
     private string LogWithAdditionalInfo(string strLog)
     {
         if (!_withCounter)
+        {
             return strLog;
+        }
+
         _errorLogId += 1;
         return _errorLogId + ": " + DateTime.Now + "\t" + " - " + strLog;
     }

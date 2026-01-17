@@ -54,7 +54,9 @@ public sealed class StringMessageHubClient : IMessageHubClient
         try
         {
             if (_connection is null)
+            {
                 return true;
+            }
 
             await _connection.StopAsync(cancellationToken);
             return true;

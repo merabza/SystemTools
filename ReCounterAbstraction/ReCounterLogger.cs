@@ -16,13 +16,19 @@ public sealed class ReCounterLogger
 
     public static ReCounterLogger? Create(string? logFolderName, string reCounterName)
     {
-        var strLogFolder = string.IsNullOrWhiteSpace(logFolderName) ? null : CreateFolder(logFolderName);
+        string? strLogFolder = string.IsNullOrWhiteSpace(logFolderName) ? null : CreateFolder(logFolderName);
         if (string.IsNullOrWhiteSpace(strLogFolder))
+        {
             return null;
+        }
+
         //თუ ფოლდერი ვერ შეიქმნა, მაშინ ითვლება, რომ ფაილიც ვერ შეიქმნება
-        var logFileName = Path.Combine(strLogFolder, reCounterName + "-logs.txt");
+        string logFileName = Path.Combine(strLogFolder, reCounterName + "-logs.txt");
         if (string.IsNullOrWhiteSpace(logFileName))
+        {
             return null;
+        }
+
         var logFile = new LogFile(logFileName);
         return new ReCounterLogger(logFile);
     }
@@ -41,16 +47,25 @@ public sealed class ReCounterLogger
     private static string CreateFolder(string strLogFolderName)
     {
         if (string.IsNullOrWhiteSpace(strLogFolderName))
+        {
             return string.Empty;
+        }
+
         try
         {
             var logFolderDir = new DirectoryInfo(strLogFolderName);
             //თუ ფოლდერი არ არსებობს შევქმნათ
             if (!logFolderDir.Exists)
+            {
                 logFolderDir.Create();
-            var strLogFolder = logFolderDir.FullName;
+            }
+
+            string strLogFolder = logFolderDir.FullName;
             while (strLogFolder.EndsWith(Path.AltDirectorySeparatorChar))
+            {
                 strLogFolder = strLogFolder[..^1];
+            }
+
             return strLogFolder;
         }
         catch (Exception)

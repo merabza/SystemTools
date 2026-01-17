@@ -22,7 +22,9 @@ public sealed class ServicesCreatorTests : IDisposable
     public void Dispose()
     {
         if (Directory.Exists(_testLogFolder))
+        {
             Directory.Delete(_testLogFolder, true);
+        }
     }
 
     [Fact]

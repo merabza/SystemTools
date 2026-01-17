@@ -20,7 +20,10 @@ public sealed class FilePermission
     public static FilePermission Create(string filePath)
     {
         if (!File.Exists(filePath))
+        {
             throw new FileLoadException("error loading " + filePath, filePath);
+        }
+
         return new FilePermission(filePath);
     }
 
@@ -45,7 +48,7 @@ public sealed class FilePermission
 
     public FilePermission? Apply()
     {
-        if (string.IsNullOrWhiteSpace(FilePath) || string.IsNullOrWhiteSpace(FilePath))
+        if (string.IsNullOrWhiteSpace(FilePath))
         {
             Console.WriteLine("File name cannot be empty.");
             return null;
@@ -59,7 +62,7 @@ public sealed class FilePermission
 
         try
         {
-            var permission = ToString();
+            string permission = ToString();
             var filePermission = new ProcessStartInfo(Command, permission);
             Process.Start(filePermission);
             return this;

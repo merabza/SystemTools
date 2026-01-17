@@ -27,7 +27,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     //protected იყენებს SystemTools
     // ReSharper disable once MemberCanBePrivate.Global
-    protected readonly string? AccessToken;
+    protected string? AccessToken;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,

@@ -26,7 +26,7 @@ public sealed class StringMessageHubClient : IMessageHubClient
 
     public async Task<bool> RunMessages(CancellationToken cancellationToken = default)
     {
-        var url =
+        string url =
             $"{_server}{MessagesRoutes.Messages.MessagesRoute}{(string.IsNullOrWhiteSpace(_apiKey) ? string.Empty : $"?{ApiKeysConstants.ApiKeyParameterName}={_apiKey}")}";
         _connection = new HubConnectionBuilder().WithUrl(url).Build();
 

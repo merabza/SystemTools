@@ -5,9 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
-using ReCounterContracts;
-using ReCounterContracts.V1.Routes;
 using SystemTools.ApiContracts;
+using SystemTools.ReCounterContracts.V1.Routes;
 
 namespace SystemTools.ReCounterContracts;
 

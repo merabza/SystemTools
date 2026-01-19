@@ -4,10 +4,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using DomainShared.Repositories;
+using SystemTools.DomainShared.Repositories;
 using SystemTools.SystemToolsShared;
 
-namespace DatabaseToolsShared;
+namespace SystemTools.DatabaseToolsShared;
 
 public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : class where TMo : class
 {

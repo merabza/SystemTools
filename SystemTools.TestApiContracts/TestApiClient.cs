@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using OneOf;
 using SystemTools.ApiContracts;
 using SystemTools.SystemToolsShared.Errors;
-using TestApiContracts.V1.Routes;
+using SystemTools.TestApiContracts.V1.Routes;
 
 namespace SystemTools.TestApiContracts;
 

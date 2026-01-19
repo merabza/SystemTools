@@ -1,4 +1,4 @@
-﻿namespace ReCounterContracts.V1.Routes;
+﻿namespace SystemTools.ReCounterContracts.V1.Routes;
 
 public static class RecountMessagesRoutes
 {

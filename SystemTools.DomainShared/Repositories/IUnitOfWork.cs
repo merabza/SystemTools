@@ -5,7 +5,7 @@ using LanguageExt;
 using Microsoft.EntityFrameworkCore.Storage;
 using SystemTools.SystemToolsShared.Errors;
 
-namespace DomainShared.Repositories;
+namespace SystemTools.DomainShared.Repositories;
 
 public interface IUnitOfWork
 {

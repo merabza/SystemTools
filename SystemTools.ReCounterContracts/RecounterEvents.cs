@@ -1,4 +1,4 @@
-﻿namespace ReCounterContracts;
+﻿namespace SystemTools.ReCounterContracts;
 
 public static class RecounterEvents
 {

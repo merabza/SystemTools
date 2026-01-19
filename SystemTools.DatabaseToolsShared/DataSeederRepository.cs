@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SystemTools.SystemToolsShared;
 
-namespace DatabaseToolsShared;
+namespace SystemTools.DatabaseToolsShared;
 
 public /*open*/ class DataSeederRepository : IDataSeederRepository
 {

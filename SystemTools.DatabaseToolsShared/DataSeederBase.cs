@@ -1,4 +1,4 @@
-﻿namespace DatabaseToolsShared;
+﻿namespace SystemTools.DatabaseToolsShared;
 
 public abstract class DataSeederBase
 {

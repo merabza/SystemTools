@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace ReCounterContracts;
+namespace SystemTools.ReCounterContracts;
 
 public sealed class ProcessMonitoringManager
 {

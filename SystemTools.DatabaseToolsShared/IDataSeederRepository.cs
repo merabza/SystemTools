@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DatabaseToolsShared;
+namespace SystemTools.DatabaseToolsShared;
 
 public interface IDataSeederRepository
 {

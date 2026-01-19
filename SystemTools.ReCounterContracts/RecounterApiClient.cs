@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using OneOf;
-using ReCounterContracts;
-using ReCounterContracts.V1.Routes;
 using SystemTools.ApiContracts;
+using SystemTools.ReCounterContracts.V1.Routes;
 using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.ReCounterContracts;

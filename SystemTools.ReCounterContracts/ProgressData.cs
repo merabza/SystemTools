@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace ReCounterContracts;
+namespace SystemTools.ReCounterContracts;
 
 public sealed class ProgressData
 {

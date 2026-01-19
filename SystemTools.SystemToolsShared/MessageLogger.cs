@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -8,10 +9,10 @@ namespace SystemTools.SystemToolsShared;
 
 public /*open*/ class MessageLogger
 {
-    protected readonly bool UseConsole;
     private readonly ILogger? _logger;
     private readonly IMessagesDataManager? _messagesDataManager;
     private readonly string? _userName;
+    protected readonly bool UseConsole;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName, bool useConsole)
@@ -57,7 +58,8 @@ public /*open*/ class MessageLogger
 
         if (_messagesDataManager is not null)
         {
-            await _messagesDataManager.SendMessage(_userName, string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1), cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, arg1), cancellationToken);
         }
     }
 
@@ -77,7 +79,8 @@ public /*open*/ class MessageLogger
 
         if (_messagesDataManager is not null)
         {
-            await _messagesDataManager.SendMessage(_userName, string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
         }
     }
 
@@ -100,10 +103,8 @@ public /*open*/ class MessageLogger
         if (_messagesDataManager is not null)
         {
             // Fix S2234: Use an explicit array to ensure argument order matches
-            await _messagesDataManager.SendMessage(
-                _userName,
-                string.Format(System.Globalization.CultureInfo.InvariantCulture, message, new[] { arg1, arg2, arg3 }),
-                cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, new[] { arg1, arg2, arg3 }), cancellationToken);
         }
     }
 
@@ -123,8 +124,8 @@ public /*open*/ class MessageLogger
 
         if (_messagesDataManager is not null)
         {
-            await _messagesDataManager.SendMessage(_userName, string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1, arg2, arg3, arg4),
-                cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, arg1, arg2, arg3, arg4), cancellationToken);
         }
     }
 
@@ -140,20 +141,23 @@ public /*open*/ class MessageLogger
     protected async ValueTask LogWarningAndSendMessage(string message, object? arg1,
         CancellationToken cancellationToken = default)
     {
-        StShared.WriteWarningLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1), UseConsole, _logger);
+        StShared.WriteWarningLine(string.Format(CultureInfo.InvariantCulture, message, arg1), UseConsole, _logger);
         if (_messagesDataManager is not null)
         {
-            await _messagesDataManager.SendMessage(_userName, string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1), cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, arg1), cancellationToken);
         }
     }
 
     protected async ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
         CancellationToken cancellationToken = default)
     {
-        StShared.WriteWarningLine(string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1, arg2), UseConsole, _logger);
+        StShared.WriteWarningLine(string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), UseConsole,
+            _logger);
         if (_messagesDataManager is not null)
         {
-            await _messagesDataManager.SendMessage(_userName, string.Format(System.Globalization.CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
+            await _messagesDataManager.SendMessage(_userName,
+                string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
         }
     }
 
@@ -189,7 +193,7 @@ public /*open*/ class MessageLogger
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
-        var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
+        Err error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
         {
             return error;

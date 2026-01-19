@@ -80,7 +80,8 @@ public static class StringExtensions
                 return true;
             }
 
-            string regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
+            string regexFileMask =
+                sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
             if (!sFileMask.EndsWith('*'))
             {
                 regexFileMask += '$';
@@ -146,7 +147,7 @@ public static class StringExtensions
             string strDate = dest.Substring(maskPositionInName, mask.Length);
             string pattern = dest[..maskPositionInName] + mask + dest[(maskPositionInName + mask.Length)..];
 
-            var dt = TryGetDate(strDate, mask);
+            DateTime dt = TryGetDate(strDate, mask);
             return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
         }
     }

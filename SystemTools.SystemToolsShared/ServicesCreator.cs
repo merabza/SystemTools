@@ -51,21 +51,18 @@ public /*open*/ class ServicesCreator
             if (logFileName is not null)
             {
                 const string extension = ".log";
-                if (logFileName.ToUpperInvariant().EndsWith(".LOG", StringComparison.Ordinal) || logFileName.ToUpperInvariant().EndsWith(".TXT", StringComparison.Ordinal))
+                if (logFileName.ToUpperInvariant().EndsWith(".LOG", StringComparison.Ordinal) ||
+                    logFileName.ToUpperInvariant().EndsWith(".TXT", StringComparison.Ordinal))
                     //extension = logFileName.Substring(logFileName.Length - 5);
                 {
                     logFileName = logFileName[..^4];
                 }
 
                 logFileName += extension;
-                Log.Logger = new LoggerConfiguration()
-                    .WriteTo.Console(consoleLogEventLevel, formatProvider: CultureInfo.InvariantCulture)
-                    .WriteTo.File(
-                        logFileName,
-                        encoding: Encoding.UTF8,
-                        rollingInterval: RollingInterval.Day,
-                        formatProvider: CultureInfo.InvariantCulture)
-                    .CreateLogger();
+                Log.Logger = new LoggerConfiguration().WriteTo
+                    .Console(consoleLogEventLevel, formatProvider: CultureInfo.InvariantCulture).WriteTo
+                    .File(logFileName, encoding: Encoding.UTF8, rollingInterval: RollingInterval.Day,
+                        formatProvider: CultureInfo.InvariantCulture).CreateLogger();
             }
 
             var serviceCollection = new ServiceCollection();

@@ -44,7 +44,7 @@ public struct Err : IEquatable<Err>
 
     public static void PrintErrorsOnConsole(IEnumerable<Err> errors)
     {
-        foreach (var error in errors)
+        foreach (Err error in errors)
         {
             StShared.WriteErrorLine(error.ErrorMessage, true, null, false);
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -85,7 +86,7 @@ public static class Inflector
 
     public static void AddUncountable(string word)
     {
-        Uncountables.Add(word.ToLower(System.Globalization.CultureInfo.CurrentCulture));
+        Uncountables.Add(word.ToLower(CultureInfo.CurrentCulture));
     }
 
     public static void AddPlural(string rule, string replacement)
@@ -122,7 +123,7 @@ public static class Inflector
     {
         string result = word;
 
-        if (Uncountables.Contains(word.ToLower(System.Globalization.CultureInfo.CurrentCulture)))
+        if (Uncountables.Contains(word.ToLower(CultureInfo.CurrentCulture)))
         {
             return result;
         }
@@ -140,7 +141,8 @@ public static class Inflector
 
     public static string Titleize(this string word)
     {
-        return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])", match => match.Captures[0].Value.ToUpper(System.Globalization.CultureInfo.CurrentCulture));
+        return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])",
+            match => match.Captures[0].Value.ToUpper(CultureInfo.CurrentCulture));
     }
 
     public static string Humanize(this string lowercaseAndUnderscoredWord)
@@ -150,7 +152,8 @@ public static class Inflector
 
     public static string Pascalize(this string lowercaseAndUnderscoredWord)
     {
-        return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)", match => match.Groups[1].Value.ToUpper(System.Globalization.CultureInfo.CurrentCulture));
+        return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)",
+            match => match.Groups[1].Value.ToUpper(CultureInfo.CurrentCulture));
     }
 
     public static string Camelize(this string lowercaseAndUnderscoredWord)
@@ -163,32 +166,32 @@ public static class Inflector
         return Regex
             .Replace(
                 Regex.Replace(Regex.Replace(pascalCasedWord, "([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                    "$1_$2"), @"[-\s]", "_").ToLower(System.Globalization.CultureInfo.CurrentCulture);
+                    "$1_$2"), @"[-\s]", "_").ToLower(CultureInfo.CurrentCulture);
     }
 
     public static string Capitalize(this string word)
     {
-        return word[..1].ToUpper(System.Globalization.CultureInfo.CurrentCulture) + word[1..].ToLower(System.Globalization.CultureInfo.CurrentCulture);
+        return word[..1].ToUpper(CultureInfo.CurrentCulture) + word[1..].ToLower(CultureInfo.CurrentCulture);
     }
 
     public static string CapitalizeCamel(this string word)
     {
-        return word[..1].ToUpper(System.Globalization.CultureInfo.CurrentCulture) + word[1..];
+        return word[..1].ToUpper(CultureInfo.CurrentCulture) + word[1..];
     }
 
     public static string UnCapitalize(this string word)
     {
-        return word[..1].ToLower(System.Globalization.CultureInfo.CurrentCulture) + word[1..];
+        return word[..1].ToLower(CultureInfo.CurrentCulture) + word[1..];
     }
 
     public static string Ordinalize(this string numberString)
     {
-        return Ordanize(int.Parse(numberString, System.Globalization.CultureInfo.CurrentCulture), numberString);
+        return Ordanize(int.Parse(numberString, CultureInfo.CurrentCulture), numberString);
     }
 
     public static string Ordinalize(this int number)
     {
-        return Ordanize(number, number.ToString(System.Globalization.CultureInfo.CurrentCulture));
+        return Ordanize(number, number.ToString(CultureInfo.CurrentCulture));
     }
 
 //#if NET45 || NETFX_CORE
@@ -227,7 +230,7 @@ public static class Inflector
             return [string.Empty];
         }
 
-        StringCollection words = new StringCollection();
+        var words = new StringCollection();
         int wordStartIndex = 0;
 
         char[] letters = source.ToCharArray();

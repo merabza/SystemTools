@@ -10,13 +10,13 @@ public static class FileStat
 {
     public static bool IsFileSchema(string fileStoragePath)
     {
-        bool uriCreated = Uri.TryCreate(fileStoragePath, UriKind.Absolute, out var uri);
+        bool uriCreated = Uri.TryCreate(fileStoragePath, UriKind.Absolute, out Uri? uri);
         return !uriCreated || uri is null || uri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase);
     }
 
     public static string NormalizePath(string path)
     {
-        if (Uri.TryCreate(path, UriKind.Absolute, out var result) && result.Scheme != "file")
+        if (Uri.TryCreate(path, UriKind.Absolute, out Uri? result) && result.Scheme != "file")
         {
             return result.AbsoluteUri.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
@@ -235,10 +235,10 @@ public static class FileStat
         }
 
         var sourceDirInfo = new DirectoryInfo(sourceFolderPath);
-        var files = sourceDirInfo.GetFiles();
-        var dirs = sourceDirInfo.GetDirectories();
+        FileInfo[] files = sourceDirInfo.GetFiles();
+        DirectoryInfo[] dirs = sourceDirInfo.GetDirectories();
 
-        foreach (var file in files)
+        foreach (FileInfo file in files)
         {
             if (excludes.Any(exclude => file.FullName.Contains(exclude)))
             {
@@ -248,7 +248,7 @@ public static class FileStat
             File.Copy(file.FullName, Path.Combine(destinationFolderPath, file.Name));
         }
 
-        foreach (var dir in dirs)
+        foreach (DirectoryInfo dir in dirs)
         {
             if (excludes.Any(exclude => dir.FullName.Contains(exclude)))
             {

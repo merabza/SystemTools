@@ -77,7 +77,7 @@ public static class EncryptDecrypt
             aes.IV = iv;
 
             // ReSharper disable once using
-            using var transform = aes.CreateDecryptor();
+            using ICryptoTransform transform = aes.CreateDecryptor();
             result = Encoding.UTF8.GetString(transform.TransformFinalBlock(cipher, 0, cipher.Length));
         }
         catch

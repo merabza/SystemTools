@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiContracts;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SignalR.Client;
+using ReCounterContracts;
 using ReCounterContracts.V1.Routes;
+using SystemTools.ApiContracts;
 
-namespace ReCounterContracts;
+namespace SystemTools.ReCounterContracts;
 
 public sealed class ReCounterMessageHubClient : IMessageHubClient
 {

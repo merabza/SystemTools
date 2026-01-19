@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using DomainShared.Repositories;
-using SystemToolsShared;
+using SystemTools.SystemToolsShared;
 
 namespace DatabaseToolsShared;
 
@@ -190,7 +190,8 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         foreach (string keyFieldName in _keyFieldNamesList)
         {
-            var keyProperty = tableDataType.GetProperty(keyFieldName) ?? throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
+            var keyProperty = tableDataType.GetProperty(keyFieldName) ??
+                              throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
             keyPropertiesList.Add(keyProperty);
         }
 

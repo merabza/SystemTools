@@ -8,6 +8,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.ApiContracts\SystemTools.ApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
         <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 

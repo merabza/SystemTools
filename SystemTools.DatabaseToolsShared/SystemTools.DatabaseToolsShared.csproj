@@ -11,8 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DomainShared\DomainShared.csproj" />
-        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+      <ProjectReference Include="..\SystemTools.DomainShared\SystemTools.DomainShared.csproj" />
     </ItemGroup>
 
 </Project>

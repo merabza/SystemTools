@@ -1,13 +1,14 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using ApiContracts;
 using Microsoft.Extensions.Logging;
 using OneOf;
+using ReCounterContracts;
 using ReCounterContracts.V1.Routes;
-using SystemToolsShared.Errors;
+using SystemTools.ApiContracts;
+using SystemTools.SystemToolsShared.Errors;
 
-namespace ReCounterContracts;
+namespace SystemTools.ReCounterContracts;
 
 public /*open*/ class ReCounterApiClient : ApiClient
 {

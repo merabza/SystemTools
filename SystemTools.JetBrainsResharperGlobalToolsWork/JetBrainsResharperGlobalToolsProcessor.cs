@@ -1,9 +1,9 @@
 ﻿using LanguageExt;
 using Microsoft.Extensions.Logging;
-using SystemToolsShared;
-using SystemToolsShared.Errors;
+using SystemTools.SystemToolsShared;
+using SystemTools.SystemToolsShared.Errors;
 
-namespace JetBrainsResharperGlobalToolsWork;
+namespace SystemTools.JetBrainsResharperGlobalToolsWork;
 
 public sealed class JetBrainsResharperGlobalToolsProcessor
 {

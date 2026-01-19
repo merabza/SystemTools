@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using SystemToolsShared;
+using SystemTools.SystemToolsShared;
 
-namespace DatabaseToolsShared;
+namespace SystemTools.DatabaseToolsShared;
 
 public static class ConfigurationHelper
 {

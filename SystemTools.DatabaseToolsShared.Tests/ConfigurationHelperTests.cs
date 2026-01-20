@@ -1,6 +1,4 @@
-using SystemTools.DatabaseToolsShared;
-
-namespace DatabaseToolsShared.Tests;
+namespace SystemTools.DatabaseToolsShared.Tests;
 
 public sealed class ConfigurationHelperTests
 {

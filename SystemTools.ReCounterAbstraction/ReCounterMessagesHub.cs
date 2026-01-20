@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using SystemTools.ReCounterContracts;
 
-namespace ReCounterAbstraction;
+namespace SystemTools.ReCounterAbstraction;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public sealed class ReCounterMessagesHub : Hub<IProgressDataMessenger>

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SystemTools.ReCounterContracts;
 
-namespace ReCounterAbstraction;
+namespace SystemTools.ReCounterAbstraction;
 
 public interface IProgressDataManager
 {

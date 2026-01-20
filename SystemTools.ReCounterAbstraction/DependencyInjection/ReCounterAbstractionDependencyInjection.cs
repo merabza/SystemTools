@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace ReCounterAbstraction.DependencyInjection;
+namespace SystemTools.ReCounterAbstraction.DependencyInjection;
 
 // ReSharper disable once UnusedType.Global
 public static class ReCounterAbstractionDependencyInjection

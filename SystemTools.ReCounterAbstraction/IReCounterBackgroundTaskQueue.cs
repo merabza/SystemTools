@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ReCounterAbstraction;
+namespace SystemTools.ReCounterAbstraction;
 
 public interface IReCounterBackgroundTaskQueue
 {

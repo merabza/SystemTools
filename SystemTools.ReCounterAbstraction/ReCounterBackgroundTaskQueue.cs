@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ReCounterAbstraction;
+namespace SystemTools.ReCounterAbstraction;
 
 public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue, IDisposable
 {

@@ -45,33 +45,51 @@ public static class StringExtensions
 
         public string AddNeedLeadPart(string mustLead)
         {
-            if (dest.StartsWith(mustLead, StringComparison.Ordinal)) return dest;
+            if (dest.StartsWith(mustLead, StringComparison.Ordinal))
+            {
+                return dest;
+            }
 
             return mustLead + dest;
         }
 
         public string AddNeedLastPart(string mustLast)
         {
-            if (dest.EndsWith(mustLast, StringComparison.Ordinal)) return dest;
+            if (dest.EndsWith(mustLast, StringComparison.Ordinal))
+            {
+                return dest;
+            }
 
             return dest + mustLast;
         }
 
         public string AddNeedLastPart(char mustLast)
         {
-            if (dest.EndsWith(mustLast)) return dest;
+            if (dest.EndsWith(mustLast))
+            {
+                return dest;
+            }
 
             return dest + mustLast;
         }
 
         public bool FitsMask(string sFileMask)
         {
-            if (string.IsNullOrWhiteSpace(sFileMask)) return true;
+            if (string.IsNullOrWhiteSpace(sFileMask))
+            {
+                return true;
+            }
 
             var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
-            if (!sFileMask.EndsWith('*')) regexFileMask += '$';
+            if (!sFileMask.EndsWith('*'))
+            {
+                regexFileMask += '$';
+            }
 
-            if (!sFileMask.StartsWith('*')) regexFileMask = '^' + regexFileMask;
+            if (!sFileMask.StartsWith('*'))
+            {
+                regexFileMask = '^' + regexFileMask;
+            }
 
             var mask = new Regex(regexFileMask);
             var toRet = mask.IsMatch(dest);
@@ -88,11 +106,17 @@ public static class StringExtensions
             {
                 if (char.IsDigit(c))
                 {
-                    if (maskPosition == 0) maskPositionInName = position;
+                    if (maskPosition == 0)
+                    {
+                        maskPositionInName = position;
+                    }
 
                     sbMask.Append(maskFirstVersion[maskPosition]);
                     maskPosition++;
-                    if (maskPosition == maskFirstVersion.Length) break;
+                    if (maskPosition == maskFirstVersion.Length)
+                    {
+                        break;
+                    }
                 }
                 else if (c is '-' or '_' && maskPosition > 0 &&
                          maskFirstVersion[maskPosition] != maskFirstVersion[maskPosition - 1])
@@ -113,7 +137,10 @@ public static class StringExtensions
             }
 
             //მინიმუმ 8 პოზიცია არის წელიწადი, თვე და დღე
-            if (maskPosition < 8) return (DateTime.MinValue, null);
+            if (maskPosition < 8)
+            {
+                return (DateTime.MinValue, null);
+            }
 
             var mask = sbMask.ToString();
             var strDate = dest.Substring(maskPositionInName, mask.Length);

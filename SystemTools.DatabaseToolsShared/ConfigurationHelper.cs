@@ -20,7 +20,10 @@ public static class ConfigurationHelper
             sb.Append(fieldName.UnCapitalize());
         }
 
-        if (unique) sb.Append(UniqueText);
+        if (unique)
+        {
+            sb.Append(UniqueText);
+        }
 
         var indexName = sb.ToString();
         return indexName.Length > 128 ? indexName[..128] : indexName;

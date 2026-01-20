@@ -37,7 +37,9 @@ public /*open*/ class MessageLogger
         }
 
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
+        }
     }
 
     protected async ValueTask LogInfoAndSendMessage(string message, object? arg1,
@@ -55,8 +57,10 @@ public /*open*/ class MessageLogger
         }
 
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, arg1), cancellationToken);
+        }
     }
 
     protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2,
@@ -74,8 +78,10 @@ public /*open*/ class MessageLogger
         }
 
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
+        }
     }
 
     protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
@@ -96,8 +102,10 @@ public /*open*/ class MessageLogger
 
         if (_messagesDataManager is not null)
             // Fix S2234: Use an explicit array to ensure argument order matches
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, new[] { arg1, arg2, arg3 }), cancellationToken);
+        }
     }
 
     protected async ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
@@ -115,15 +123,19 @@ public /*open*/ class MessageLogger
         }
 
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, arg1, arg2, arg3, arg4), cancellationToken);
+        }
     }
 
     protected async ValueTask LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
     {
         StShared.WriteWarningLine(message, UseConsole, _logger);
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
+        }
     }
 
     protected async ValueTask LogWarningAndSendMessage(string message, object? arg1,
@@ -131,8 +143,10 @@ public /*open*/ class MessageLogger
     {
         StShared.WriteWarningLine(string.Format(CultureInfo.InvariantCulture, message, arg1), UseConsole, _logger);
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, arg1), cancellationToken);
+        }
     }
 
     protected async ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
@@ -141,8 +155,10 @@ public /*open*/ class MessageLogger
         StShared.WriteWarningLine(string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), UseConsole,
             _logger);
         if (_messagesDataManager is not null)
+        {
             await _messagesDataManager.SendMessage(_userName,
                 string.Format(CultureInfo.InvariantCulture, message, arg1, arg2), cancellationToken);
+        }
     }
 
     protected async ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
@@ -150,7 +166,10 @@ public /*open*/ class MessageLogger
     {
         StShared.WriteErrorLine(message, UseConsole, _logger);
 
-        if (_messagesDataManager is null) return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
+        if (_messagesDataManager is null)
+        {
+            return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
+        }
 
         await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
         return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
@@ -161,7 +180,10 @@ public /*open*/ class MessageLogger
     {
         StShared.WriteErrorLine(error.ErrorMessage, UseConsole, _logger);
 
-        if (_messagesDataManager is null) return [error];
+        if (_messagesDataManager is null)
+        {
+            return [error];
+        }
 
         await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
         return [error];
@@ -172,7 +194,10 @@ public /*open*/ class MessageLogger
     {
         StShared.WriteException(ex, UseConsole, _logger);
         var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
-        if (_messagesDataManager is null) return error;
+        if (_messagesDataManager is null)
+        {
+            return error;
+        }
 
         await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
         return error;

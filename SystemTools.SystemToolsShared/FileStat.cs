@@ -17,7 +17,9 @@ public static class FileStat
     public static string NormalizePath(string path)
     {
         if (Uri.TryCreate(path, UriKind.Absolute, out var result) && result.Scheme != "file")
+        {
             return result.AbsoluteUri.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
 
         var fullPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? fullPath.ToUpperInvariant() : fullPath;
@@ -28,11 +30,17 @@ public static class FileStat
         try
         {
             var sf = new FileInfo(fileName);
-            if (sf.DirectoryName is null) return false;
+            if (sf.DirectoryName is null)
+            {
+                return false;
+            }
 
             var destDir = new DirectoryInfo(sf.DirectoryName);
 
-            if (destDir.Exists) return true;
+            if (destDir.Exists)
+            {
+                return true;
+            }
 
             //ფოლდერი არ არსებობს, უნდა შეიქმნას
             destDir.Create();
@@ -53,7 +61,10 @@ public static class FileStat
         {
             var destDir = new DirectoryInfo(folderName);
 
-            if (destDir.Exists) return destDir.FullName;
+            if (destDir.Exists)
+            {
+                return destDir.FullName;
+            }
 
             //ფოლდერი არ არსებობს, უნდა შეიქმნას
             destDir.Create();
@@ -85,7 +96,9 @@ public static class FileStat
         // Determine if the same file was referenced two times.
         if (file1 == file2)
             // Return true to indicate that the files are the same.
+        {
             return true;
+        }
 
         // Open the two files.
         // ReSharper disable once using
@@ -139,7 +152,10 @@ public static class FileStat
             File.Delete(file);
         }
 
-        foreach (var dir in dirs) DeleteDirectoryWithNormaliseAttributes(dir);
+        foreach (var dir in dirs)
+        {
+            DeleteDirectoryWithNormaliseAttributes(dir);
+        }
 
         Directory.Delete(targetDir, false);
         Console.WriteLine($"Deleted {targetDir}");
@@ -147,7 +163,10 @@ public static class FileStat
 
     public static void DeleteDirectoryIfExists(string directoryPath)
     {
-        if (!Directory.Exists(directoryPath)) return;
+        if (!Directory.Exists(directoryPath))
+        {
+            return;
+        }
 
         Console.WriteLine($"Deleting {directoryPath} ...");
         Directory.Delete(directoryPath, true);
@@ -156,7 +175,10 @@ public static class FileStat
 
     public static void DeleteFileIfExists(string filePath)
     {
-        if (!File.Exists(filePath)) return;
+        if (!File.Exists(filePath))
+        {
+            return;
+        }
 
         Console.WriteLine($"Deleting {filePath} ...");
         File.Delete(filePath);
@@ -171,7 +193,10 @@ public static class FileStat
 
         foreach (var file in files)
         {
-            if (excludes.Any(exclude => file.Contains(exclude))) continue;
+            if (excludes.Any(exclude => file.Contains(exclude)))
+            {
+                continue;
+            }
 
             File.SetAttributes(file, FileAttributes.Normal);
             File.Delete(file);
@@ -179,7 +204,10 @@ public static class FileStat
 
         foreach (var dir in dirs)
         {
-            if (excludes.Any(exclude => dir.Contains(exclude))) continue;
+            if (excludes.Any(exclude => dir.Contains(exclude)))
+            {
+                continue;
+            }
 
             DeleteDirectoryWithNormaliseAttributes(dir);
         }
@@ -212,14 +240,20 @@ public static class FileStat
 
         foreach (var file in files)
         {
-            if (excludes.Any(exclude => file.FullName.Contains(exclude))) continue;
+            if (excludes.Any(exclude => file.FullName.Contains(exclude)))
+            {
+                continue;
+            }
 
             File.Copy(file.FullName, Path.Combine(destinationFolderPath, file.Name));
         }
 
         foreach (var dir in dirs)
         {
-            if (excludes.Any(exclude => dir.FullName.Contains(exclude))) continue;
+            if (excludes.Any(exclude => dir.FullName.Contains(exclude)))
+            {
+                continue;
+            }
 
             CopyFilesAndFolders(Path.Combine(sourceFolderPath, dir.Name), Path.Combine(destinationFolderPath, dir.Name),
                 excludes, useConsole, logger);

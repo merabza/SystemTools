@@ -38,15 +38,9 @@ public readonly struct FilePermissionFlag : IEquatable<FilePermissionFlag>
         return HashCode.Combine(User, Group, Others);
     }
 
-    public static bool operator ==(FilePermissionFlag left, FilePermissionFlag right)
-    {
-        return left.Equals(right);
-    }
+    public static bool operator ==(FilePermissionFlag left, FilePermissionFlag right) => left.Equals(right);
 
-    public static bool operator !=(FilePermissionFlag left, FilePermissionFlag right)
-    {
-        return !(left == right);
-    }
+    public static bool operator !=(FilePermissionFlag left, FilePermissionFlag right) => !(left == right);
 
     public bool Equals(FilePermissionFlag other)
     {

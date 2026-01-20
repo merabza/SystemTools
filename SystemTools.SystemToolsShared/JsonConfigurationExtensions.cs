@@ -10,7 +10,10 @@ public static class JsonConfigurationExtensions
     {
         ArgumentNullException.ThrowIfNull(builder);
 
-        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException("File path must be a non-empty string.");
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new ArgumentException("File path must be a non-empty string.");
+        }
 
         var source = new JsonConfigurationSource(null, path, optional, reloadOnChange, key, appSetEnKeysFileName);
 

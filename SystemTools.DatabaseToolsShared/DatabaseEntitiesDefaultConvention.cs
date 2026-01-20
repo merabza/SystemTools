@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-namespace SystemTools.DatabaseToolsShared;
-
 //ამ კლასის დანიშნულებაა გააკეთოს საბოლოო ცვლილებები ბაზის ცხრილების მოდელების კონფიგურაციებში
 //ეს ისეთი ცვლილებებია, რომლებიც ზოგადად ყველა მოდელისთვის მისაღებია. თუმცა გათვალისწინებულია გამონაკლისებიც
+namespace SystemTools.DatabaseToolsShared;
+
 public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConvention
 {
     public void ProcessModelFinalizing(IConventionModelBuilder modelBuilder,
@@ -21,7 +21,10 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             var tableNameAnnotation = entityType.GetTableName();
             ////თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
             ////ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
-            if (string.IsNullOrEmpty(tableNameAnnotation)) continue;
+            if (string.IsNullOrEmpty(tableNameAnnotation))
+            {
+                continue;
+            }
             //{
             //    tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
             //    entityType.SetTableName(tableNameAnnotation);
@@ -60,7 +63,10 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             //დავადგინოთ არის თუ არა უკვე მინიჭებული კონსტრეინის სახელი
             var constraintNameAnnotation = foreignKey.GetConstraintName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
-            if (!string.IsNullOrEmpty(constraintNameAnnotation)) continue;
+            if (!string.IsNullOrEmpty(constraintNameAnnotation))
+            {
+                continue;
+            }
 
             //დავადგინოთ ამ ტიპთან რელაციურ კავშირში მყოფი ცხრილის შესაბამისი ტიპი
             var relatedEntityType = foreignKey.PrincipalEntityType;
@@ -68,7 +74,10 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             //დავადგინოთ ამ ტიპის ცხრილის სახელი
             var relatedTableName = relatedEntityType.GetTableName();
 
-            if (relatedTableName is null) continue;
+            if (relatedTableName is null)
+            {
+                continue;
+            }
 
             string constraintName;
 
@@ -104,12 +113,21 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             var clrType = property.ClrType;
 
             var isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
-            if (isNullable) clrType = clrType.GetGenericArguments()[0];
+            if (isNullable)
+            {
+                clrType = clrType.GetGenericArguments()[0];
+            }
 
-            if (clrType == typeof(DateTime)) property.SetColumnType("datetime");
+            if (clrType == typeof(DateTime))
+            {
+                property.SetColumnType("datetime");
+            }
 
             //თუ ველის ტიპი არის decimal, მაშინ სვეტის ტიპი იყოს money
-            if (clrType == typeof(decimal)) property.SetColumnType("money");
+            if (clrType == typeof(decimal))
+            {
+                property.SetColumnType("money");
+            }
         }
     }
 
@@ -121,7 +139,10 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             //დავადგინოთ არის თუ არა უკვე მინიჭებული ბაზის სახელი
             var indexNameAnnotation = index.GetDatabaseName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
-            if (!string.IsNullOrEmpty(indexNameAnnotation)) continue;
+            if (!string.IsNullOrEmpty(indexNameAnnotation))
+            {
+                continue;
+            }
 
             //დავადგინოთ ინდექსში შემავალი ველების სახელები
             var properties = index.Properties.Select(p => p.GetColumnName()).ToArray();

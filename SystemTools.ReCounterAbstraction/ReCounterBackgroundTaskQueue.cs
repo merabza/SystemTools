@@ -10,6 +10,11 @@ public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
     private readonly SemaphoreSlim _signal = new(0);
     private readonly ConcurrentQueue<Func<CancellationToken, Task>> _workItems = new();
 
+    public void Dispose()
+    {
+        _signal.Dispose();
+    }
+
     public void QueueBackgroundWorkItem(Func<CancellationToken, Task> workItem)
     {
         ArgumentNullException.ThrowIfNull(workItem);
@@ -29,10 +34,5 @@ public sealed class ReCounterBackgroundTaskQueue : IReCounterBackgroundTaskQueue
     public void ClearQueue()
     {
         _workItems.Clear();
-    }
-
-    public void Dispose()
-    {
-        _signal.Dispose();
     }
 }

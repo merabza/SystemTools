@@ -19,7 +19,10 @@ public sealed class FilePermission
 
     public static FilePermission Create(string filePath)
     {
-        if (!File.Exists(filePath)) throw new FileLoadException("error loading " + filePath, filePath);
+        if (!File.Exists(filePath))
+        {
+            throw new FileLoadException("error loading " + filePath, filePath);
+        }
 
         return new FilePermission(filePath);
     }

@@ -55,7 +55,10 @@ public static class StShared
         while (!proc.StandardOutput.EndOfStream)
         {
             var line = proc.StandardOutput.ReadLine();
-            if (useConsole) Console.WriteLine(line);
+            if (useConsole)
+            {
+                Console.WriteLine(line);
+            }
 
             sb.AppendLine(line);
         }
@@ -69,14 +72,20 @@ public static class StShared
         }
 
         var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
-        if (useConsole || logger is not null) WriteErrorLine(errorMessage, useConsole, logger);
+        if (useConsole || logger is not null)
+        {
+            WriteErrorLine(errorMessage, useConsole, logger);
+        }
 
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
     private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)
     {
-        if (exitCode == 0) return true;
+        if (exitCode == 0)
+        {
+            return true;
+        }
 
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
@@ -93,7 +102,10 @@ public static class StShared
         // ReSharper disable once using
         using var proc = Process.Start(programFileName, arguments);
 
-        if (waitForExit == 0) return null;
+        if (waitForExit == 0)
+        {
+            return null;
+        }
 
         ConsoleWriteInformationLine(logger, useConsole, "Wait For Exit {0}", programFileName);
 
@@ -101,10 +113,16 @@ public static class StShared
 
         ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
 
-        if (IsAllowExitCode(proc.ExitCode, allowExitCodes)) return null;
+        if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
+        {
+            return null;
+        }
 
         var errorMessage = $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
-        if (useErrorLine && (useConsole || logger is not null)) WriteErrorLine(errorMessage, useConsole, logger);
+        if (useErrorLine && (useConsole || logger is not null))
+        {
+            WriteErrorLine(errorMessage, useConsole, logger);
+        }
 
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
@@ -137,7 +155,10 @@ public static class StShared
         };
         // ReSharper disable once using
         using var pNpmRunDist = Process.Start(psiNpmRunDist);
-        if (pNpmRunDist is null) return false;
+        if (pNpmRunDist is null)
+        {
+            return false;
+        }
 
         pNpmRunDist.StandardInput.WriteLine($"{command} & exit");
         pNpmRunDist.WaitForExit();
@@ -149,7 +170,10 @@ public static class StShared
     {
         var checkedPath = FileStat.CreateFolderIfNotExists(path, useConsole);
 
-        if (checkedPath is not null) return true;
+        if (checkedPath is not null)
+        {
+            return true;
+        }
 
         WriteErrorLine($"Cannot create Folder {path}.", useConsole);
         return false;
@@ -167,7 +191,10 @@ public static class StShared
 #pragma warning disable CA2254 // Template should be a static expression
         logger?.LogInformation(message, args);
 #pragma warning restore CA2254 // Template should be a static expression
-        if (!useConsole) return;
+        if (!useConsole)
+        {
+            return;
+        }
 
         ConsoleWriteFormattedLine(message, args);
     }
@@ -198,15 +225,22 @@ public static class StShared
             }
             else
             {
-                if (openBraceIndex > scanIndex) Console.Write(message[scanIndex..openBraceIndex]);
+                if (openBraceIndex > scanIndex)
+                {
+                    Console.Write(message[scanIndex..openBraceIndex]);
+                }
 
                 var existingColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 if (argIndex < args.Length)
+                {
                     Console.Write(args[argIndex++]);
+                }
                 else
+                {
                     Console.Write(message.AsSpan(openBraceIndex + 1, closeBraceIndex - 1)); //value
+                }
 
                 Console.ForegroundColor = existingColor;
 
@@ -246,7 +280,9 @@ public static class StShared
                 {
                     if (braceOccurrenceCount == 0)
                         // For '}' pick the first occurrence.
+                    {
                         braceIndex = scanIndex;
+                    }
                 }
                 else
                     // For '{' pick the last occurrence.
@@ -269,14 +305,20 @@ public static class StShared
 #pragma warning disable CA2254 // Template should be a static expression
         logger?.LogWarning(warningText);
 #pragma warning restore CA2254 // Template should be a static expression
-        if (!useConsole) return;
+        if (!useConsole)
+        {
+            return;
+        }
 
         var existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.Write("[warning] ");
         Console.ForegroundColor = existingColor;
         Console.WriteLine(warningText);
-        if (pauseAfter) Pause();
+        if (pauseAfter)
+        {
+            Pause();
+        }
     }
 
     public static void WriteErrorLine(string errorText, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
@@ -284,14 +326,20 @@ public static class StShared
 #pragma warning disable CA2254
         logger?.LogError(errorText);
 #pragma warning restore CA2254
-        if (!useConsole) return;
+        if (!useConsole)
+        {
+            return;
+        }
 
         var existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[ERROR] ");
         Console.ForegroundColor = existingColor;
         Console.WriteLine(errorText);
-        if (pauseAfter) Pause();
+        if (pauseAfter)
+        {
+            Pause();
+        }
     }
 
     public static void WriteSuccessMessage(string messageText)
@@ -308,18 +356,27 @@ public static class StShared
 #pragma warning disable CA2254
         logger?.LogError(ex, additionalMessage ?? string.Empty);
 #pragma warning restore CA2254
-        if (!useConsole) return;
+        if (!useConsole)
+        {
+            return;
+        }
 
         var existingColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[ERROR] ");
         Console.ForegroundColor = existingColor;
-        if (!string.IsNullOrWhiteSpace(additionalMessage)) Console.WriteLine(additionalMessage);
+        if (!string.IsNullOrWhiteSpace(additionalMessage))
+        {
+            Console.WriteLine(additionalMessage);
+        }
 
         Console.WriteLine($"{ex?.GetType().Name} thrown with message: {ex?.Message}");
         Console.WriteLine($"Error message is: {ex?.Message}");
         Console.WriteLine($"StackTrace: {ex?.StackTrace}");
-        if (pauseAfter) Pause();
+        if (pauseAfter)
+        {
+            Pause();
+        }
     }
 
     public static void WriteException(Exception? ex, bool useConsole, ILogger? logger = null, bool pauseAfter = true)

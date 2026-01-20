@@ -123,11 +123,18 @@ public static class Inflector
     {
         var result = word;
 
-        if (Uncountables.Contains(word.ToLower(CultureInfo.CurrentCulture))) return result;
+        if (Uncountables.Contains(word.ToLower(CultureInfo.CurrentCulture)))
+        {
+            return result;
+        }
 
         for (var i = rules.Count - 1; i >= 0; i--)
+        {
             if ((result = rules[i].Apply(word)) is not null)
+            {
                 break;
+            }
+        }
 
         return result ?? word;
     }
@@ -194,7 +201,10 @@ public static class Inflector
     {
         var nMod100 = number % 100;
 
-        if (nMod100 >= 11 && nMod100 <= 13) return numberString + "th";
+        if (nMod100 >= 11 && nMod100 <= 13)
+        {
+            return numberString + "th";
+        }
 
         return (number % 10) switch
         {
@@ -215,7 +225,10 @@ public static class Inflector
         //if(source is null)
         //    return new string[] {}; //Return empty array.
 
-        if (source.Length == 0) return [string.Empty];
+        if (source.Length == 0)
+        {
+            return [string.Empty];
+        }
 
         var words = new StringCollection();
         var wordStartIndex = 0;
@@ -224,7 +237,10 @@ public static class Inflector
         // Skip the first letter. we don't care what case it is.
         for (var i = 1; i < letters.Length; i++)
         {
-            if (!char.IsUpper(letters[i])) continue;
+            if (!char.IsUpper(letters[i]))
+            {
+                continue;
+            }
 
             //Grab everything before the current index.
             words.Add(new string(letters, wordStartIndex, i - wordStartIndex));

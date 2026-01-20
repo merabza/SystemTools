@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,7 +55,8 @@ public sealed class LogFile
 
             //დავადგინოთ არქივის ფაილის სახელი სადაც მოხდება წინა დღის ლოგების გადანახვა.
             rename = Path.Combine(dirName,
-                    fileNameWithoutDate + _lastLogSaveDate.ToString("yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture) + fileExtension);
+                fileNameWithoutDate + _lastLogSaveDate.ToString("yyyyMMdd", CultureInfo.InvariantCulture) +
+                fileExtension);
             //შევამოწმოთ ხომ არ არსებობს ერთ თვეზე მეტი ხნის ლოგები და თუ არსებობს წავშალოთ
             foreach (var fileInfo in checkFile.Directory.GetFiles(fileNameWithoutDate + "????????" + fileExtension)
                          .Where(c => c.CreationTime.AddMonths(1) < checkDate))

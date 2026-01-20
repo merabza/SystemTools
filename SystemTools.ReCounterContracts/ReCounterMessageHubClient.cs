@@ -42,7 +42,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         {
             if (progressData.BoolData.Count > 0 &&
                 progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out var processIsRunning))
+            {
                 ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
+            }
 
             if (progressData.StrData.Count > 0)
             {
@@ -66,7 +68,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
                     $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
                 var conMessageLength = conMessage.Length;
                 if (ProcessMonitoringManager.Instance.LastLength > conMessageLength)
+                {
                     conMessage = conMessage.PadRight(ProcessMonitoringManager.Instance.LastLength);
+                }
 
                 ProcessMonitoringManager.Instance.LastLength = conMessageLength;
                 Console.Write(conMessage);
@@ -98,7 +102,10 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     {
         try
         {
-            if (_connection is null) return true;
+            if (_connection is null)
+            {
+                return true;
+            }
 
             await _connection.StopAsync(cancellationToken);
             return true;

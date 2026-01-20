@@ -8,7 +8,10 @@ public static class EncryptDecrypt
 {
     public static string? EncryptString(string? str, string key)
     {
-        if (string.IsNullOrWhiteSpace(str)) return str;
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            return str;
+        }
 
         string? result = null;
         try
@@ -45,7 +48,10 @@ public static class EncryptDecrypt
 
     public static string? DecryptString(string? str, string key)
     {
-        if (string.IsNullOrWhiteSpace(str)) return str;
+        if (string.IsNullOrWhiteSpace(str))
+        {
+            return str;
+        }
 
         string? result = null;
         try

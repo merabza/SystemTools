@@ -18,7 +18,10 @@ public sealed class ProcessMonitoringManager
     {
         get
         {
-            if (_instance is not null) return _instance;
+            if (_instance is not null)
+            {
+                return _instance;
+            }
 
             lock (SyncRoot) //thread safe singleton
             {

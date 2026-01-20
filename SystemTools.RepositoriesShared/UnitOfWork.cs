@@ -1,5 +1,6 @@
 ﻿using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
 using SystemTools.DomainShared.Repositories;
 using SystemTools.SystemToolsShared.Errors;
@@ -22,7 +23,7 @@ public /*open*/ class UnitOfWork : IUnitOfWork
 
     public string GetTableName<T>() where T : class
     {
-        var entType = _dbContext.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
+        IEntityType? entType = _dbContext.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
         return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 

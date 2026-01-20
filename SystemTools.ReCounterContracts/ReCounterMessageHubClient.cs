@@ -41,14 +41,12 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         _connection.On<ProgressData>(RecounterEvents.ProgressDataReceived, progressData =>
         {
             if (progressData.BoolData.Count > 0 &&
-                progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out bool processIsRunning))
-            {
+                progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out var processIsRunning))
                 ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
-            }
 
             if (progressData.StrData.Count > 0)
             {
-                string? procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
+                var procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
                 if (ProcessMonitoringManager.Instance.LastProcName != procName)
                 {
                     Console.WriteLine(procName);
@@ -58,19 +56,17 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-            string? progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
+            var progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
 
-            int lineNo = Console.CursorTop;
+            var lineNo = Console.CursorTop;
             if (procPosition is not null && procLength is not null && (decimal)procLength > 0)
             {
-                decimal procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
-                string conMessage =
+                var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
+                var conMessage =
                     $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
-                int conMessageLength = conMessage.Length;
+                var conMessageLength = conMessage.Length;
                 if (ProcessMonitoringManager.Instance.LastLength > conMessageLength)
-                {
                     conMessage = conMessage.PadRight(ProcessMonitoringManager.Instance.LastLength);
-                }
 
                 ProcessMonitoringManager.Instance.LastLength = conMessageLength;
                 Console.Write(conMessage);
@@ -102,10 +98,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     {
         try
         {
-            if (_connection is null)
-            {
-                return true;
-            }
+            if (_connection is null) return true;
 
             await _connection.StopAsync(cancellationToken);
             return true;

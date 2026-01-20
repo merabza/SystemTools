@@ -18,7 +18,7 @@ public readonly struct FilePermissionFlag : IEquatable<FilePermissionFlag>
     public static LinuxFileAccess ToValidAccess(LinuxFileAccess access)
     {
         //file access should be 0 to 7
-        int num = (int)access;
+        var num = (int)access;
         num = num switch
         {
             < 0 => 0,
@@ -38,9 +38,15 @@ public readonly struct FilePermissionFlag : IEquatable<FilePermissionFlag>
         return HashCode.Combine(User, Group, Others);
     }
 
-    public static bool operator ==(FilePermissionFlag left, FilePermissionFlag right) => left.Equals(right);
+    public static bool operator ==(FilePermissionFlag left, FilePermissionFlag right)
+    {
+        return left.Equals(right);
+    }
 
-    public static bool operator !=(FilePermissionFlag left, FilePermissionFlag right) => !(left == right);
+    public static bool operator !=(FilePermissionFlag left, FilePermissionFlag right)
+    {
+        return !(left == right);
+    }
 
     public bool Equals(FilePermissionFlag other)
     {

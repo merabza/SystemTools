@@ -33,21 +33,12 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //ეს არის ძირითადი მეთოდი, რომლის საშუალებითაც ხდება ერთი ცხრილის შესაბამისი ინფორმაციის ჩატვირთვა ბაზაში
     public bool Create(bool checkOnly)
     {
-        if (checkOnly)
-        {
-            return AdditionalCheck(LoadFromJsonFile(), []) && DataSeederRepo.SaveChanges();
-        }
+        if (checkOnly) return AdditionalCheck(LoadFromJsonFile(), []) && DataSeederRepo.SaveChanges();
 
         //ვამოწმებთ არის თუ არა ჩანაწერები ბაზაში. ვაგრძელებთ მაშინ თუ ჩანაწერები არ არის
-        if (CheckRecordsExists())
-        {
-            return false;
-        }
+        if (CheckRecordsExists()) return false;
 
-        if (_seedDataType == ESeedDataType.None)
-        {
-            return true;
-        }
+        if (_seedDataType == ESeedDataType.None) return true;
 
         //Json-დან ჩატვირთვა
         var seedData = _seedDataType switch
@@ -87,10 +78,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         };
 
         //შენახვა ბაზაში
-        if (!DataSeederRepo.CreateEntities(dataList))
-        {
-            throw new Exception($"{_tableName} entities cannot be created");
-        }
+        if (!DataSeederRepo.CreateEntities(dataList)) throw new Exception($"{_tableName} entities cannot be created");
 
         //აქ დამატებით ვუშვებ მონაცემების შემოწმებას და თუ რომელიმე აუცილებელი ჩანაწერი აკლია, რაც ლოგიკით განისაზღვრება,
         //მაშინ ისინიც ჩაემატება. ან თუ არასწორად არის რომელიმე ჩანაწერი, შეიცვლება. ან თუ ზედმეტია წაიშლება
@@ -120,10 +108,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //დანარჩენ შემთხვევაში საჭიროა გადატვირთვა
     public virtual List<TDst> Adapt(List<TMo> appClaimsSeedData)
     {
-        if (appClaimsSeedData.Count == 0)
-        {
-            return [];
-        }
+        if (appClaimsSeedData.Count == 0) return [];
 
         var jsonModelType = typeof(TMo);
         var jsonModelTypeProperties = jsonModelType.GetProperties();
@@ -138,16 +123,13 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         return appClaimsSeedData.Select(s =>
         {
             var instance = Activator.CreateInstance<TDst>();
-            foreach (string propName in commonProperties)
+            foreach (var propName in commonProperties)
             {
                 var jsonProp = jsonModelType.GetProperty(propName);
                 var tableProp = tableDataType.GetProperty(propName);
-                if (jsonProp == null || tableProp == null)
-                {
-                    continue;
-                }
+                if (jsonProp == null || tableProp == null) continue;
 
-                object? value = jsonProp.GetValue(s);
+                var value = jsonProp.GetValue(s);
                 tableProp.SetValue(instance, value);
             }
 
@@ -158,7 +140,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია და აქციოს მოდელების სიად
     public static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
     {
-        string jsonFullFileName = Path.Combine(folderName, fileName);
+        var jsonFullFileName = Path.Combine(folderName, fileName);
         return File.Exists(jsonFullFileName)
             ? FileLoader.LoadDeserializeResolve<List<T>>(jsonFullFileName, true) ?? []
             : [];
@@ -180,15 +162,13 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     public List<TDst> Adjust(List<TDst> listWithMorePriority, List<TDst> listWithLessPriority)
     {
         if (_keyFieldNamesList is null || _keyFieldNamesList.Count == 0)
-        {
             throw new Exception($"key field name List is not set for {_tableName}");
-        }
 
         var tableDataType = typeof(TDst);
 
         var keyPropertiesList = new List<PropertyInfo>();
 
-        foreach (string keyFieldName in _keyFieldNamesList)
+        foreach (var keyFieldName in _keyFieldNamesList)
         {
             var keyProperty = tableDataType.GetProperty(keyFieldName) ??
                               throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
@@ -200,7 +180,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         if (duplicatePriorityKeys.Count != 0)
         {
-            string strKeyList = string.Join(", ", duplicatePriorityKeys);
+            var strKeyList = string.Join(", ", duplicatePriorityKeys);
             Console.WriteLine("Priority keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Priority keys contains duplicate keys");
         }
@@ -210,7 +190,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         if (duplicateSecondKeys.Count != 0)
         {
-            string strKeyList = string.Join(", ", duplicateSecondKeys);
+            var strKeyList = string.Join(", ", duplicateSecondKeys);
             Console.WriteLine("Secondary keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Secondary keys duplicate keys");
         }
@@ -227,12 +207,14 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         return retList;
 
-        string KeySelector(TDst item) =>
-            string.Join('_', keyPropertiesList.Select(s =>
+        string KeySelector(TDst item)
+        {
+            return string.Join('_', keyPropertiesList.Select(s =>
             {
-                string? val = s.GetValue(item)?.ToString()?.ToLower(CultureInfo.CurrentCulture);
+                var val = s.GetValue(item)?.ToString()?.ToLower(CultureInfo.CurrentCulture);
                 return val ?? throw new InvalidOperationException("Key property value cannot be null");
             }));
+        }
         //return keyProperty.GetValue(item)?.ToString()?.ToLower() ??
         //       throw new InvalidOperationException("Key property value cannot be null");
     }

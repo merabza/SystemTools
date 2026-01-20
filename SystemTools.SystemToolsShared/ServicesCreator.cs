@@ -36,13 +36,8 @@ public /*open*/ class ServicesCreator
         {
             string? logFileName = null;
             if (!string.IsNullOrWhiteSpace(_logFileName))
-            {
                 logFileName = _logFileName;
-            }
-            else if (_logFolder is not null)
-            {
-                logFileName = Path.Combine(_logFolder, _appName, $"{_appName}.log");
-            }
+            else if (_logFolder is not null) logFileName = Path.Combine(_logFolder, _appName, $"{_appName}.log");
 
             ////check with regex logFileName is valid filename
             //if (!FileNameValidator.IsValidFileName(logFileName))
@@ -54,9 +49,7 @@ public /*open*/ class ServicesCreator
                 if (logFileName.ToUpperInvariant().EndsWith(".LOG", StringComparison.Ordinal) ||
                     logFileName.ToUpperInvariant().EndsWith(".TXT", StringComparison.Ordinal))
                     //extension = logFileName.Substring(logFileName.Length - 5);
-                {
                     logFileName = logFileName[..^4];
-                }
 
                 logFileName += extension;
                 Log.Logger = new LoggerConfiguration().WriteTo

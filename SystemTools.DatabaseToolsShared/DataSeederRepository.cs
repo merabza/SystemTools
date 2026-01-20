@@ -31,10 +31,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
     public bool CreateEntities<T>(List<T> entities) where T : class
     {
-        if (entities.Count == 0)
-        {
-            return true;
-        }
+        if (entities.Count == 0) return true;
 
         try
         {
@@ -50,17 +47,11 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
     public bool DeleteEntities<T>(List<T> entities) where T : class
     {
-        if (entities.Count == 0)
-        {
-            return true;
-        }
+        if (entities.Count == 0) return true;
 
         try
         {
-            foreach (var entity in entities)
-            {
-                _context.Remove(entity);
-            }
+            foreach (var entity in entities) _context.Remove(entity);
 
             return SaveChanges();
         }
@@ -87,17 +78,11 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
     public bool SetUpdates<T>(List<T> forUpdate) where T : class
     {
-        if (forUpdate.Count == 0)
-        {
-            return true;
-        }
+        if (forUpdate.Count == 0) return true;
 
         try
         {
-            foreach (var rec in forUpdate)
-            {
-                _context.Update(rec);
-            }
+            foreach (var rec in forUpdate) _context.Update(rec);
 
             return SaveChanges();
         }
@@ -110,10 +95,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
     public bool RemoveNeedlessRecords<T>(List<T> needLessList) where T : class
     {
-        if (needLessList.Count == 0)
-        {
-            return true;
-        }
+        if (needLessList.Count == 0) return true;
 
         try
         {

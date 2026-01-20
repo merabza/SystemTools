@@ -21,10 +21,7 @@ public sealed class ProgramAttributes
             //ეს ატრიბუტები სესიაზე არ არის დამოკიდებული და იქმნება პროგრამის გაშვებისთანავე, 
             //შემდგომში მასში ცვლილებები არ შედის,
             //მაგრამ შეიძლება პროგრამამ თავისი მუშაობის განმავლობაში რამდენჯერმე გამოიყენოს აქ არსებული ინფორმაცია
-            if (_instance is not null)
-            {
-                return _instance;
-            }
+            if (_instance is not null) return _instance;
 
             lock (SyncRoot) //thread safe singleton
             {

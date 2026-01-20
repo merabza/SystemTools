@@ -7,16 +7,10 @@ public static class FileNameValidator
 {
     public static bool IsValidFileName(string? fileName)
     {
-        if (string.IsNullOrWhiteSpace(fileName))
-        {
-            return false;
-        }
+        if (string.IsNullOrWhiteSpace(fileName)) return false;
 
         // Check for invalid characters
-        if (fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-        {
-            return false;
-        }
+        if (fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0) return false;
 
         // Check for reserved Windows names (like CON, PRN, AUX, etc.)
         string[] reservedNames =
@@ -26,11 +20,8 @@ public static class FileNameValidator
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         ];
 
-        string upperName = Path.GetFileNameWithoutExtension(fileName).ToUpperInvariant();
-        if (Array.Exists(reservedNames, rn => rn == upperName))
-        {
-            return false;
-        }
+        var upperName = Path.GetFileNameWithoutExtension(fileName).ToUpperInvariant();
+        if (Array.Exists(reservedNames, rn => rn == upperName)) return false;
 
         // Optional: check length
         return fileName.Length <= 255;

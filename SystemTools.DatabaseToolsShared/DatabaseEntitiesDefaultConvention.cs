@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -16,16 +15,13 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
         IConventionContext<IConventionModelBuilder> context)
     {
         //თითოეული ენტიტის ტიპისთვის
-        foreach (IConventionEntityType entityType in modelBuilder.Metadata.GetEntityTypes())
+        foreach (var entityType in modelBuilder.Metadata.GetEntityTypes())
         {
             ////დავადგინოთ არის თუ არა უკვე მინიჭებული ცხრილის სახელი
-            string? tableNameAnnotation = entityType.GetTableName();
+            var tableNameAnnotation = entityType.GetTableName();
             ////თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
             ////ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
-            if (string.IsNullOrEmpty(tableNameAnnotation))
-            {
-                continue;
-            }
+            if (string.IsNullOrEmpty(tableNameAnnotation)) continue;
             //{
             //    tableNameAnnotation = entityType.ClrType.Name.Pluralize().UnCapitalize();
             //    entityType.SetTableName(tableNameAnnotation);
@@ -49,36 +45,30 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
 
     private static void SetRelationConstraintNames(IConventionEntityType entityType, string tableNameAnnotation)
     {
-        List<IConventionForeignKey> foreignKeys = entityType.GetForeignKeys().ToList();
+        var foreignKeys = entityType.GetForeignKeys().ToList();
         //foreignKeys.Select(s=>s.PrincipalEntityType.GetTableName()).GroupBy(g=>g)
 
-        List<string> uniqueTableNamesWithMoreThenOneOccurence = foreignKeys
-            .Select(s => s.PrincipalEntityType.GetTableName()).Where(w => w is not null).Cast<string>().GroupBy(s => s)
+        var uniqueTableNamesWithMoreThenOneOccurence = foreignKeys.Select(s => s.PrincipalEntityType.GetTableName())
+            .Where(w => w is not null).Cast<string>().GroupBy(s => s)
             .Select(g => new { Value = g.Key, Count = g.Count() }).Where(w => w.Count > 1).Select(s => s.Value)
             .ToList();
 
-        int selfRelatedNumber = 0;
+        var selfRelatedNumber = 0;
         //თითოეული გამოცხადებული კავშირისთვის
-        foreach (IConventionForeignKey foreignKey in entityType.GetForeignKeys())
+        foreach (var foreignKey in entityType.GetForeignKeys())
         {
             //დავადგინოთ არის თუ არა უკვე მინიჭებული კონსტრეინის სახელი
-            string? constraintNameAnnotation = foreignKey.GetConstraintName();
+            var constraintNameAnnotation = foreignKey.GetConstraintName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
-            if (!string.IsNullOrEmpty(constraintNameAnnotation))
-            {
-                continue;
-            }
+            if (!string.IsNullOrEmpty(constraintNameAnnotation)) continue;
 
             //დავადგინოთ ამ ტიპთან რელაციურ კავშირში მყოფი ცხრილის შესაბამისი ტიპი
-            IConventionEntityType relatedEntityType = foreignKey.PrincipalEntityType;
+            var relatedEntityType = foreignKey.PrincipalEntityType;
 
             //დავადგინოთ ამ ტიპის ცხრილის სახელი
-            string? relatedTableName = relatedEntityType.GetTableName();
+            var relatedTableName = relatedEntityType.GetTableName();
 
-            if (relatedTableName is null)
-            {
-                continue;
-            }
+            if (relatedTableName is null) continue;
 
             string constraintName;
 
@@ -94,7 +84,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             }
             else
             {
-                string[] relatedFieldName = foreignKey.Properties.Select(s => s.GetColumnName()).ToArray();
+                var relatedFieldName = foreignKey.Properties.Select(s => s.GetColumnName()).ToArray();
                 constraintName = tableNameAnnotation.CreateConstraintName(relatedTableName, relatedFieldName);
             }
 
@@ -105,48 +95,36 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
     private static void SetFieldNames(IConventionEntityType entityType)
     {
         //ენტიტის თითოეული ველისთვის 
-        foreach (IConventionProperty property in entityType.GetProperties())
+        foreach (var property in entityType.GetProperties())
         {
             ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
             //property.SetColumnName(property.Name.UnCapitalize());
             //თუ ველის ტიპი არის DateTime, მაშინ სვეტის ტიპი იყოს datetime
 
-            Type clrType = property.ClrType;
+            var clrType = property.ClrType;
 
-            bool isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
-            if (isNullable)
-            {
-                clrType = clrType.GetGenericArguments()[0];
-            }
+            var isNullable = clrType.IsGenericType && clrType.GetGenericTypeDefinition() == typeof(Nullable<>);
+            if (isNullable) clrType = clrType.GetGenericArguments()[0];
 
-            if (clrType == typeof(DateTime))
-            {
-                property.SetColumnType("datetime");
-            }
+            if (clrType == typeof(DateTime)) property.SetColumnType("datetime");
 
             //თუ ველის ტიპი არის decimal, მაშინ სვეტის ტიპი იყოს money
-            if (clrType == typeof(decimal))
-            {
-                property.SetColumnType("money");
-            }
+            if (clrType == typeof(decimal)) property.SetColumnType("money");
         }
     }
 
     private static void SetIndexesNames(IConventionEntityType entityType, string tableNameAnnotation)
     {
         //ენტიტის თითოეული ინდექსისათვის
-        foreach (IConventionIndex index in entityType.GetIndexes())
+        foreach (var index in entityType.GetIndexes())
         {
             //დავადგინოთ არის თუ არა უკვე მინიჭებული ბაზის სახელი
-            string? indexNameAnnotation = index.GetDatabaseName();
+            var indexNameAnnotation = index.GetDatabaseName();
             //თუ უკვე მინიჭებულია, მაშინ ამ ინდექსს ვანებებთ თავს
-            if (!string.IsNullOrEmpty(indexNameAnnotation))
-            {
-                continue;
-            }
+            if (!string.IsNullOrEmpty(indexNameAnnotation)) continue;
 
             //დავადგინოთ ინდექსში შემავალი ველების სახელები
-            string[] properties = index.Properties.Select(p => p.GetColumnName()).ToArray();
+            var properties = index.Properties.Select(p => p.GetColumnName()).ToArray();
 
             //ნდექსის სახელი შევქმნათ ცხრილის სახელზე ველების სახელების დამატევით და უნიკალურობის გათვალისწინებით
             indexNameAnnotation = tableNameAnnotation.CreateIndexName(index.IsUnique, properties);

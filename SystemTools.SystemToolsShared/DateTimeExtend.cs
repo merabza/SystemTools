@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading;
 
 namespace SystemTools.SystemToolsShared;
@@ -20,14 +19,14 @@ public static class DateTimeExtend
             case EPeriodType.Year:
                 return new DateTime(forDate.Year, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Quarter:
-                int quarterNumber = (forDate.Month - 1) / 3 + 1;
+                var quarterNumber = (forDate.Month - 1) / 3 + 1;
                 return new DateTime(forDate.Year, (quarterNumber - 1) * 3 + 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Month:
                 return new DateTime(forDate.Year, forDate.Month, 1, 0, 0, 0, DateTimeKind.Unspecified);
             case EPeriodType.Week:
-                CultureInfo ci = Thread.CurrentThread.CurrentCulture;
-                DayOfWeek firstDayOfWeek = ci.DateTimeFormat.FirstDayOfWeek;
-                DayOfWeek dayOfWeek = forDate.DayOfWeek;
+                var ci = Thread.CurrentThread.CurrentCulture;
+                var firstDayOfWeek = ci.DateTimeFormat.FirstDayOfWeek;
+                var dayOfWeek = forDate.DayOfWeek;
                 return forDate.AddDays(firstDayOfWeek - dayOfWeek).Date;
             case EPeriodType.Day:
                 return forDate.Date;
@@ -118,7 +117,7 @@ public static class DateTimeExtend
     {
         var zeroTime = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
 
-        TimeSpan span = lValue - rValue;
+        var span = lValue - rValue;
         return (zeroTime + span).Year - 1;
     }
 }

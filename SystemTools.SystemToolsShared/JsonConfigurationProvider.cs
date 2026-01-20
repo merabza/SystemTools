@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using SystemTools.SystemToolsShared.Domain;
 
@@ -26,35 +25,27 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
         //if (appSetEnKeysList is null || appSetEnKeysList.Keys is null)
         //    return;
 
-        KeysListDomain? appSetEnKeysList = KeysListDomain.LoadFromFile(_source.AppSetEnKeysFileName);
-        if (appSetEnKeysList?.Keys is null)
-        {
-            return;
-        }
+        var appSetEnKeysList = KeysListDomain.LoadFromFile(_source.AppSetEnKeysFileName);
+        if (appSetEnKeysList?.Keys is null) return;
 
-        string key = _source.Key;
-        List<string> appSetEnKeys = appSetEnKeysList.Keys.ToList();
+        var key = _source.Key;
+        var appSetEnKeys = appSetEnKeysList.Keys.ToList();
 
         // Do decryption here, you can tap into the Data property like so:
-        foreach (string s in Data.Keys)
+        foreach (var s in Data.Keys)
+        foreach (var dataKey in appSetEnKeys)
         {
-            foreach (string dataKey in appSetEnKeys)
+            if (dataKey == s)
             {
-                if (dataKey == s)
-                {
-                    Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
-                    appSetEnKeys.Remove(dataKey);
-                    break;
-                }
-
-                if (!IsRelevant(dataKey, s))
-                {
-                    continue;
-                }
-
                 Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
+                appSetEnKeys.Remove(dataKey);
                 break;
             }
+
+            if (!IsRelevant(dataKey, s)) continue;
+
+            Data[s] = EncryptDecrypt.DecryptString(Data[s], key);
+            break;
         }
 
         //Console.WriteLine($"Decrypted key={key}, Data[s]={Data[s]}");
@@ -63,40 +54,29 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 
     public static bool IsRelevant(string dataKey, string dk)
     {
-        string[] keys = dataKey.Split(":");
-        string[] dKeys = dk.Split(":");
+        var keys = dataKey.Split(":");
+        var dKeys = dk.Split(":");
 
-        if (keys.Length > dKeys.Length)
-        {
-            return false;
-        }
+        if (keys.Length > dKeys.Length) return false;
 
-        for (int i = 0; i < keys.Length; i++)
-        {
+        for (var i = 0; i < keys.Length; i++)
             switch (keys[i])
             {
                 case "*":
                     continue;
                 case "[]":
-                    {
-                        if (!int.TryParse(dKeys[i], out _))
-                        {
-                            return false;
-                        }
+                {
+                    if (!int.TryParse(dKeys[i], out _)) return false;
 
-                        break;
-                    }
+                    break;
+                }
                 default:
-                    {
-                        if (keys[i] != dKeys[i])
-                        {
-                            return false;
-                        }
+                {
+                    if (keys[i] != dKeys[i]) return false;
 
-                        break;
-                    }
+                    break;
+                }
             }
-        }
 
         return true;
     }

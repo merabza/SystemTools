@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using OneOf;
-using SystemToolsShared.Errors;
+using SystemTools.SystemToolsShared.Errors;
 
-namespace MediatRMessagingAbstractions;
+namespace SystemTools.MediatRMessagingAbstractions;
 
 public interface IQuery<TResponse> : IRequest<OneOf<TResponse, Err[]>>;

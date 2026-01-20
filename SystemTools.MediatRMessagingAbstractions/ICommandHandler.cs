@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using OneOf;
-using SystemToolsShared.Errors;
+using SystemTools.SystemToolsShared.Errors;
 
-namespace MediatRMessagingAbstractions;
+namespace SystemTools.MediatRMessagingAbstractions;
 
 public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand, OneOf<Unit, Err[]>> where TCommand : ICommand;
 

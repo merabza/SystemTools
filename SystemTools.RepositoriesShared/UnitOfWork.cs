@@ -1,10 +1,11 @@
-﻿using DomainShared.Repositories;
-using LanguageExt;
+﻿using LanguageExt;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using SystemToolsShared.Errors;
+using SystemTools.DomainShared.Repositories;
+using SystemTools.SystemToolsShared.Errors;
 
-namespace RepositoriesShared;
+namespace SystemTools.RepositoriesShared;
 
 public /*open*/ class UnitOfWork : IUnitOfWork
 {
@@ -22,13 +23,18 @@ public /*open*/ class UnitOfWork : IUnitOfWork
 
     public string GetTableName<T>() where T : class
     {
-        var entType = _dbContext.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
+        IEntityType? entType = _dbContext.Model.GetEntityTypes().SingleOrDefault(s => s.ClrType == typeof(T));
         return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
     {
         return _dbContext.Database.BeginTransactionAsync(cancellationToken);
+    }
+
+    public void SetCommandTimeout(TimeSpan timeout)
+    {
+        _dbContext.Database.SetCommandTimeout(timeout);
     }
 
     public async Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql,
@@ -43,10 +49,5 @@ public /*open*/ class UnitOfWork : IUnitOfWork
         {
             return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
         }
-    }
-
-    public void SetCommandTimeout(TimeSpan timeout)
-    {
-        _dbContext.Database.SetCommandTimeout(timeout);
     }
 }

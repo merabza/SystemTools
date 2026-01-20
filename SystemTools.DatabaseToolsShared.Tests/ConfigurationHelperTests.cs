@@ -1,3 +1,5 @@
+using SystemTools.DatabaseToolsShared;
+
 namespace DatabaseToolsShared.Tests;
 
 public sealed class ConfigurationHelperTests
@@ -9,7 +11,7 @@ public sealed class ConfigurationHelperTests
     [InlineData("Table", true, new[] { "Field1", "Field2" }, "IX_Table_field1_field2_Unique")]
     public void CreateIndexName_ReturnsExpected(string tableName, bool unique, string[] fieldNames, string expected)
     {
-        var result = tableName.CreateIndexName(unique, fieldNames);
+        string result = tableName.CreateIndexName(unique, fieldNames);
         Assert.Equal(expected, result);
     }
 
@@ -19,7 +21,7 @@ public sealed class ConfigurationHelperTests
     public void CreateConstraintName_TableRelated_ReturnsExpected(string tableName, string relatedTableName,
         string expected)
     {
-        var result = tableName.CreateConstraintName(relatedTableName);
+        string result = tableName.CreateConstraintName(relatedTableName);
         Assert.Equal(expected, result);
     }
 
@@ -29,7 +31,7 @@ public sealed class ConfigurationHelperTests
     public void CreateConstraintName_TableRelatedField_ReturnsExpected(string tableName, string relatedTableName,
         string relatedFieldName, string expected)
     {
-        var result = tableName.CreateConstraintName(relatedTableName, relatedFieldName);
+        string result = tableName.CreateConstraintName(relatedTableName, relatedFieldName);
         Assert.Equal(expected, result);
     }
 
@@ -40,7 +42,7 @@ public sealed class ConfigurationHelperTests
     public void CreateConstraintName_TableRelatedFields_ReturnsExpected(string tableName, string relatedTableName,
         string[] relatedFieldNames, string expected)
     {
-        var result = tableName.CreateConstraintName(relatedTableName, relatedFieldNames);
+        string result = tableName.CreateConstraintName(relatedTableName, relatedFieldNames);
         Assert.Equal(expected, result);
     }
 
@@ -49,7 +51,7 @@ public sealed class ConfigurationHelperTests
     [InlineData("Person", 2, "FK_Person_Person2")]
     public void CreateSelfRelatedConstraintName_ReturnsExpected(string tableName, int number, string expected)
     {
-        var result = tableName.CreateSelfRelatedConstraintName(number);
+        string result = tableName.CreateSelfRelatedConstraintName(number);
         Assert.Equal(expected, result);
     }
 }

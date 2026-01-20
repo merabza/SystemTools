@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using ReCounterContracts;
-using SystemToolsShared.Errors;
+using SystemTools.ReCounterContracts;
+using SystemTools.SystemToolsShared.Errors;
 
 namespace ReCounterAbstraction;
 

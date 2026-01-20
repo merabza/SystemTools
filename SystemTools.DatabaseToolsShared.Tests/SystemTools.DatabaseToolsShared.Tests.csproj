@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DatabaseToolsShared\DatabaseToolsShared.csproj" />
+      <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

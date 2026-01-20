@@ -11,7 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ReCounterContracts\ReCounterContracts.csproj" />
+      <PackageReference Include="Serilog" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SystemTools.ReCounterContracts\SystemTools.ReCounterContracts.csproj" />
     </ItemGroup>
 
 </Project>

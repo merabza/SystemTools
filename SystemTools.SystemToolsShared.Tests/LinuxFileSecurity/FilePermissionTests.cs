@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using SystemToolsShared.LinuxFileSecurity;
+using SystemTools.SystemToolsShared.LinuxFileSecurity;
 using Xunit;
 
-namespace SystemToolsShared.Tests.LinuxFileSecurity;
+namespace SystemTools.SystemToolsShared.Tests.LinuxFileSecurity;
 
 public sealed class FilePermissionTests : IDisposable
 {
@@ -35,7 +35,7 @@ public sealed class FilePermissionTests : IDisposable
     {
         var perm = new FilePermission(_testFilePath);
         perm.Apply(LinuxFileAccess.Read, LinuxFileAccess.Write, LinuxFileAccess.Execute);
-        var str = perm.ToString();
+        string str = perm.ToString();
         // Should be like "421 <filePath>"
         Assert.Matches(@"^\d{3} .+$", str);
         Assert.EndsWith(_testFilePath, str);

@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class RuleTests
 {
@@ -43,7 +43,7 @@ public sealed class RuleTests
         var rule = new Rule(pattern, replacement);
 
         // Act
-        var result = rule.Apply(input);
+        string? result = rule.Apply(input);
 
         // Assert
         Assert.Null(result);
@@ -57,7 +57,6 @@ public sealed class RuleTests
     [InlineData("t[e]st", "replacement", "test", "replacement")]
     [InlineData("TEST", "replacement", "test", "replacement")] // Testing case insensitivity
     [InlineData("t.st", "replacement", "test", "replacement")] // Testing regex pattern
-
     public void Apply_WithRegexGroups_ReplacesCorrectly(string pattern, string replacement, string input,
         string expected)
     {
@@ -65,7 +64,7 @@ public sealed class RuleTests
         var rule = new Rule(pattern, replacement);
 
         // Act
-        var result = rule.Apply(input);
+        string? result = rule.Apply(input);
 
         // Assert
         Assert.Equal(expected, result);
@@ -81,7 +80,7 @@ public sealed class RuleTests
         var rule = new Rule(pattern, replacement);
 
         // Act
-        var result = rule.Apply(input);
+        string? result = rule.Apply(input);
 
         // Assert
         Assert.Equal(replacement, result);
@@ -94,7 +93,7 @@ public sealed class RuleTests
         var rule = new Rule("test", "replacement");
 
         // Act
-        var result = rule.Apply(string.Empty);
+        string? result = rule.Apply(string.Empty);
 
         // Assert
         Assert.Null(result);

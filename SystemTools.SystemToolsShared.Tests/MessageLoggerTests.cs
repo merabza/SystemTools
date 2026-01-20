@@ -2,13 +2,12 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Moq;
-using SystemToolsShared.Errors;
+using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class MessageLoggerTests
 {
@@ -58,11 +57,11 @@ public sealed class MessageLoggerTests
     {
         var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
 
-        var result = await logger.LogErrorAndSendMessageFromError("E1", "Error message");
+        Err[] result = await logger.LogErrorAndSendMessageFromError("E1", "Error message");
 
         _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Error message", It.IsAny<CancellationToken>()),
             Times.Once);
-        var err = Assert.Single(result);
+        Err err = Assert.Single(result);
         Assert.Equal("E1", err.ErrorCode);
         Assert.Equal("Error message", err.ErrorMessage);
     }
@@ -72,9 +71,9 @@ public sealed class MessageLoggerTests
     {
         var logger = new TestMessageLogger(_mockLogger.Object, null, UserName, false);
 
-        var result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
+        Err[] result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
 
-        var err = Assert.Single(result);
+        Err err = Assert.Single(result);
         Assert.Equal("E2", err.ErrorCode);
         Assert.Equal("No manager", err.ErrorMessage);
     }
@@ -85,7 +84,7 @@ public sealed class MessageLoggerTests
         var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
         var ex = new InvalidOperationException("fail");
 
-        var result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
+        Err result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
 
         _mockMessagesDataManager.Verify(
             m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("Error in TestMethod")),

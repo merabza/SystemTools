@@ -1,7 +1,7 @@
 using System.IO;
 using Xunit;
 
-namespace SystemToolsShared.Tests.StSharedTests;
+namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
 
 public sealed class StSharedModuleTests
 {
@@ -9,7 +9,7 @@ public sealed class StSharedModuleTests
     public void GetMainModulePath_ReturnsValidPath()
     {
         // Act
-        var path = StShared.GetMainModulePath();
+        string? path = StShared.GetMainModulePath();
 
         // Assert
         Assert.NotNull(path);

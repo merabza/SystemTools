@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using Newtonsoft.Json;
-using SystemToolsShared.Domain;
-using SystemToolsShared.Models;
+using SystemTools.SystemToolsShared.Domain;
+using SystemTools.SystemToolsShared.Models;
 using Xunit;
 
-namespace SystemToolsShared.Tests.Domain;
+namespace SystemTools.SystemToolsShared.Tests.Domain;
 
 public sealed class KeysListDomainTests : IDisposable
 {
@@ -30,7 +30,7 @@ public sealed class KeysListDomainTests : IDisposable
     public void LoadFromFile_WithInvalidFileName_ReturnsNull(string filename)
     {
         // Act
-        var result = KeysListDomain.LoadFromFile(filename);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(filename);
 
         // Assert
         Assert.Null(result);
@@ -44,7 +44,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -62,7 +62,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -77,7 +77,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.Null(result);
@@ -97,7 +97,7 @@ public sealed class KeysListDomainTests : IDisposable
     public void LoadFromFile_WithNonExistentFile_ThrowsFileNotFoundException()
     {
         // Arrange
-        var nonExistentFile = Path.Combine(Path.GetTempPath(), "nonexistent.json");
+        string nonExistentFile = Path.Combine(Path.GetTempPath(), "nonexistent.json");
 
         // Act & Assert
         Assert.Throws<FileNotFoundException>(() => KeysListDomain.LoadFromFile(nonExistentFile));
@@ -113,7 +113,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -129,7 +129,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -144,7 +144,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -162,7 +162,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -178,7 +178,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);
@@ -195,7 +195,7 @@ public sealed class KeysListDomainTests : IDisposable
         // Arrange
         var keysList = new KeysList { Keys = ["key1", "key2"] };
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Act
         result!.Keys.Add("key3");
@@ -211,7 +211,7 @@ public sealed class KeysListDomainTests : IDisposable
         // Arrange
         var keysList = new KeysList { Keys = ["key1", "key2"] };
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Act
         result!.Keys = ["newKey1", "newKey2", "newKey3"];
@@ -230,7 +230,7 @@ public sealed class KeysListDomainTests : IDisposable
         File.WriteAllText(_testFilePath, JsonConvert.SerializeObject(keysList));
 
         // Act
-        var result = KeysListDomain.LoadFromFile(_testFilePath);
+        KeysListDomain? result = KeysListDomain.LoadFromFile(_testFilePath);
 
         // Assert
         Assert.NotNull(result);

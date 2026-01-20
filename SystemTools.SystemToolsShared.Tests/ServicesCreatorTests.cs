@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Serilog.Events;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class ServicesCreatorTests : IDisposable
 {
@@ -37,10 +37,10 @@ public sealed class ServicesCreatorTests : IDisposable
     [Fact]
     public void CreateServiceProvider_WithLogFileName_CreatesProviderAndLogger()
     {
-        var logFileName = Path.Combine(_testLogFolder, "test.log");
+        string logFileName = Path.Combine(_testLogFolder, "test.log");
         var creator = new ServicesCreator(null, logFileName, _testAppName);
         // ReSharper disable once using
-        using var provider = creator.CreateServiceProvider(LogEventLevel.Information);
+        using ServiceProvider? provider = creator.CreateServiceProvider(LogEventLevel.Information);
         Assert.NotNull(provider);
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
@@ -51,7 +51,7 @@ public sealed class ServicesCreatorTests : IDisposable
     {
         var creator = new ServicesCreator(_testLogFolder, null, _testAppName);
         // ReSharper disable once using
-        using var provider = creator.CreateServiceProvider(LogEventLevel.Warning);
+        using ServiceProvider? provider = creator.CreateServiceProvider(LogEventLevel.Warning);
         Assert.NotNull(provider);
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
@@ -62,7 +62,7 @@ public sealed class ServicesCreatorTests : IDisposable
     {
         var creator = new ServicesCreator(null, null, _testAppName);
         // ReSharper disable once using
-        using var provider = creator.CreateServiceProvider(LogEventLevel.Error);
+        using ServiceProvider? provider = creator.CreateServiceProvider(LogEventLevel.Error);
         Assert.NotNull(provider);
     }
 
@@ -82,7 +82,7 @@ public sealed class ServicesCreatorTests : IDisposable
         var services = new ServiceCollection();
         creator.TestConfigureServices(services);
         // ReSharper disable once using
-        using var provider = services.BuildServiceProvider();
+        using ServiceProvider provider = services.BuildServiceProvider();
         var logger = provider.GetService<ILogger<ServicesCreatorTests>>();
         Assert.NotNull(logger);
     }

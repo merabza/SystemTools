@@ -1,8 +1,11 @@
+using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
+using OneOf;
+using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
-namespace SystemToolsShared.Tests.StSharedTests;
+namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
 
 public sealed class StSharedProcessTests
 {
@@ -17,14 +20,15 @@ public sealed class StSharedProcessTests
     public void RunProcessWithOutput_WithValidCommand_ReturnsOutput()
     {
         // Arrange
-        var useConsole = false;
+        bool useConsole = false;
 
         // Act
-        var result = StShared.RunProcessWithOutput(useConsole, _mockLogger.Object, "cmd", "/c echo test");
+        OneOf<(string, int), Err[]> result =
+            StShared.RunProcessWithOutput(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
         Assert.True(result.IsT0);
-        var (output, exitCode) = result.AsT0;
+        (string output, int exitCode) = result.AsT0;
         Assert.Equal(0, exitCode);
         Assert.Contains("test", output);
     }
@@ -33,10 +37,10 @@ public sealed class StSharedProcessTests
     public void RunProcess_WithValidCommand_ReturnsNone()
     {
         // Arrange
-        var useConsole = false;
+        bool useConsole = false;
 
         // Act
-        var result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
+        Option<Err[]> result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
         Assert.True(result.IsNone);
@@ -46,7 +50,7 @@ public sealed class StSharedProcessTests
     public void IsAllowExitCode_WithZero_ReturnsTrue()
     {
         // Arrange & Act
-        var result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
+        Option<Err[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
 
         // Assert
         Assert.True(result.IsNone);
@@ -56,7 +60,7 @@ public sealed class StSharedProcessTests
     public void IsAllowExitCode_WithAllowedCode_ReturnsTrue()
     {
         // Arrange & Act
-        var result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
+        Option<Err[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
 
         // Assert
         Assert.True(result.IsNone);

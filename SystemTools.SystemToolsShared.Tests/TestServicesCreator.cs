@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class TestServicesCreator : ServicesCreator
 {

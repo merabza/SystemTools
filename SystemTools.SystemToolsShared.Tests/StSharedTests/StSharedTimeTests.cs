@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace SystemToolsShared.Tests.StSharedTests;
+namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
 
 public sealed class StSharedTimeTests
 {
@@ -9,10 +9,10 @@ public sealed class StSharedTimeTests
     public void TimeTakenMessage_WithLessThanOneMinute_ShowsOnlySeconds()
     {
         // Arrange
-        var startTime = DateTime.Now.AddSeconds(-30);
+        DateTime startTime = DateTime.Now.AddSeconds(-30);
 
         // Act
-        var result = StShared.TimeTakenMessage(startTime);
+        string result = StShared.TimeTakenMessage(startTime);
 
         // Assert
         Assert.Contains("30 seconds", result);
@@ -24,10 +24,10 @@ public sealed class StSharedTimeTests
     public void TimeTakenMessage_WithMinutes_ShowsMinutesAndSeconds()
     {
         // Arrange
-        var startTime = DateTime.Now.AddMinutes(-2).AddSeconds(-15);
+        DateTime startTime = DateTime.Now.AddMinutes(-2).AddSeconds(-15);
 
         // Act
-        var result = StShared.TimeTakenMessage(startTime);
+        string result = StShared.TimeTakenMessage(startTime);
 
         // Assert
         Assert.Contains("2 minutes", result);
@@ -39,10 +39,10 @@ public sealed class StSharedTimeTests
     public void TimeTakenMessage_WithHours_ShowsAllUnits()
     {
         // Arrange
-        var startTime = DateTime.Now.AddHours(-1).AddMinutes(-30).AddSeconds(-45);
+        DateTime startTime = DateTime.Now.AddHours(-1).AddMinutes(-30).AddSeconds(-45);
 
         // Act
-        var result = StShared.TimeTakenMessage(startTime);
+        string result = StShared.TimeTakenMessage(startTime);
 
         // Assert
         Assert.Contains("1 hours", result);

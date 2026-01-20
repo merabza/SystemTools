@@ -2,7 +2,7 @@ using Microsoft.Extensions.FileProviders;
 using Moq;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class JsonConfigurationSourceTests
 {
@@ -10,7 +10,7 @@ public sealed class JsonConfigurationSourceTests
     public void Constructor_SetsPropertiesCorrectly()
     {
         // Arrange
-        var fileProvider = new Mock<IFileProvider>().Object;
+        IFileProvider fileProvider = new Mock<IFileProvider>().Object;
         const string path = "settings.json";
         const bool optional = true;
         const bool reloadOnChange = true;

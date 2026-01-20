@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Threading;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class DateTimeExtendTests
 {
@@ -11,7 +11,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Year_ReturnsStartOfYear()
     {
         var date = new DateTime(2023, 5, 15, 10, 30, 45, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Year);
+        DateTime result = date.StartOfPeriod(EPeriodType.Year);
         Assert.Equal(new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -19,7 +19,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Quarter_ReturnsStartOfQuarter()
     {
         var date = new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Quarter);
+        DateTime result = date.StartOfPeriod(EPeriodType.Quarter);
         Assert.Equal(new DateTime(2023, 4, 1, 0, 0, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -27,7 +27,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Month_ReturnsStartOfMonth()
     {
         var date = new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Month);
+        DateTime result = date.StartOfPeriod(EPeriodType.Month);
         Assert.Equal(new DateTime(2023, 5, 1, 0, 0, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -37,7 +37,7 @@ public sealed class DateTimeExtendTests
         var date = new DateTime(2023, 5, 17, 0, 0, 0, DateTimeKind.Unspecified); // Wednesday
         var culture = new CultureInfo("en-US");
         Thread.CurrentThread.CurrentCulture = culture;
-        var result = date.StartOfPeriod(EPeriodType.Week);
+        DateTime result = date.StartOfPeriod(EPeriodType.Week);
         Assert.Equal(new DateTime(2023, 5, 14, 0, 0, 0, DateTimeKind.Unspecified), result); // Sunday
     }
 
@@ -45,7 +45,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Day_ReturnsStartOfDay()
     {
         var date = new DateTime(2023, 5, 15, 10, 30, 45, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Day);
+        DateTime result = date.StartOfPeriod(EPeriodType.Day);
         Assert.Equal(new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -53,7 +53,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Hour_ReturnsStartOfHour()
     {
         var date = new DateTime(2023, 5, 15, 10, 30, 45, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Hour);
+        DateTime result = date.StartOfPeriod(EPeriodType.Hour);
         Assert.Equal(new DateTime(2023, 5, 15, 10, 0, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -61,7 +61,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Minute_ReturnsStartOfMinute()
     {
         var date = new DateTime(2023, 5, 15, 10, 30, 45, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Minute);
+        DateTime result = date.StartOfPeriod(EPeriodType.Minute);
         Assert.Equal(new DateTime(2023, 5, 15, 10, 30, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -69,7 +69,7 @@ public sealed class DateTimeExtendTests
     public void StartOfPeriod_Second_ReturnsStartOfSecond()
     {
         var date = new DateTime(2023, 5, 15, 10, 30, 45, 123, DateTimeKind.Unspecified);
-        var result = date.StartOfPeriod(EPeriodType.Second);
+        DateTime result = date.StartOfPeriod(EPeriodType.Second);
         Assert.Equal(new DateTime(2023, 5, 15, 10, 30, 45, 0, DateTimeKind.Unspecified), result);
     }
 
@@ -123,7 +123,7 @@ public sealed class DateTimeExtendTests
     {
         var forDate = new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified);
         var startAtDate = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
-        var result = forDate.StartOfPeriod(startAtDate, EPeriodType.Year, EPeriodType.Month, 2);
+        DateTime result = forDate.StartOfPeriod(startAtDate, EPeriodType.Year, EPeriodType.Month, 2);
         // Should be 2023-03-01 (start at 2020, add 3 years, then add 2 months)
         Assert.Equal(new DateTime(2023, 3, 1, 0, 0, 0, DateTimeKind.Unspecified), result);
     }

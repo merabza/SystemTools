@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class EncryptDecryptTests
 {
@@ -25,12 +25,12 @@ public sealed class EncryptDecryptTests
     {
         const string key = "test-key";
         const string original = "Hello, World! 1234";
-        var encrypted = EncryptDecrypt.EncryptString(original, key);
+        string? encrypted = EncryptDecrypt.EncryptString(original, key);
 
         Assert.False(string.IsNullOrWhiteSpace(encrypted));
         Assert.NotEqual(original, encrypted);
 
-        var decrypted = EncryptDecrypt.DecryptString(encrypted, key);
+        string? decrypted = EncryptDecrypt.DecryptString(encrypted, key);
         Assert.Equal(original, decrypted);
     }
 
@@ -40,9 +40,9 @@ public sealed class EncryptDecryptTests
         const string key = "key1";
         const string wrongKey = "key2";
         const string original = "SensitiveData";
-        var encrypted = EncryptDecrypt.EncryptString(original, key);
+        string? encrypted = EncryptDecrypt.EncryptString(original, key);
 
-        var decrypted = EncryptDecrypt.DecryptString(encrypted, wrongKey);
+        string? decrypted = EncryptDecrypt.DecryptString(encrypted, wrongKey);
 
         // Decryption with wrong key should not return the original string
         Assert.NotEqual(original, decrypted);
@@ -53,10 +53,10 @@ public sealed class EncryptDecryptTests
     {
         const string key = "ключ";
         const string original = "Тестовые данные 你好";
-        var encrypted = EncryptDecrypt.EncryptString(original, key);
+        string? encrypted = EncryptDecrypt.EncryptString(original, key);
 
         // Encrypted string may lose non-ASCII chars due to Encoding.ASCII, so decrypted may not match
-        var decrypted = EncryptDecrypt.DecryptString(encrypted, key);
+        string? decrypted = EncryptDecrypt.DecryptString(encrypted, key);
 
         // Because ASCII encoding is used, non-ASCII chars will be lost, so decrypted != original
         Assert.NotEqual(original, decrypted);
@@ -66,18 +66,18 @@ public sealed class EncryptDecryptTests
     public void EncryptString_WithEmptyKey_StillEncrypts()
     {
         const string original = "data";
-        var encrypted = EncryptDecrypt.EncryptString(original, "");
+        string? encrypted = EncryptDecrypt.EncryptString(original, "");
         Assert.False(string.IsNullOrWhiteSpace(encrypted));
         Assert.NotEqual(original, encrypted);
 
-        var decrypted = EncryptDecrypt.DecryptString(encrypted, "");
+        string? decrypted = EncryptDecrypt.DecryptString(encrypted, "");
         Assert.Equal(original, decrypted);
     }
 
     [Fact]
     public void DecryptString_WithInvalidBase64_ReturnsNull()
     {
-        var result = EncryptDecrypt.DecryptString("not-a-base64-string", "key");
+        string? result = EncryptDecrypt.DecryptString("not-a-base64-string", "key");
         Assert.Null(result);
     }
 }

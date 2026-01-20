@@ -1,10 +1,9 @@
 using System;
 using System.IO;
-using System.Linq;
-using SystemToolsShared.Errors;
+using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class ErrTests
 {
@@ -41,7 +40,7 @@ public sealed class ErrTests
     public void Create_ReturnsEnumerableWithErr()
     {
         var err = new Err { ErrorCode = "E", ErrorMessage = "M" };
-        var result = Err.Create(err);
+        Err[] result = Err.Create(err);
         Assert.Single(result);
         Assert.Equal(err, result[0]);
     }
@@ -50,7 +49,7 @@ public sealed class ErrTests
     public void CreateArr_ReturnsArrayWithErr()
     {
         var err = new Err { ErrorCode = "E", ErrorMessage = "M" };
-        var result = Err.CreateArr(err);
+        Err[] result = Err.CreateArr(err);
         Assert.Single(result);
         Assert.Equal(err, result[0]);
     }
@@ -60,7 +59,7 @@ public sealed class ErrTests
     {
         var err1 = new Err { ErrorCode = "A", ErrorMessage = "B" };
         var err2 = new Err { ErrorCode = "C", ErrorMessage = "D" };
-        var result = Err.RecreateErrors([err1], err2);
+        Err[] result = Err.RecreateErrors([err1], err2);
         Assert.Equal(2, result.Length);
         Assert.Contains(err1, result);
         Assert.Contains(err2, result);
@@ -72,7 +71,7 @@ public sealed class ErrTests
         var err1 = new Err { ErrorCode = "A", ErrorMessage = "B" };
         var err2 = new Err { ErrorCode = "C", ErrorMessage = "D" };
         var err3 = new Err { ErrorCode = "E", ErrorMessage = "F" };
-        var result = Err.RecreateErrors([err1], [err2, err3]);
+        Err[] result = Err.RecreateErrors([err1], [err2, err3]);
         Assert.Equal(3, result.Length);
         Assert.Contains(err1, result);
         Assert.Contains(err2, result);
@@ -88,12 +87,12 @@ public sealed class ErrTests
         // ReSharper disable once DisposableConstructor
         using var sw = new StringWriter();
         // ReSharper disable once using
-        using var originalOut = Console.Out;
+        using TextWriter originalOut = Console.Out;
         Console.SetOut(sw);
         try
         {
             Err.PrintErrorsOnConsole([err1, err2]);
-            var output = sw.ToString();
+            string output = sw.ToString();
             Assert.Contains("B", output);
             Assert.Contains("D", output);
         }

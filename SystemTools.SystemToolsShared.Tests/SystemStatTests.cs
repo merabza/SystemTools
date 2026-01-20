@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class SystemStatTests
 {
@@ -10,10 +10,10 @@ public sealed class SystemStatTests
     public void IsWindows_ShouldReturnCorrectPlatform()
     {
         // Act
-        var result = SystemStat.IsWindows();
+        bool result = SystemStat.IsWindows();
 
         // Assert
-        var expected = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        bool expected = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         Assert.Equal(expected, result);
     }
 
@@ -21,11 +21,11 @@ public sealed class SystemStatTests
     public void IsWindows_ShouldMatchRuntimeInformation()
     {
         // Arrange
-        var platformWindows = OSPlatform.Windows;
+        OSPlatform platformWindows = OSPlatform.Windows;
 
         // Act
-        var isWindowsResult = SystemStat.IsWindows();
-        var runtimeResult = RuntimeInformation.IsOSPlatform(platformWindows);
+        bool isWindowsResult = SystemStat.IsWindows();
+        bool runtimeResult = RuntimeInformation.IsOSPlatform(platformWindows);
 
         // Assert
         Assert.Equal(runtimeResult, isWindowsResult);
@@ -35,7 +35,7 @@ public sealed class SystemStatTests
     public void IsWindows_ReturnsTrue_OnWindowsPlatform()
     {
         // Arrange & Act
-        var result = SystemStat.IsWindows();
+        bool result = SystemStat.IsWindows();
 
         // Assert
         // This test will only pass on Windows. On other platforms, it will fail.

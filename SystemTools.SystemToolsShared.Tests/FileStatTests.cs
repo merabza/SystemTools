@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class FileStatTests : IDisposable
 {
@@ -13,8 +13,8 @@ public sealed class FileStatTests : IDisposable
     {
         _tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(_tempDir);
-        var tempFile1 = Path.Combine(_tempDir, "file1.txt");
-        var tempFile2 = Path.Combine(_tempDir, "file2.txt");
+        string tempFile1 = Path.Combine(_tempDir, "file1.txt");
+        string tempFile2 = Path.Combine(_tempDir, "file2.txt");
         File.WriteAllText(tempFile1, "abc");
         File.WriteAllText(tempFile2, "abc");
     }
@@ -44,16 +44,16 @@ public sealed class FileStatTests : IDisposable
     [InlineData(@"D:\1WorkDotnetCore\ApAgent\SystemTools", @"D:\1WORKDOTNETCORE\APAGENT\SYSTEMTOOLS")]
     public void NormalizePathTest(string path, string result)
     {
-        var normPath = FileStat.NormalizePath(path);
+        string normPath = FileStat.NormalizePath(path);
         Assert.Equal(result, normPath);
     }
 
     [Fact]
     public void CreatePrevFolderIfNotExists_CreatesDirectory()
     {
-        var filePath = Path.Combine(_tempDir, "subdir", "file.txt");
+        string filePath = Path.Combine(_tempDir, "subdir", "file.txt");
         var logger = new TestLogger();
-        var created = FileStat.CreatePrevFolderIfNotExists(filePath, false, logger);
+        bool created = FileStat.CreatePrevFolderIfNotExists(filePath, false, logger);
         Assert.True(created);
         Assert.True(Directory.Exists(Path.GetDirectoryName(filePath)!));
     }
@@ -61,9 +61,9 @@ public sealed class FileStatTests : IDisposable
     [Fact]
     public void CreateFolderIfNotExists_CreatesAndReturnsPath()
     {
-        var folder = Path.Combine(_tempDir, "newfolder");
+        string folder = Path.Combine(_tempDir, "newfolder");
         var logger = new TestLogger();
-        var result = FileStat.CreateFolderIfNotExists(folder, false, logger);
+        string? result = FileStat.CreateFolderIfNotExists(folder, false, logger);
         Assert.NotNull(result);
         Assert.True(Directory.Exists(folder));
     }
@@ -113,7 +113,7 @@ public sealed class FileStatTests : IDisposable
     {
         const string fileName = "backup_20230515123045.txt";
         const string mask = "yyyyMMddHHmmss";
-        var (dt, pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
+        (DateTime dt, string? pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
         Assert.NotEqual(DateTime.MinValue, dt);
         Assert.Contains(mask, pattern!);
     }
@@ -123,7 +123,7 @@ public sealed class FileStatTests : IDisposable
     {
         const string fileName = "backup_file.txt";
         const string mask = "yyyyMMddHHmmss";
-        var (dt, pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
+        (DateTime dt, string? pattern) = fileName.GetDateTimeAndPatternByDigits(mask);
         Assert.Equal(DateTime.MinValue, dt);
         Assert.Null(pattern);
     }
@@ -131,13 +131,13 @@ public sealed class FileStatTests : IDisposable
     [Fact]
     public void TryGetDate_ValidAndInvalid_ReturnsExpected()
     {
-        var valid = StringExtensions.TryGetDate("20230515", "yyyyMMdd");
-            Assert.Equal(new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified), valid);
+        DateTime valid = StringExtensions.TryGetDate("20230515", "yyyyMMdd");
+        Assert.Equal(new DateTime(2023, 5, 15, 0, 0, 0, DateTimeKind.Unspecified), valid);
 
-        var invalid = StringExtensions.TryGetDate("notadate", "yyyyMMdd");
+        DateTime invalid = StringExtensions.TryGetDate("notadate", "yyyyMMdd");
         Assert.Equal(DateTime.MinValue, invalid);
     }
-        
+
     private sealed class TestLogger : ILogger
     {
         public IDisposable BeginScope<T>(T state) where T : notnull

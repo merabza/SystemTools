@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class FileLoaderTests : IDisposable
 {
@@ -38,7 +38,7 @@ public sealed class FileLoaderTests : IDisposable
     [Fact]
     public void LoadDeserializeResolve_FileNotFound_ReturnsDefault()
     {
-        var nonExistentFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".json");
+        string nonExistentFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".json");
         var result = FileLoader.LoadDeserializeResolve<TestModel>(nonExistentFile, false);
         Assert.Null(result);
     }

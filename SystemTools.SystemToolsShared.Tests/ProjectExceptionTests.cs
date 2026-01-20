@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace SystemToolsShared.Tests;
+namespace SystemTools.SystemToolsShared.Tests;
 
 public sealed class ProjectExceptionTests
 {
@@ -48,7 +48,7 @@ public sealed class ProjectExceptionTests
     public void Exception_IsSealed()
     {
         // Act & Assert
-        var type = typeof(ProjectException);
+        Type type = typeof(ProjectException);
         Assert.True(type.IsSealed);
     }
 

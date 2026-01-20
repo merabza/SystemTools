@@ -1,17 +1,20 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using LanguageExt;
+using OneOf;
+using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
-namespace SystemToolsShared.Tests.StSharedTests;
+namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
 
 public sealed class StSharedUnitTests
 {
     [Fact]
     public void TimeTakenMessage_ReturnsExpectedFormat()
     {
-        var start = DateTime.Now.AddMinutes(-1).AddSeconds(-10);
-        var msg = StShared.TimeTakenMessage(start);
+        DateTime start = DateTime.Now.AddMinutes(-1).AddSeconds(-10);
+        string msg = StShared.TimeTakenMessage(start);
         Assert.Contains("minutes", msg);
         Assert.Contains("seconds", msg);
     }
@@ -19,9 +22,9 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcessWithOutput_ValidProcess_ReturnsOutput()
     {
-        var result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
+        OneOf<(string, int), Err[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
         Assert.True(result.IsT0);
-        var (output, exitCode) = result.AsT0;
+        (string output, int exitCode) = result.AsT0;
         Assert.False(string.IsNullOrWhiteSpace(output));
         Assert.Equal(0, exitCode);
     }
@@ -38,7 +41,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcess_ValidProcess_ReturnsNull()
     {
-        var result = StShared.RunProcess(false, null, "dotnet", "--version");
+        Option<Err[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
         Assert.True(result.IsNone);
     }
 
@@ -59,17 +62,17 @@ public sealed class StSharedUnitTests
             return;
         }
 
-        var result = StShared.RunCmdProcess("echo Hello");
+        bool result = StShared.RunCmdProcess("echo Hello");
         Assert.True(result);
     }
 
     [Fact]
     public void CreateFolder_CreatesAndReturnsTrue()
     {
-        var tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         try
         {
-            var result = StShared.CreateFolder(tempDir, false);
+            bool result = StShared.CreateFolder(tempDir, false);
             Assert.True(result);
             Assert.True(Directory.Exists(tempDir));
         }
@@ -86,8 +89,8 @@ public sealed class StSharedUnitTests
     public void CreateFolder_Fails_ReturnsFalse()
     {
         // Try to create a folder in an invalid location
-        var invalidPath = Path.Combine("?:", "invalid", Guid.NewGuid().ToString());
-        var result = StShared.CreateFolder(invalidPath, false);
+        string invalidPath = Path.Combine("?:", "invalid", Guid.NewGuid().ToString());
+        bool result = StShared.CreateFolder(invalidPath, false);
         Assert.False(result);
     }
 
@@ -137,7 +140,7 @@ public sealed class StSharedUnitTests
         using var sw = new StringWriter();
         Console.SetOut(sw);
         StShared.WriteSuccessMessage("Success!");
-        var output = sw.ToString();
+        string output = sw.ToString();
         Assert.Contains("Success!", output);
     }
 
@@ -172,7 +175,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void GetMainModulePath_ReturnsPath()
     {
-        var path = StShared.GetMainModulePath();
+        string? path = StShared.GetMainModulePath();
         Assert.False(string.IsNullOrWhiteSpace(path));
         Assert.True(Directory.Exists(path));
     }
@@ -180,7 +183,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void GetMainModuleFileName_ReturnsFileName()
     {
-        var fileName = StShared.GetMainModuleFileName();
+        string? fileName = StShared.GetMainModuleFileName();
         Assert.False(string.IsNullOrWhiteSpace(fileName));
         Assert.True(fileName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase) ||
                     fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase));

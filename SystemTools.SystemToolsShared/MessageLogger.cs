@@ -193,7 +193,7 @@ public /*open*/ class MessageLogger
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
-        var error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
+        Err error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
         {
             return error;

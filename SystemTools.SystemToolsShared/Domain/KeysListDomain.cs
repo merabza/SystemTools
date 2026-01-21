@@ -22,7 +22,7 @@ public sealed class KeysListDomain
             return null;
         }
 
-        var appSetEnKeysJsonString = File.ReadAllText(filename);
+        string appSetEnKeysJsonString = File.ReadAllText(filename);
         var appSetEnKeysList = JsonConvert.DeserializeObject<KeysList>(appSetEnKeysJsonString);
 
         if (appSetEnKeysList?.Keys is null)

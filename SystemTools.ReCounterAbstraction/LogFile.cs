@@ -39,7 +39,7 @@ public sealed class LogFile
         }
 
         //შევამოწმოთ ახალი დღე ხომ არ დაიწყო
-        var checkDate = DateTime.Now;
+        DateTime checkDate = DateTime.Now;
         if (_lastLogSaveDate != DateTime.MinValue && _lastLogSaveDate.Date != checkDate.Date && checkFile.Exists)
         {
             //შევამოწმოთ მოესწრო თუ არა ლოგების ფაილის შექმნა
@@ -58,7 +58,7 @@ public sealed class LogFile
                 fileNameWithoutDate + _lastLogSaveDate.ToString("yyyyMMdd", CultureInfo.InvariantCulture) +
                 fileExtension);
             //შევამოწმოთ ხომ არ არსებობს ერთ თვეზე მეტი ხნის ლოგები და თუ არსებობს წავშალოთ
-            foreach (var fileInfo in checkFile.Directory.GetFiles(fileNameWithoutDate + "????????" + fileExtension)
+            foreach (FileInfo fileInfo in checkFile.Directory.GetFiles(fileNameWithoutDate + "????????" + fileExtension)
                          .Where(c => c.CreationTime.AddMonths(1) < checkDate))
             {
                 fileInfo.Delete(); //ნაპოვნი ძველი ფაილის წაშლა

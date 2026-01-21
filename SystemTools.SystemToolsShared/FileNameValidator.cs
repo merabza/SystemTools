@@ -26,7 +26,7 @@ public static class FileNameValidator
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         ];
 
-        var upperName = Path.GetFileNameWithoutExtension(fileName).ToUpperInvariant();
+        string upperName = Path.GetFileNameWithoutExtension(fileName).ToUpperInvariant();
         if (Array.Exists(reservedNames, rn => rn == upperName))
         {
             return false;

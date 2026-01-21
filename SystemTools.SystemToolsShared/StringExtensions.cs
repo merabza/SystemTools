@@ -80,7 +80,8 @@ public static class StringExtensions
                 return true;
             }
 
-            var regexFileMask = sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
+            string regexFileMask =
+                sFileMask.Replace(".", "[.]").Replace("*", ".*").Replace("?", ".").Replace("\\", @"\\");
             if (!sFileMask.EndsWith('*'))
             {
                 regexFileMask += '$';
@@ -92,17 +93,17 @@ public static class StringExtensions
             }
 
             var mask = new Regex(regexFileMask);
-            var toRet = mask.IsMatch(dest);
+            bool toRet = mask.IsMatch(dest);
             return toRet;
         }
 
         public (DateTime, string?) GetDateTimeAndPatternByDigits(string maskFirstVersion)
         {
             var sbMask = new StringBuilder();
-            var position = 0;
-            var maskPosition = 0;
-            var maskPositionInName = 0;
-            foreach (var c in dest)
+            int position = 0;
+            int maskPosition = 0;
+            int maskPositionInName = 0;
+            foreach (char c in dest)
             {
                 if (char.IsDigit(c))
                 {
@@ -142,11 +143,11 @@ public static class StringExtensions
                 return (DateTime.MinValue, null);
             }
 
-            var mask = sbMask.ToString();
-            var strDate = dest.Substring(maskPositionInName, mask.Length);
-            var pattern = dest[..maskPositionInName] + mask + dest[(maskPositionInName + mask.Length)..];
+            string mask = sbMask.ToString();
+            string strDate = dest.Substring(maskPositionInName, mask.Length);
+            string pattern = dest[..maskPositionInName] + mask + dest[(maskPositionInName + mask.Length)..];
 
-            var dt = TryGetDate(strDate, mask);
+            DateTime dt = TryGetDate(strDate, mask);
             return dt == DateTime.MinValue ? (DateTime.MinValue, null) : (dt, pattern);
         }
     }

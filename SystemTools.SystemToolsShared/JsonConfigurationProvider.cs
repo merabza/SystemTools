@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using SystemTools.SystemToolsShared.Domain;
 
@@ -25,19 +26,19 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
         //if (appSetEnKeysList is null || appSetEnKeysList.Keys is null)
         //    return;
 
-        var appSetEnKeysList = KeysListDomain.LoadFromFile(_source.AppSetEnKeysFileName);
+        KeysListDomain? appSetEnKeysList = KeysListDomain.LoadFromFile(_source.AppSetEnKeysFileName);
         if (appSetEnKeysList?.Keys is null)
         {
             return;
         }
 
-        var key = _source.Key;
-        var appSetEnKeys = appSetEnKeysList.Keys.ToList();
+        string key = _source.Key;
+        List<string> appSetEnKeys = appSetEnKeysList.Keys.ToList();
 
         // Do decryption here, you can tap into the Data property like so:
-        foreach (var s in Data.Keys)
+        foreach (string s in Data.Keys)
         {
-            foreach (var dataKey in appSetEnKeys)
+            foreach (string dataKey in appSetEnKeys)
             {
                 if (dataKey == s)
                 {
@@ -62,15 +63,15 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 
     public static bool IsRelevant(string dataKey, string dk)
     {
-        var keys = dataKey.Split(":");
-        var dKeys = dk.Split(":");
+        string[] keys = dataKey.Split(":");
+        string[] dKeys = dk.Split(":");
 
         if (keys.Length > dKeys.Length)
         {
             return false;
         }
 
-        for (var i = 0; i < keys.Length; i++)
+        for (int i = 0; i < keys.Length; i++)
         {
             switch (keys[i])
             {

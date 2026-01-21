@@ -121,14 +121,14 @@ public static class Inflector
 
     private static string ApplyRules(List<Rule> rules, string word)
     {
-        var result = word;
+        string? result = word;
 
         if (Uncountables.Contains(word.ToLower(CultureInfo.CurrentCulture)))
         {
             return result;
         }
 
-        for (var i = rules.Count - 1; i >= 0; i--)
+        for (int i = rules.Count - 1; i >= 0; i--)
         {
             if ((result = rules[i].Apply(word)) is not null)
             {
@@ -199,7 +199,7 @@ public static class Inflector
 //#endif
     public static string Ordanize(int number, string numberString)
     {
-        var nMod100 = number % 100;
+        int nMod100 = number % 100;
 
         if (nMod100 >= 11 && nMod100 <= 13)
         {
@@ -231,11 +231,11 @@ public static class Inflector
         }
 
         var words = new StringCollection();
-        var wordStartIndex = 0;
+        int wordStartIndex = 0;
 
-        var letters = source.ToCharArray();
+        char[] letters = source.ToCharArray();
         // Skip the first letter. we don't care what case it is.
-        for (var i = 1; i < letters.Length; i++)
+        for (int i = 1; i < letters.Length; i++)
         {
             if (!char.IsUpper(letters[i]))
             {
@@ -251,7 +251,7 @@ public static class Inflector
         words.Add(new string(letters, wordStartIndex, letters.Length - wordStartIndex));
 
         //Copy to a string array.
-        var wordArray = new string[words.Count];
+        string[] wordArray = new string[words.Count];
         words.CopyTo(wordArray, 0);
         return wordArray;
     }

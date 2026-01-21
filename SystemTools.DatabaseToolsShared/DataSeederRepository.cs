@@ -57,7 +57,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
         try
         {
-            foreach (var entity in entities)
+            foreach (T entity in entities)
             {
                 _context.Remove(entity);
             }
@@ -94,7 +94,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
 
         try
         {
-            foreach (var rec in forUpdate)
+            foreach (T rec in forUpdate)
             {
                 _context.Update(rec);
             }

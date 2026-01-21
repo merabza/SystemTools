@@ -18,7 +18,7 @@ public readonly struct FilePermissionFlag : IEquatable<FilePermissionFlag>
     public static LinuxFileAccess ToValidAccess(LinuxFileAccess access)
     {
         //file access should be 0 to 7
-        var num = (int)access;
+        int num = (int)access;
         num = num switch
         {
             < 0 => 0,

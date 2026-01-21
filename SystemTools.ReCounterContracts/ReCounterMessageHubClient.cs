@@ -41,14 +41,14 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         _connection.On<ProgressData>(RecounterEvents.ProgressDataReceived, progressData =>
         {
             if (progressData.BoolData.Count > 0 &&
-                progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out var processIsRunning))
+                progressData.BoolData.TryGetValue(ReCounterConstants.ProcessRun, out bool processIsRunning))
             {
                 ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
             }
 
             if (progressData.StrData.Count > 0)
             {
-                var procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
+                string? procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
                 if (ProcessMonitoringManager.Instance.LastProcName != procName)
                 {
                     Console.WriteLine(procName);
@@ -58,15 +58,15 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             int? procPosition = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcPosition);
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
-            var progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
+            string? progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
 
-            var lineNo = Console.CursorTop;
+            int lineNo = Console.CursorTop;
             if (procPosition is not null && procLength is not null && (decimal)procLength > 0)
             {
-                var procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
-                var conMessage =
+                decimal procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
+                string conMessage =
                     $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
-                var conMessageLength = conMessage.Length;
+                int conMessageLength = conMessage.Length;
                 if (ProcessMonitoringManager.Instance.LastLength > conMessageLength)
                 {
                     conMessage = conMessage.PadRight(ProcessMonitoringManager.Instance.LastLength);

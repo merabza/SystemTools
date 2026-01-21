@@ -31,7 +31,7 @@ public /*open*/ class ReCounter
 
     protected async Task LogErrors(IEnumerable<Err> errors, CancellationToken cancellationToken = default)
     {
-        foreach (var error in errors)
+        foreach (Err error in errors)
         {
             await LogMessage(ReCounterConstants.Error, error.ErrorMessage, true, cancellationToken);
         }

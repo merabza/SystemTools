@@ -50,7 +50,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         }
 
         //Json-დან ჩატვირთვა
-        var seedData = _seedDataType switch
+        List<TMo> seedData = _seedDataType switch
         {
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
@@ -59,7 +59,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         };
 
         //Json-ის მოდელის გადაყვანა ბაზის მოდელში
-        var dataListByJson = _seedDataType switch
+        List<TDst> dataListByJson = _seedDataType switch
         {
             ESeedDataType.OnlyRules => [],
             ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
@@ -68,7 +68,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         };
 
         //წესების მიხედვით შექმნა
-        var dataListByRules = _seedDataType switch
+        List<TDst> dataListByRules = _seedDataType switch
         {
             ESeedDataType.OnlyJson => [],
             ESeedDataType.OnlyRules or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
@@ -77,7 +77,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         };
 
         //დაყვანა
-        var dataList = _seedDataType switch
+        List<TDst> dataList = _seedDataType switch
         {
             ESeedDataType.OnlyJson => dataListByJson,
             ESeedDataType.OnlyRules => dataListByRules,
@@ -125,29 +125,29 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             return [];
         }
 
-        var jsonModelType = typeof(TMo);
-        var jsonModelTypeProperties = jsonModelType.GetProperties();
+        Type jsonModelType = typeof(TMo);
+        PropertyInfo[] jsonModelTypeProperties = jsonModelType.GetProperties();
 
-        var tableDataType = typeof(TDst);
-        var tableDataTypeProperties = tableDataType.GetProperties();
+        Type tableDataType = typeof(TDst);
+        PropertyInfo[] tableDataTypeProperties = tableDataType.GetProperties();
 
         // Find the intersection of property names between jsonModelTypeProperties and tableDataTypeProperties
-        var commonProperties = jsonModelTypeProperties.Select(p => p.Name)
+        List<string> commonProperties = jsonModelTypeProperties.Select(p => p.Name)
             .Intersect(tableDataTypeProperties.Select(p => p.Name)).ToList();
 
         return appClaimsSeedData.Select(s =>
         {
             var instance = Activator.CreateInstance<TDst>();
-            foreach (var propName in commonProperties)
+            foreach (string propName in commonProperties)
             {
-                var jsonProp = jsonModelType.GetProperty(propName);
-                var tableProp = tableDataType.GetProperty(propName);
+                PropertyInfo? jsonProp = jsonModelType.GetProperty(propName);
+                PropertyInfo? tableProp = tableDataType.GetProperty(propName);
                 if (jsonProp == null || tableProp == null)
                 {
                     continue;
                 }
 
-                var value = jsonProp.GetValue(s);
+                object? value = jsonProp.GetValue(s);
                 tableProp.SetValue(instance, value);
             }
 
@@ -158,7 +158,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია და აქციოს მოდელების სიად
     public static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
     {
-        var jsonFullFileName = Path.Combine(folderName, fileName);
+        string jsonFullFileName = Path.Combine(folderName, fileName);
         return File.Exists(jsonFullFileName)
             ? FileLoader.LoadDeserializeResolve<List<T>>(jsonFullFileName, true) ?? []
             : [];
@@ -184,45 +184,45 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
             throw new Exception($"key field name List is not set for {_tableName}");
         }
 
-        var tableDataType = typeof(TDst);
+        Type tableDataType = typeof(TDst);
 
         var keyPropertiesList = new List<PropertyInfo>();
 
-        foreach (var keyFieldName in _keyFieldNamesList)
+        foreach (string keyFieldName in _keyFieldNamesList)
         {
-            var keyProperty = tableDataType.GetProperty(keyFieldName) ??
-                              throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
+            PropertyInfo keyProperty = tableDataType.GetProperty(keyFieldName) ??
+                                       throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}");
             keyPropertiesList.Add(keyProperty);
         }
 
-        var duplicatePriorityKeys = listWithMorePriority.GroupBy(KeySelector).Where(group => group.Count() > 1)
+        List<string> duplicatePriorityKeys = listWithMorePriority.GroupBy(KeySelector).Where(group => group.Count() > 1)
             .Select(group => group.Key).ToList();
 
         if (duplicatePriorityKeys.Count != 0)
         {
-            var strKeyList = string.Join(", ", duplicatePriorityKeys);
+            string strKeyList = string.Join(", ", duplicatePriorityKeys);
             Console.WriteLine("Priority keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Priority keys contains duplicate keys");
         }
 
-        var duplicateSecondKeys = listWithLessPriority.GroupBy(KeySelector).Where(group => group.Count() > 1)
+        List<string> duplicateSecondKeys = listWithLessPriority.GroupBy(KeySelector).Where(group => group.Count() > 1)
             .Select(group => group.Key).ToList();
 
         if (duplicateSecondKeys.Count != 0)
         {
-            var strKeyList = string.Join(", ", duplicateSecondKeys);
+            string strKeyList = string.Join(", ", duplicateSecondKeys);
             Console.WriteLine("Secondary keys contains duplicate keys {0}", strKeyList);
             throw new Exception("Secondary keys duplicate keys");
         }
 
-        var priorDictionary = listWithMorePriority.ToDictionary(KeySelector, v => v);
+        Dictionary<string, TDst> priorDictionary = listWithMorePriority.ToDictionary(KeySelector, v => v);
 
-        var secondDictionary = listWithLessPriority.ToDictionary(KeySelector, v => v);
+        Dictionary<string, TDst> secondDictionary = listWithLessPriority.ToDictionary(KeySelector, v => v);
 
         var retList = new List<TDst>();
         retList.AddRange(priorDictionary.Values);
 
-        var extraKeys = secondDictionary.Keys.Except(priorDictionary.Keys).ToList();
+        List<string> extraKeys = secondDictionary.Keys.Except(priorDictionary.Keys).ToList();
         retList.AddRange(extraKeys.Select(key => secondDictionary[key]));
 
         return retList;
@@ -230,7 +230,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         string KeySelector(TDst item) =>
             string.Join('_', keyPropertiesList.Select(s =>
             {
-                var val = s.GetValue(item)?.ToString()?.ToLower(CultureInfo.CurrentCulture);
+                string? val = s.GetValue(item)?.ToString()?.ToLower(CultureInfo.CurrentCulture);
                 return val ?? throw new InvalidOperationException("Key property value cannot be null");
             }));
         //return keyProperty.GetValue(item)?.ToString()?.ToLower() ??

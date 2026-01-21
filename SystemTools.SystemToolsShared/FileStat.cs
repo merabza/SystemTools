@@ -10,18 +10,18 @@ public static class FileStat
 {
     public static bool IsFileSchema(string fileStoragePath)
     {
-        var uriCreated = Uri.TryCreate(fileStoragePath, UriKind.Absolute, out var uri);
+        bool uriCreated = Uri.TryCreate(fileStoragePath, UriKind.Absolute, out Uri? uri);
         return !uriCreated || uri is null || uri.Scheme.Equals("file", StringComparison.OrdinalIgnoreCase);
     }
 
     public static string NormalizePath(string path)
     {
-        if (Uri.TryCreate(path, UriKind.Absolute, out var result) && result.Scheme != "file")
+        if (Uri.TryCreate(path, UriKind.Absolute, out Uri? result) && result.Scheme != "file")
         {
             return result.AbsoluteUri.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         }
 
-        var fullPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        string fullPath = Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? fullPath.ToUpperInvariant() : fullPath;
     }
 
@@ -143,16 +143,16 @@ public static class FileStat
     public static void DeleteDirectoryWithNormaliseAttributes(string targetDir)
     {
         Console.WriteLine($"Deleting {targetDir} ...");
-        var files = Directory.GetFiles(targetDir);
-        var dirs = Directory.GetDirectories(targetDir);
+        string[] files = Directory.GetFiles(targetDir);
+        string[] dirs = Directory.GetDirectories(targetDir);
 
-        foreach (var file in files)
+        foreach (string file in files)
         {
             File.SetAttributes(file, FileAttributes.Normal);
             File.Delete(file);
         }
 
-        foreach (var dir in dirs)
+        foreach (string dir in dirs)
         {
             DeleteDirectoryWithNormaliseAttributes(dir);
         }
@@ -188,10 +188,10 @@ public static class FileStat
     public static void ClearFolder(string targetFolder, string[] excludes)
     {
         Console.WriteLine($"Clearing {targetFolder} ...");
-        var files = Directory.GetFiles(targetFolder);
-        var dirs = Directory.GetDirectories(targetFolder);
+        string[] files = Directory.GetFiles(targetFolder);
+        string[] dirs = Directory.GetDirectories(targetFolder);
 
-        foreach (var file in files)
+        foreach (string file in files)
         {
             if (excludes.Any(exclude => file.Contains(exclude)))
             {
@@ -202,7 +202,7 @@ public static class FileStat
             File.Delete(file);
         }
 
-        foreach (var dir in dirs)
+        foreach (string dir in dirs)
         {
             if (excludes.Any(exclude => dir.Contains(exclude)))
             {
@@ -226,7 +226,7 @@ public static class FileStat
             return false;
         }
 
-        var appDiffPath = CreateFolderIfNotExists(destinationFolderPath, true);
+        string? appDiffPath = CreateFolderIfNotExists(destinationFolderPath, true);
         if (appDiffPath is null)
         {
             StShared.WriteErrorLine($"does not exists and cannot be creates destination folder {destinationFolderPath}",
@@ -235,10 +235,10 @@ public static class FileStat
         }
 
         var sourceDirInfo = new DirectoryInfo(sourceFolderPath);
-        var files = sourceDirInfo.GetFiles();
-        var dirs = sourceDirInfo.GetDirectories();
+        FileInfo[] files = sourceDirInfo.GetFiles();
+        DirectoryInfo[] dirs = sourceDirInfo.GetDirectories();
 
-        foreach (var file in files)
+        foreach (FileInfo file in files)
         {
             if (excludes.Any(exclude => file.FullName.Contains(exclude)))
             {
@@ -248,7 +248,7 @@ public static class FileStat
             File.Copy(file.FullName, Path.Combine(destinationFolderPath, file.Name));
         }
 
-        foreach (var dir in dirs)
+        foreach (DirectoryInfo dir in dirs)
         {
             if (excludes.Any(exclude => dir.FullName.Contains(exclude)))
             {

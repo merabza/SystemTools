@@ -62,7 +62,7 @@ public sealed class FilePermission
 
         try
         {
-            var permission = ToString();
+            string permission = ToString();
             var filePermission = new ProcessStartInfo(Command, permission);
             Process.Start(filePermission);
             return this;

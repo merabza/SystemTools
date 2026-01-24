@@ -7,13 +7,9 @@ namespace SystemTools.ReCounterAbstraction.DependencyInjection;
 // ReSharper disable once UnusedType.Global
 public static class ReCounterAbstractionDependencyInjection
 {
-    public static IServiceCollection AddReCounterAbstraction(this IServiceCollection services, ILogger logger,
-        bool debugMode)
+    public static IServiceCollection AddReCounterAbstraction(this IServiceCollection services, ILogger? debugLogger)
     {
-        if (debugMode)
-        {
-            logger.Information($"{nameof(AddReCounterAbstraction)} Started");
-        }
+        debugLogger?.Information("{MethodName} Started", nameof(AddReCounterAbstraction));
 
         services.AddSignalR()
             .AddJsonProtocol(options => { options.PayloadSerializerOptions.PropertyNamingPolicy = null; })
@@ -23,10 +19,7 @@ public static class ReCounterAbstractionDependencyInjection
         services.AddSingleton<IHostedService>(p => p.GetRequiredService<ReCounterQueuedHostedService>());
         services.AddSingleton<IReCounterBackgroundTaskQueue, ReCounterBackgroundTaskQueue>();
 
-        if (debugMode)
-        {
-            logger.Information($"{nameof(AddReCounterAbstraction)} Finished");
-        }
+        debugLogger?.Information("{MethodName} Finished", nameof(AddReCounterAbstraction));
 
         return services;
     }

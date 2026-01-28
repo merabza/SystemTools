@@ -15,7 +15,7 @@ public /*open*/ class UnitOfWork : IUnitOfWork
 {
     private readonly DbContext _dbContext;
 
-    public UnitOfWork(DbContext dbContext)
+    protected UnitOfWork(DbContext dbContext)
     {
         _dbContext = dbContext;
     }

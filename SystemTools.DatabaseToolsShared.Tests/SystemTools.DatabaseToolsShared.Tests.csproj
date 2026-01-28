@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="xunit" />
+        <PackageReference Include="xunit" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
+        <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

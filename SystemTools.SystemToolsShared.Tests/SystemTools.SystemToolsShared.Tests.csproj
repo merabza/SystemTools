@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Moq" />
-      <PackageReference Include="xunit" />
+        <PackageReference Include="Moq" />
+        <PackageReference Include="xunit" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
-      <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
+        <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
+        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

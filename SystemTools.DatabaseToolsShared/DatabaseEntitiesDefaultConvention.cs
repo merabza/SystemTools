@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using SystemTools.SystemToolsShared;
 
 //ამ კლასის დანიშნულებაა გააკეთოს საბოლოო ცვლილებები ბაზის ცხრილების მოდელების კონფიგურაციებში
 //ეს ისეთი ცვლილებებია, რომლებიც ზოგადად ყველა მოდელისთვის მისაღებია. თუმცა გათვალისწინებულია გამონაკლისებიც
@@ -108,7 +109,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
         foreach (IConventionProperty property in entityType.GetProperties())
         {
             ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
-            //property.SetColumnName(property.Name.UnCapitalize());
+            property.SetColumnName(property.Name.Capitalize());
             //თუ ველის ტიპი არის DateTime, მაშინ სვეტის ტიპი იყოს datetime
 
             Type clrType = property.ClrType;

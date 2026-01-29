@@ -108,8 +108,8 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
         //ენტიტის თითოეული ველისთვის 
         foreach (IConventionProperty property in entityType.GetProperties())
         {
-            ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი დაპატარავებულ ფორმაში
-            property.SetColumnName(property.Name.Capitalize());
+            ////ბაზის სვეტის სახელს მივანიჭოთ ველის სახელი პირველი ასოთი გაზრდილ ფორმაში
+            //property.SetColumnName(property.Name.Capitalize());
             //თუ ველის ტიპი არის DateTime, მაშინ სვეტის ტიპი იყოს datetime
 
             Type clrType = property.ClrType;

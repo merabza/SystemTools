@@ -52,7 +52,9 @@ public /*open*/ class MessageLogger
         else
         {
 #pragma warning disable CA2254 // Template should be a static expression
+#pragma warning disable CA1873
             _logger?.LogInformation(message, arg1);
+#pragma warning restore CA1873
 #pragma warning restore CA2254 // Template should be a static expression
         }
 
@@ -73,7 +75,9 @@ public /*open*/ class MessageLogger
         else
         {
 #pragma warning disable CA2254
+#pragma warning disable CA1873
             _logger?.LogInformation(message, arg1, arg2);
+#pragma warning restore CA1873
 #pragma warning restore CA2254
         }
 
@@ -96,7 +100,9 @@ public /*open*/ class MessageLogger
         else
         {
 #pragma warning disable CA2254
+#pragma warning disable CA1873
             _logger?.LogInformation(message, arg1, arg2, arg3);
+#pragma warning restore CA1873
 #pragma warning restore CA2254
         }
 
@@ -118,7 +124,9 @@ public /*open*/ class MessageLogger
         else
         {
 #pragma warning disable CA2254
+#pragma warning disable CA1873
             _logger?.LogInformation(message, arg1, arg2, arg3, arg4);
+#pragma warning restore CA1873
 #pragma warning restore CA2254
         }
 

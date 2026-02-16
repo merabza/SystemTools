@@ -323,11 +323,12 @@ public static class StShared
         }
     }
 
-    public static void WriteErrorLine(string errorText, bool useConsole, ILogger? logger = null, bool pauseAfter = true)
+    public static void WriteErrorLine(string errorText, bool useConsole, ILogger? logger = null, bool pauseAfter = true,
+        params object[] args)
     {
-#pragma warning disable CA2254
-        logger?.LogError(errorText);
-#pragma warning restore CA2254
+#pragma warning disable CA2254 // Template should be a static expression
+        logger?.LogError(errorText, args);
+#pragma warning restore CA2254 // Template should be a static expression
         if (!useConsole)
         {
             return;

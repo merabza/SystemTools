@@ -1,4 +1,4 @@
-﻿namespace ApiKeysManagement.Models;
+﻿namespace SystemTools.ApiKeysManagement.Models;
 
 public sealed class ApiKeyByRemoteIpAddressModel
 {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ApiKeysManagement.Domain;
+using SystemTools.ApiKeysManagement.Domain;
 
-namespace ApiKeysManagement;
+namespace SystemTools.ApiKeysManagement;
 
 public interface IApiKeyFinder
 {

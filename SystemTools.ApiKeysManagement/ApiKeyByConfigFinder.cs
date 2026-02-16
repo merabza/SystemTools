@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using ApiKeysManagement.Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SystemTools.ApiKeysManagement.Domain;
 
-namespace ApiKeysManagement;
+namespace SystemTools.ApiKeysManagement;
 
 public sealed class ApiKeyByConfigFinder : IApiKeyFinder
 {

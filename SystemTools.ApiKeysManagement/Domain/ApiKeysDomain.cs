@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ApiKeysManagement.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SystemTools.ApiKeysManagement.Models;
 
-namespace ApiKeysManagement.Domain;
+namespace SystemTools.ApiKeysManagement.Domain;
 
 public sealed class ApiKeysDomain
 {
@@ -14,7 +14,7 @@ public sealed class ApiKeysDomain
 
     public static ApiKeysDomain Create(IConfiguration configuration, ILogger logger)
     {
-        var apiKeysSection = configuration.GetSection("ApiKeys");
+        IConfigurationSection apiKeysSection = configuration.GetSection("ApiKeys");
         var apiKeys = apiKeysSection.Get<ApiKeys>();
 
         var apiKeysDomain = new ApiKeysDomain();
@@ -25,7 +25,7 @@ public sealed class ApiKeysDomain
             return apiKeysDomain;
         }
 
-        foreach (var apiKeyByRemoteIpAddressModel in apiKeys.AppSettingsByApiKey)
+        foreach (ApiKeyByRemoteIpAddressModel apiKeyByRemoteIpAddressModel in apiKeys.AppSettingsByApiKey)
         {
             string? apiKey = apiKeyByRemoteIpAddressModel.ApiKey;
             string? remoteIpAddress = apiKeyByRemoteIpAddressModel.RemoteIpAddress;

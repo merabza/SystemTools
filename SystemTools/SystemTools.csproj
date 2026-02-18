@@ -7,18 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ApiContracts\ApiContracts.csproj" />
-        <ProjectReference Include="..\ApiKeysManagement\ApiKeysManagement.csproj" />
-        <ProjectReference Include="..\DatabaseToolsShared\DatabaseToolsShared.csproj" />
-        <ProjectReference Include="..\DomainShared\DomainShared.csproj" />
-        <ProjectReference Include="..\JetBrainsResharperGlobalToolsWork\JetBrainsResharperGlobalToolsWork.csproj" />
-        <ProjectReference Include="..\MediatRMessagingAbstractions\MediatRMessagingAbstractions.csproj" />
-        <ProjectReference Include="..\ReCounterAbstraction\ReCounterAbstraction.csproj" />
-        <ProjectReference Include="..\ReCounterContracts\ReCounterContracts.csproj" />
-        <ProjectReference Include="..\RepositoriesShared\RepositoriesShared.csproj" />
-        <ProjectReference Include="..\StringMessagesApiContracts\StringMessagesApiContracts.csproj" />
-        <ProjectReference Include="..\SystemToolsShared\SystemToolsShared.csproj" />
-        <ProjectReference Include="..\TestApiContracts\TestApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.ApiContracts\SystemTools.ApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.ApiKeysManagement\SystemTools.ApiKeysManagement.csproj" />
+        <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
+        <ProjectReference Include="..\SystemTools.DomainShared\SystemTools.DomainShared.csproj" />
+        <ProjectReference Include="..\SystemTools.JetBrainsResharperGlobalToolsWork\SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
+        <ProjectReference Include="..\SystemTools.MediatRMessagingAbstractions\SystemTools.MediatRMessagingAbstractions.csproj" />
+        <ProjectReference Include="..\SystemTools.ReCounterAbstraction\SystemTools.ReCounterAbstraction.csproj" />
+        <ProjectReference Include="..\SystemTools.ReCounterContracts\SystemTools.ReCounterContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.RepositoriesShared\SystemTools.RepositoriesShared.csproj" />
+        <ProjectReference Include="..\SystemTools.StringMessagesApiContracts\SystemTools.StringMessagesApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
+        <ProjectReference Include="..\SystemTools.TestApiContracts\SystemTools.TestApiContracts.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

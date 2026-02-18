@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\StringMessagesApiContracts\StringMessagesApiContracts.csproj" />
+      <ProjectReference Include="..\SystemTools.StringMessagesApiContracts\SystemTools.StringMessagesApiContracts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

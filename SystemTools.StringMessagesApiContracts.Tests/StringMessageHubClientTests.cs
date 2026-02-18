@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Threading.Tasks;
+using SystemTools.StringMessagesApiContracts;
 
 namespace StringMessagesApiContracts.Tests;
 

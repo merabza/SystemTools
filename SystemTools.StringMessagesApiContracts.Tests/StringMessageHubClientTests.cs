@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 using System.Threading.Tasks;
-using SystemTools.StringMessagesApiContracts;
 
-namespace StringMessagesApiContracts.Tests;
+namespace SystemTools.StringMessagesApiContracts.Tests;
 
 public sealed class StringMessageHubClientTests
 {
@@ -29,7 +28,7 @@ public sealed class StringMessageHubClientTests
         var client = new StringMessageHubClient("http://invalid-server", ApiKey);
 
         // Act
-        var result = await client.RunMessages();
+        bool result = await client.RunMessages();
 
         // Assert
         Assert.False(result);
@@ -42,7 +41,7 @@ public sealed class StringMessageHubClientTests
         var client = new StringMessageHubClient(ServerUrl, ApiKey);
 
         // Act
-        var result = await client.StopMessages();
+        bool result = await client.StopMessages();
 
         // Assert
         Assert.True(result);
@@ -64,7 +63,7 @@ public sealed class StringMessageHubClientTests
         typeof(StringMessageHubClient).GetField("_connection", BindingFlags.NonPublic | BindingFlags.Instance)
             ?.SetValue(client, null);
 
-        var result = await client.StopMessages();
+        bool result = await client.StopMessages();
 
         Assert.True(result); // Should return true since _connection is null
     }

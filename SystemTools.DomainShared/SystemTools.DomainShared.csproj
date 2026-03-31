@@ -4,8 +4,4 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
-    </ItemGroup>
-
 </Project>

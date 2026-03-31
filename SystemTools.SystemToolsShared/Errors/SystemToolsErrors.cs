@@ -5,85 +5,72 @@ namespace SystemTools.SystemToolsShared.Errors;
 
 public static class SystemToolsErrors
 {
-    public static readonly Err UnexpectedError = new()
+    public static readonly Error UnexpectedError = new()
     {
-        ErrorCode = nameof(UnexpectedError), ErrorMessage = "გაუთვალისწინებელი შეცდომა"
+        Code = nameof(UnexpectedError), Name = "გაუთვალისწინებელი შეცდომა"
     };
 
-    public static Err SuchARecordAlreadyExists =>
-        new() { ErrorCode = nameof(SuchARecordAlreadyExists), ErrorMessage = "ასეთი ჩანაწერი უკვე არსებობს" };
+    public static Error SuchARecordAlreadyExists =>
+        new() { Code = nameof(SuchARecordAlreadyExists), Name = "ასეთი ჩანაწერი უკვე არსებობს" };
 
-    public static Err TheEntryHasBeenUsedAndCannotBeDeleted =>
-        new()
-        {
-            ErrorCode = nameof(TheEntryHasBeenUsedAndCannotBeDeleted),
-            ErrorMessage = "ჩანაწერი გამოყენებულია და ვერ წაიშლება"
-        };
+    public static Error TheEntryHasBeenUsedAndCannotBeDeleted =>
+        new() { Code = nameof(TheEntryHasBeenUsedAndCannotBeDeleted), Name = "ჩანაწერი გამოყენებულია და ვერ წაიშლება" };
 
-    public static Err ErrorCaught(string methodName, string errorMessage)
+    public static Error ErrorCaught(string methodName, string errorMessage)
     {
-        return new Err { ErrorCode = nameof(ErrorCaught), ErrorMessage = $"Error in {methodName} {errorMessage}" };
+        return new Error { Code = nameof(ErrorCaught), Name = $"Error in {methodName} {errorMessage}" };
     }
 
-    public static Err VirtualMethodOverrideNotImplemented(string methodName)
+    public static Error VirtualMethodOverrideNotImplemented(string methodName)
     {
-        return new Err
+        return new Error
         {
-            ErrorCode = nameof(VirtualMethodOverrideNotImplemented),
-            ErrorMessage = $"Virtual Method {methodName} Override did Not Implemented"
+            Code = nameof(VirtualMethodOverrideNotImplemented),
+            Name = $"Virtual Method {methodName} Override did Not Implemented"
         };
     }
 
-    public static Err MethodNotImplemented(string methodName)
+    public static Error MethodNotImplemented(string methodName)
     {
-        return new Err
+        return new Error { Code = nameof(MethodNotImplemented), Name = $"Method {methodName} did Not Implemented" };
+    }
+
+    public static Error HandlerNotImplemented(string methodName)
+    {
+        return new Error { Code = nameof(MethodNotImplemented), Name = $"Handler {methodName} did Not Implemented" };
+    }
+
+    public static Error ErrorWhenRunningMethod(string methodName, Guid errorGuid)
+    {
+        return new Error
         {
-            ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Method {methodName} did Not Implemented"
+            Code = nameof(ErrorWhenRunningMethod),
+            Name = $"{errorGuid} Error When Loading Data With Method {methodName}"
         };
     }
 
-    public static Err HandlerNotImplemented(string methodName)
-    {
-        return new Err
-        {
-            ErrorCode = nameof(MethodNotImplemented), ErrorMessage = $"Handler {methodName} did Not Implemented"
-        };
-    }
-
-    public static Err ErrorWhenRunningMethod(string methodName, Guid errorGuid)
-    {
-        return new Err
-        {
-            ErrorCode = nameof(ErrorWhenRunningMethod),
-            ErrorMessage = $"{errorGuid} Error When Loading Data With Method {methodName}"
-        };
-    }
-
-    public static Err UnexpectedApiException(Exception e)
+    public static Error UnexpectedApiException(Exception e)
     {
         var errorId = Guid.NewGuid();
         Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
             e.StackTrace);
-        return new Err
-        {
-            ErrorCode = nameof(UnexpectedApiException), ErrorMessage = $"გაუთვალისწინებელი შეცდომა: {errorId}"
-        };
+        return new Error { Code = nameof(UnexpectedApiException), Name = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
     }
 
-    public static Err RunProcessError(string errorMessage)
+    public static Error RunProcessError(string errorMessage)
     {
-        return new Err { ErrorCode = nameof(RunProcessError), ErrorMessage = $"RunProcessError: {errorMessage}" };
+        return new Error { Code = nameof(RunProcessError), Name = $"RunProcessError: {errorMessage}" };
     }
 
-    public static Err UnexpectedDatabaseException(Exception e)
+    public static Error UnexpectedDatabaseException(Exception e)
     {
         var errorId = Guid.NewGuid();
         Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
             e.StackTrace);
-        return new Err
+        return new Error
         {
-            ErrorCode = nameof(UnexpectedDatabaseException),
-            ErrorMessage = $"მონაცემთა ბაზასთან დაკავშირებული გაუთვალისწინებელი შეცდომა: {errorId}"
+            Code = nameof(UnexpectedDatabaseException),
+            Name = $"მონაცემთა ბაზასთან დაკავშირებული გაუთვალისწინებელი შეცდომა: {errorId}"
         };
     }
 }

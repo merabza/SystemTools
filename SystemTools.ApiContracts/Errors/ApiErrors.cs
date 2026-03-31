@@ -4,24 +4,21 @@ namespace SystemTools.ApiContracts.Errors;
 
 public static class ApiErrors
 {
-    public static readonly Err InvalidRemoteAddress = new()
+    public static readonly Error InvalidRemoteAddress = new()
     {
-        ErrorCode = nameof(InvalidRemoteAddress), ErrorMessage = "Invalid Remote Address"
+        Code = nameof(InvalidRemoteAddress), Name = "Invalid Remote Address"
     };
 
-    public static readonly Err ApiKeyIsInvalid = new()
+    public static readonly Error ApiKeyIsInvalid = new()
     {
-        ErrorCode = nameof(ApiKeyIsInvalid), ErrorMessage = "API Key is invalid"
+        Code = nameof(ApiKeyIsInvalid), Name = "API Key is invalid"
     };
 
-    public static readonly Err RequestIsEmpty = new()
-    {
-        ErrorCode = nameof(RequestIsEmpty), ErrorMessage = "Request is Empty"
-    };
+    public static readonly Error RequestIsEmpty = new() { Code = nameof(RequestIsEmpty), Name = "Request is Empty" };
 
-    public static readonly Err SomeRequestParametersAreNotValid = new()
+    public static readonly Error SomeRequestParametersAreNotValid = new()
     {
-        ErrorCode = nameof(SomeRequestParametersAreNotValid), ErrorMessage = "Some request parameters are not valid"
+        Code = nameof(SomeRequestParametersAreNotValid), Name = "Some request parameters are not valid"
     };
 
     public static string IsEmptyErrMessage(string propertyNameLocalized)

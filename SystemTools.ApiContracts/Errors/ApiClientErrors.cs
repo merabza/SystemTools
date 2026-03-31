@@ -4,27 +4,24 @@ namespace SystemTools.ApiContracts.Errors;
 
 public static class ApiClientErrors
 {
-    public static readonly Err UnexpectedServerError = new()
+    public static readonly Error UnexpectedServerError = new()
     {
-        ErrorCode = nameof(UnexpectedServerError), ErrorMessage = "Unexpected Server Error"
+        Code = nameof(UnexpectedServerError), Name = "Unexpected Server Error"
     };
 
-    public static readonly Err ApiUnknownError = new()
+    public static readonly Error ApiUnknownError = new()
     {
-        ErrorCode = nameof(ApiUnknownError), ErrorMessage = "Api returned an unknown error"
+        Code = nameof(ApiUnknownError), Name = "Api returned an unknown error"
     };
 
-    public static readonly Err ApiDidNotReturnAnything = new()
+    public static readonly Error ApiDidNotReturnAnything = new()
     {
-        ErrorCode = nameof(ApiDidNotReturnAnything), ErrorMessage = "api did not return anything"
+        Code = nameof(ApiDidNotReturnAnything), Name = "api did not return anything"
     };
 
-    public static Err ApiReturnedAnError(string errorMessage)
+    public static Error ApiReturnedAnError(string errorMessage)
     {
-        return new Err
-        {
-            ErrorCode = nameof(ApiReturnedAnError), ErrorMessage = $"Api Returned an Error: {errorMessage}"
-        };
+        return new Error { Code = nameof(ApiReturnedAnError), Name = $"Api Returned an Error: {errorMessage}" };
     }
 
     /*

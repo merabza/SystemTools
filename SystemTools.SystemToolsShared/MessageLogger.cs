@@ -169,45 +169,45 @@ public /*open*/ class MessageLogger
         }
     }
 
-    protected async ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+    protected async ValueTask<Error[]> LogErrorAndSendMessageFromError(string errorCode, string message,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(message, UseConsole, _logger);
 
         if (_messagesDataManager is null)
         {
-            return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
+            return [new Error { Code = errorCode, Name = message }];
         }
 
         await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
-        return [new Err { ErrorCode = errorCode, ErrorMessage = message }];
+        return [new Error { Code = errorCode, Name = message }];
     }
 
-    public async ValueTask<Err[]> LogErrorAndSendMessageFromError(Err error,
+    public async ValueTask<Error[]> LogErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {
-        StShared.WriteErrorLine(error.ErrorMessage, UseConsole, _logger);
+        StShared.WriteErrorLine(error.Name, UseConsole, _logger);
 
         if (_messagesDataManager is null)
         {
             return [error];
         }
 
-        await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
+        await _messagesDataManager.SendMessage(_userName, error.Name, cancellationToken);
         return [error];
     }
 
-    protected async ValueTask<Err> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+    protected async ValueTask<Error> LogErrorAndSendMessageFromException(Exception ex, string methodName,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
-        Err error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
+        Error error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
         {
             return error;
         }
 
-        await _messagesDataManager.SendMessage(_userName, error.ErrorMessage, cancellationToken);
+        await _messagesDataManager.SendMessage(_userName, error.Name, cancellationToken);
         return error;
     }
 }

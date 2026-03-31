@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using SystemTools.DomainShared.Repositories;
 using SystemTools.SystemToolsShared;
 
 namespace SystemTools.DatabaseToolsShared;
@@ -16,20 +15,18 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
     protected readonly IDataSeederRepository DataSeederRepo;
-    protected readonly IUnitOfWork UnitOfWork;
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
     //ანუ როცა გამოყენებულია RulesHasMorePriority, ან JsonHasMorePriority
-    public DataSeeder(string dataSeedFolder, IDataSeederRepository repo, IUnitOfWork unitOfWork,
+    public DataSeeder(string dataSeedFolder, IDataSeederRepository repo, IDatabaseAbstraction databaseAbstraction,
         ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
     {
         _dataSeedFolder = dataSeedFolder;
         DataSeederRepo = repo;
-        UnitOfWork = unitOfWork;
         _seedDataType = seedDataType;
         _keyFieldNamesList = keyFieldNamesList ?? [];
-        _tableName = unitOfWork.GetTableName<TDst>();
+        _tableName = databaseAbstraction.GetTableName<TDst>();
     }
 
     //ეს არის ძირითადი მეთოდი, რომლის საშუალებითაც ხდება ერთი ცხრილის შესაბამისი ინფორმაციის ჩატვირთვა ბაზაში

@@ -6,23 +6,18 @@ using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
-using SystemTools.Domain.Abstractions;
+using SystemTools.SystemToolsShared;
 using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.RepositoriesShared;
 
-public /*open*/ class UnitOfWork : IUnitOfWork
+public /*open*/ class DatabaseAbstractionRepository : IDatabaseAbstraction
 {
     private readonly DbContext _dbContext;
 
-    protected UnitOfWork(DbContext dbContext)
+    protected DatabaseAbstractionRepository(DbContext dbContext)
     {
         _dbContext = dbContext;
-    }
-
-    public Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        return _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public string GetTableName<T>() where T : class

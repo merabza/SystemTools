@@ -5,7 +5,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SystemTools.DomainShared\SystemTools.DomainShared.csproj" />
+      <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,13 +5,12 @@ using LanguageExt;
 using Microsoft.EntityFrameworkCore.Storage;
 using SystemTools.SystemToolsShared.Errors;
 
-namespace SystemTools.DomainShared.Repositories;
+namespace SystemTools.SystemToolsShared;
 
-public interface IUnitOfWork
+public interface IDatabaseAbstraction
 {
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
     string GetTableName<T>() where T : class;
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
-    Task<Option<Err[]>> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default);
+    Task<Option<Error[]>> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default);
     void SetCommandTimeout(TimeSpan timeout);
 }

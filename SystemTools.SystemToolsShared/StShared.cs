@@ -27,7 +27,7 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static OneOf<(string, int), Err[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
+    public static OneOf<(string, int), Error[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
         //var option = CheckFileExists(programFileName);
@@ -91,7 +91,7 @@ public static class StShared
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
-    public static Option<Err[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
+    public static Option<Error[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
         int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);

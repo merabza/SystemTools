@@ -32,7 +32,7 @@ public static class StShared
     {
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 
-        //    return (Err[])option;
+        //    return (Error[])option;
 
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
@@ -129,20 +129,20 @@ public static class StShared
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
-    //private static Option<Err[]> CheckFileExists(string programFileName)
+    //private static Option<Error[]> CheckFileExists(string programFileName)
     //{
     //    // Check if the program file exists before starting the process
     //    if (!File.Exists(programFileName))
     //    {
     //        var errorMsg = $"File not found: {programFileName}";
-    //        return Err.CreateArr(new Err { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //        return Error.CreateArr(new Error { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
     //    }
 
     //    //also check if the file exists in the current directory
     //    if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), programFileName)))
     //    {
     //        var errorMsg = $"File not found in current directory: {programFileName}";
-    //        return Err.CreateArr(new Err { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //        return Error.CreateArr(new Error { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
     //    }
     //    return null;
     //}

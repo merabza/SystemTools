@@ -135,14 +135,14 @@ public static class StShared
     //    if (!File.Exists(programFileName))
     //    {
     //        var errorMsg = $"File not found: {programFileName}";
-    //        return Error.CreateArr(new Error { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
     //    }
 
     //    //also check if the file exists in the current directory
     //    if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), programFileName)))
     //    {
     //        var errorMsg = $"File not found in current directory: {programFileName}";
-    //        return Error.CreateArr(new Error { ErrorCode = "FileNotFound", ErrorMessage = errorMsg });
+    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
     //    }
     //    return null;
     //}

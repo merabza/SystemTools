@@ -85,7 +85,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         }
 
         string errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
-        _logger?.LogError("Returned error message from ApiClient: {ErrorMessage}", errorMessage);
+        _logger?.LogError("Returned error message from ApiClient: {Name}", errorMessage);
 
         return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];
     }

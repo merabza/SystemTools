@@ -25,6 +25,6 @@ public static class ApiClientErrors
     }
 
     /*
-            return new Error[] { new() { ErrorCode = "ApiReturnNothing", ErrorMessage = "Nothing returned Api" } };
+            return new Error[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
      */
 }

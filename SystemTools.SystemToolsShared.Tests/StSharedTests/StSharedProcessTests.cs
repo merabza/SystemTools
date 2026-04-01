@@ -23,7 +23,7 @@ public sealed class StSharedProcessTests
         bool useConsole = false;
 
         // Act
-        OneOf<(string, int), Err[]> result =
+        OneOf<(string, int), Error[]> result =
             StShared.RunProcessWithOutput(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
@@ -40,7 +40,7 @@ public sealed class StSharedProcessTests
         bool useConsole = false;
 
         // Act
-        Option<Err[]> result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
+        Option<Error[]> result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
         Assert.True(result.IsNone);
@@ -50,7 +50,7 @@ public sealed class StSharedProcessTests
     public void IsAllowExitCode_WithZero_ReturnsTrue()
     {
         // Arrange & Act
-        Option<Err[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
+        Option<Error[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
 
         // Assert
         Assert.True(result.IsNone);
@@ -60,7 +60,7 @@ public sealed class StSharedProcessTests
     public void IsAllowExitCode_WithAllowedCode_ReturnsTrue()
     {
         // Arrange & Act
-        Option<Err[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
+        Option<Error[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
 
         // Assert
         Assert.True(result.IsNone);

@@ -57,13 +57,13 @@ public sealed class MessageLoggerTests
     {
         var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
 
-        Err[] result = await logger.LogErrorAndSendMessageFromError("E1", "Error message");
+        Error[] result = await logger.LogErrorAndSendMessageFromError("E1", "Error message");
 
         _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "Error message", It.IsAny<CancellationToken>()),
             Times.Once);
-        Err err = Assert.Single(result);
-        Assert.Equal("E1", err.ErrorCode);
-        Assert.Equal("Error message", err.ErrorMessage);
+        Error err = Assert.Single(result);
+        Assert.Equal("E1", err.Code);
+        Assert.Equal("Error message", err.Name);
     }
 
     [Fact]
@@ -71,11 +71,11 @@ public sealed class MessageLoggerTests
     {
         var logger = new TestMessageLogger(_mockLogger.Object, null, UserName, false);
 
-        Err[] result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
+        Error[] result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
 
-        Err err = Assert.Single(result);
-        Assert.Equal("E2", err.ErrorCode);
-        Assert.Equal("No manager", err.ErrorMessage);
+        Error err = Assert.Single(result);
+        Assert.Equal("E2", err.Code);
+        Assert.Equal("No manager", err.Name);
     }
 
     [Fact]
@@ -84,14 +84,14 @@ public sealed class MessageLoggerTests
         var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
         var ex = new InvalidOperationException("fail");
 
-        Err result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
+        Error result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
 
         _mockMessagesDataManager.Verify(
             m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("Error in TestMethod")),
                 It.IsAny<CancellationToken>()), Times.Once);
 
-        Assert.Equal("ErrorCaught", result.ErrorCode);
-        Assert.Contains("Error in TestMethod", result.ErrorMessage);
+        Assert.Equal("ErrorCaught", result.Code);
+        Assert.Contains("Error in TestMethod", result.Name);
     }
 
     private sealed class TestMessageLogger : MessageLogger
@@ -148,7 +148,7 @@ public sealed class MessageLoggerTests
         //    return base.LogWarningAndSendMessage(message, arg1, arg2, cancellationToken);
         //}
 
-        public new ValueTask<Err[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+        public new ValueTask<Error[]> LogErrorAndSendMessageFromError(string errorCode, string message,
             CancellationToken cancellationToken = default)
         {
             return base.LogErrorAndSendMessageFromError(errorCode, message, cancellationToken);
@@ -160,7 +160,7 @@ public sealed class MessageLoggerTests
         //    return base.LogErrorAndSendMessageFromError(error, cancellationToken);
         //}
 
-        public new ValueTask<Err> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+        public new ValueTask<Error> LogErrorAndSendMessageFromException(Exception ex, string methodName,
             CancellationToken cancellationToken = default)
         {
             return base.LogErrorAndSendMessageFromException(ex, methodName, cancellationToken);

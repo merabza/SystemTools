@@ -22,7 +22,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcessWithOutput_ValidProcess_ReturnsOutput()
     {
-        OneOf<(string, int), Err[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
+        OneOf<(string, int), Error[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
         Assert.True(result.IsT0);
         (string output, int exitCode) = result.AsT0;
         Assert.False(string.IsNullOrWhiteSpace(output));
@@ -41,7 +41,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcess_ValidProcess_ReturnsNull()
     {
-        Option<Err[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
+        Option<Error[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
         Assert.True(result.IsNone);
     }
 

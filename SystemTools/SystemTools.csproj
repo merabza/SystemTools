@@ -7,26 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SystemTools.ApiContracts\SystemTools.ApiContracts.csproj" />
-        <ProjectReference Include="..\SystemTools.ApiKeysManagement\SystemTools.ApiKeysManagement.csproj" />
-        <ProjectReference
-            Include="..\SystemTools.DatabaseToolsShared.Tests\SystemTools.DatabaseToolsShared.Tests.csproj" />
-        <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
-        <ProjectReference Include="..\SystemTools.DomainShared\SystemTools.DomainShared.csproj" />
-        <ProjectReference
-            Include="..\SystemTools.JetBrainsResharperGlobalToolsWork\SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
-        <ProjectReference
-            Include="..\SystemTools.MediatRMessagingAbstractions\SystemTools.MediatRMessagingAbstractions.csproj" />
-        <ProjectReference Include="..\SystemTools.ReCounterAbstraction\SystemTools.ReCounterAbstraction.csproj" />
-        <ProjectReference Include="..\SystemTools.ReCounterContracts\SystemTools.ReCounterContracts.csproj" />
-        <ProjectReference Include="..\SystemTools.RepositoriesShared\SystemTools.RepositoriesShared.csproj" />
-        <ProjectReference
-            Include="..\SystemTools.StringMessagesApiContracts.Tests\SystemTools.StringMessagesApiContracts.Tests.csproj" />
-        <ProjectReference
-            Include="..\SystemTools.StringMessagesApiContracts\SystemTools.StringMessagesApiContracts.csproj" />
-        <ProjectReference Include="..\SystemTools.SystemToolsShared.Tests\SystemTools.SystemToolsShared.Tests.csproj" />
-        <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
-        <ProjectReference Include="..\SystemTools.TestApiContracts\SystemTools.TestApiContracts.csproj" />
+      <ProjectReference Include="..\SystemTools.ApiContracts\SystemTools.ApiContracts.csproj" />
+      <ProjectReference Include="..\SystemTools.ApiKeysManagement\SystemTools.ApiKeysManagement.csproj" />
+      <ProjectReference Include="..\SystemTools.DatabaseToolsShared\SystemTools.DatabaseToolsShared.csproj" />
+      <ProjectReference Include="..\SystemTools.Domain.Abstractions\SystemTools.Domain.Abstractions.csproj" />
+      <ProjectReference Include="..\SystemTools.DomainShared\SystemTools.DomainShared.csproj" />
+      <ProjectReference Include="..\SystemTools.JetBrainsResharperGlobalToolsWork\SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
+      <ProjectReference Include="..\SystemTools.MediatRMessagingAbstractions\SystemTools.MediatRMessagingAbstractions.csproj" />
+      <ProjectReference Include="..\SystemTools.ReCounterAbstraction\SystemTools.ReCounterAbstraction.csproj" />
+      <ProjectReference Include="..\SystemTools.ReCounterContracts\SystemTools.ReCounterContracts.csproj" />
+      <ProjectReference Include="..\SystemTools.RepositoriesShared\SystemTools.RepositoriesShared.csproj" />
+      <ProjectReference Include="..\SystemTools.StringMessagesApiContracts\SystemTools.StringMessagesApiContracts.csproj" />
+      <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
+      <ProjectReference Include="..\SystemTools.TestApiContracts\SystemTools.TestApiContracts.csproj" />
     </ItemGroup>
 
 </Project>

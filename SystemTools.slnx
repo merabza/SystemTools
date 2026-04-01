@@ -12,6 +12,7 @@
     <Project Path="SystemTools.ApiContracts/SystemTools.ApiContracts.csproj" />
     <Project Path="SystemTools.ApiKeysManagement/SystemTools.ApiKeysManagement.csproj" />
     <Project Path="SystemTools.DatabaseToolsShared/SystemTools.DatabaseToolsShared.csproj" />
+    <Project Path="SystemTools.Domain.Abstractions/SystemTools.Domain.Abstractions.csproj" />
     <Project Path="SystemTools.DomainShared/SystemTools.DomainShared.csproj" />
     <Project Path="SystemTools.JetBrainsResharperGlobalToolsWork/SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
     <Project Path="SystemTools.MediatRMessagingAbstractions/SystemTools.MediatRMessagingAbstractions.csproj" />

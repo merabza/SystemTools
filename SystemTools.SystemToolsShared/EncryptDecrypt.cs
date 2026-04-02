@@ -56,6 +56,32 @@ public static class EncryptDecrypt
         string? result = null;
         try
         {
+            //#pragma warning disable CA5351
+            //#pragma warning disable CA2000
+            //            MD5 md5 = MD5.Create();
+            //#pragma warning restore CA2000
+            //#pragma warning restore CA5351
+            //#pragma warning disable CA1850
+            //            byte[] hash = md5.ComputeHash(Encoding.ASCII.GetBytes(key));
+            //#pragma warning restore CA1850
+            //#pragma warning disable S5547
+            //#pragma warning disable CA5350
+            //#pragma warning disable CA5350
+            //#pragma warning disable CA2000
+            //            TripleDES tripleDes = TripleDES.Create();
+            //#pragma warning restore CA2000
+            //#pragma warning restore CA5350
+            //#pragma warning restore CA5350
+            //#pragma warning restore S5547
+            //            tripleDes.Key = hash;
+            //#pragma warning disable CA5358
+            //            tripleDes.Mode = CipherMode.ECB;
+            //#pragma warning restore CA5358
+            //            tripleDes.Padding = PaddingMode.PKCS7;
+            //            byte[] buff = Encoding.ASCII.GetBytes(str);
+            //            result = Convert.ToBase64String(tripleDes.CreateEncryptor().TransformFinalBlock(buff, 0, buff.Length));
+
+
             byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(key));
             byte[] aesKey = new byte[32];
             Array.Copy(hash, aesKey, 32);

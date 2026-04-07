@@ -81,7 +81,6 @@ public static class EncryptDecrypt
             //            byte[] buff = Encoding.ASCII.GetBytes(str);
             //            result = Convert.ToBase64String(tripleDes.CreateEncryptor().TransformFinalBlock(buff, 0, buff.Length));
 
-
             byte[] hash = SHA256.HashData(Encoding.UTF8.GetBytes(key));
             byte[] aesKey = new byte[32];
             Array.Copy(hash, aesKey, 32);

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SystemTools.BackgroundTasks;
 
-//ეს კლასი გამოიყენება ApAgent-ში
+//ეს კლასი გამოიყენება Replicator-ში
 public sealed class Processes : IProcesses, IDisposable
 {
     private readonly ILogger _logger;

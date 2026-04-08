@@ -7,7 +7,7 @@ namespace SystemTools.BackgroundTasks;
 
 public /*open*/ class ProcessesToolAction : ToolAction
 {
-    //საჭიროა ApAgent-ისთვის
+    //საჭიროა Replicator-ისთვის
     // ReSharper disable once MemberCanBePrivate.Global
     protected readonly ProcessManager? ProcessManager;
 
@@ -43,14 +43,14 @@ public /*open*/ class ProcessesToolAction : ToolAction
         await task.WaitAsync(cancellationToken);
     }
 
-    //public საჭიროა ApAgent-ისათვის
+    //public საჭიროა Replicator-ისათვის
     // ReSharper disable once MemberCanBeProtected.Global
     public virtual ProcessesToolAction? GetNextAction()
     {
         return null;
     }
 
-    //protected საჭიროა ApAgent-ისათვის
+    //protected საჭიროა Replicator-ისათვის
     // ReSharper disable once MemberCanBePrivate.Global
     protected async ValueTask RunNextAction(ProcessesToolAction? nextToolAction,
         CancellationToken cancellationToken = default)

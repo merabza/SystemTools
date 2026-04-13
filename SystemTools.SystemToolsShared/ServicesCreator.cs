@@ -27,7 +27,6 @@ public /*open*/ class ServicesCreator
     {
         services.AddLogging(configure => configure.AddSerilog());
         services.Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
-        //services.AddHttpClient();
     }
 
     public ServiceProvider? CreateServiceProvider(LogEventLevel consoleLogEventLevel)
@@ -44,16 +43,11 @@ public /*open*/ class ServicesCreator
                 logFileName = Path.Combine(_logFolder, _appName, $"{_appName}.log");
             }
 
-            ////check with regex logFileName is valid filename
-            //if (!FileNameValidator.IsValidFileName(logFileName))
-            //    return null;
-
             if (logFileName is not null)
             {
                 const string extension = ".log";
                 if (logFileName.ToUpperInvariant().EndsWith(".LOG", StringComparison.Ordinal) ||
                     logFileName.ToUpperInvariant().EndsWith(".TXT", StringComparison.Ordinal))
-                    //extension = logFileName.Substring(logFileName.Length - 5);
                 {
                     logFileName = logFileName[..^4];
                 }

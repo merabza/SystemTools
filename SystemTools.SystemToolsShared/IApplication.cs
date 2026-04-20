@@ -2,5 +2,5 @@
 
 public interface IApplication
 {
-    string Name { get; }
+    string AppName { get; }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
@@ -19,5 +15,4 @@ public static class SerilogLoggerServicesExtensions
         services.Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
         return services;
     }
-
 }

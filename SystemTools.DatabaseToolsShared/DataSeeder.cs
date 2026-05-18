@@ -18,9 +18,9 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
-    //ანუ როცა გამოყენებულია RulesHasMorePriority, ან JsonHasMorePriority
+    //ანუ როცა გამოყენებულია SeederRulesHasMorePriority, ან DatabaseDataHasMorePriority
     public DataSeeder(string dataSeedFolder, IDataSeederRepository repo, IDatabaseAbstraction databaseAbstraction,
-        ESeedDataType seedDataType = ESeedDataType.OnlyJson, List<string>? keyFieldNamesList = null)
+        ESeedDataType seedDataType = ESeedDataType.OnlyDatabase, List<string>? keyFieldNamesList = null)
     {
         _dataSeedFolder = dataSeedFolder;
         DataSeederRepo = repo;
@@ -51,37 +51,37 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         //Json-დან ჩატვირთვა
         List<TMo> seedData = _seedDataType switch
         {
-            ESeedDataType.OnlyRules => [],
-            ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
-                LoadFromJsonFile(),
+            ESeedDataType.OnlySeederRules => [],
+            ESeedDataType.OnlyDatabase or ESeedDataType.SeederRulesHasMorePriority
+                or ESeedDataType.DatabaseDataHasMorePriority => LoadFromJsonFile(),
             _ => throw new InvalidOperationException()
         };
 
         //Json-ის მოდელის გადაყვანა ბაზის მოდელში
         List<TDst> dataListByJson = _seedDataType switch
         {
-            ESeedDataType.OnlyRules => [],
-            ESeedDataType.OnlyJson or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
-                Adapt(seedData),
+            ESeedDataType.OnlySeederRules => [],
+            ESeedDataType.OnlyDatabase or ESeedDataType.SeederRulesHasMorePriority
+                or ESeedDataType.DatabaseDataHasMorePriority => Adapt(seedData),
             _ => throw new InvalidOperationException()
         };
 
         //წესების მიხედვით შექმნა
         List<TDst> dataListByRules = _seedDataType switch
         {
-            ESeedDataType.OnlyJson => [],
-            ESeedDataType.OnlyRules or ESeedDataType.RulesHasMorePriority or ESeedDataType.JsonHasMorePriority =>
-                CreateListByRules(),
+            ESeedDataType.OnlyDatabase => [],
+            ESeedDataType.OnlySeederRules or ESeedDataType.SeederRulesHasMorePriority
+                or ESeedDataType.DatabaseDataHasMorePriority => CreateListByRules(),
             _ => throw new InvalidOperationException()
         };
 
         //დაყვანა
         List<TDst> dataList = _seedDataType switch
         {
-            ESeedDataType.OnlyJson => dataListByJson,
-            ESeedDataType.OnlyRules => dataListByRules,
-            ESeedDataType.RulesHasMorePriority => Adjust(dataListByRules, dataListByJson),
-            ESeedDataType.JsonHasMorePriority => Adjust(dataListByJson, dataListByRules),
+            ESeedDataType.OnlyDatabase => dataListByJson,
+            ESeedDataType.OnlySeederRules => dataListByRules,
+            ESeedDataType.SeederRulesHasMorePriority => Adjust(dataListByRules, dataListByJson),
+            ESeedDataType.DatabaseDataHasMorePriority => Adjust(dataListByJson, dataListByRules),
             _ => throw new InvalidOperationException()
         };
 

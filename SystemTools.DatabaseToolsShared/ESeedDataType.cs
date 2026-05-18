@@ -2,9 +2,9 @@
 
 public enum ESeedDataType
 {
-    OnlyRules,
-    OnlyJson,
-    RulesHasMorePriority,
-    JsonHasMorePriority,
+    OnlySeederRules,
+    OnlyDatabase,
+    SeederRulesHasMorePriority,
+    DatabaseDataHasMorePriority,
     None
 }

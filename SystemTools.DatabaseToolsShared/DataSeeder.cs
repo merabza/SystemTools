@@ -58,7 +58,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         };
 
         //Json-ის მოდელის გადაყვანა ბაზის მოდელში
-        List<TDst> dataListByJson = _seedDataType switch
+        List<TDst> dataListByDatabase = _seedDataType switch
         {
             ESeedDataType.OnlySeederRules => [],
             ESeedDataType.OnlyDatabase or ESeedDataType.SeederRulesHasMorePriority
@@ -78,10 +78,10 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
         //დაყვანა
         List<TDst> dataList = _seedDataType switch
         {
-            ESeedDataType.OnlyDatabase => dataListByJson,
+            ESeedDataType.OnlyDatabase => dataListByDatabase,
             ESeedDataType.OnlySeederRules => dataListByRules,
-            ESeedDataType.SeederRulesHasMorePriority => Adjust(dataListByRules, dataListByJson),
-            ESeedDataType.DatabaseDataHasMorePriority => Adjust(dataListByJson, dataListByRules),
+            ESeedDataType.SeederRulesHasMorePriority => Adjust(dataListByRules, dataListByDatabase),
+            ESeedDataType.DatabaseDataHasMorePriority => Adjust(dataListByDatabase, dataListByRules),
             _ => throw new InvalidOperationException()
         };
 

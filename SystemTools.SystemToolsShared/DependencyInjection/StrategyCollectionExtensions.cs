@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCliTools.CliMenu.DependencyInjection;
+namespace SystemTools.SystemToolsShared.DependencyInjection;
 
 public static class StrategyCollectionExtensions
 {

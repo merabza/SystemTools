@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Polly;
 using SystemTools.SystemToolsShared;
 
 namespace SystemTools.BackgroundTasks;
@@ -12,8 +13,9 @@ public /*open*/ class ProcessesToolAction : ToolAction
     protected readonly ProcessManager? ProcessManager;
 
     protected ProcessesToolAction(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName,
-        ProcessManager? processManager, string actionName, int procLineId = 0) : base(logger, actionName,
-        messagesDataManager, userName)
+        ProcessManager? processManager, string actionName, int procLineId = 0,
+        ResiliencePipeline<bool>? retryPipeline = null) : base(logger, actionName, messagesDataManager, userName,
+        false, retryPipeline)
     {
         ProcessManager = processManager;
         ProcLineId = procLineId;

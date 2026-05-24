@@ -43,6 +43,9 @@ public sealed class Processes : IProcesses, IDisposable
 
     public ProcessManager GetNewProcessManager()
     {
+        // წინა მენეჯერი (თუ არსებობდა) უკვე ფინიშდ უნდა იყოს —
+        // CliAppLoop-ი ყოველთვის ელოდება WaitForFinishAll-ს ახალი key-ის წაკითხვამდე
+        ClearProcessManager();
         // ReSharper disable once DisposableConstructor
         _processManager = new ProcessManager(_logger);
         return _processManager;

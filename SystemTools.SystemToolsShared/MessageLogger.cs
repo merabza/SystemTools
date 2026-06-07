@@ -183,6 +183,17 @@ public /*open*/ class MessageLogger
         return [new Error { Code = errorCode, Name = message }];
     }
 
+    public async ValueTask<Error[]> LogErrorsAndSendMessageFromError(Error[] errors,
+        CancellationToken cancellationToken = default)
+    {
+        foreach (var error in errors)
+        {
+            await LogErrorAndSendMessageFromError(error, cancellationToken);
+        }
+
+        return errors;
+    }
+
     public async ValueTask<Error[]> LogErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {

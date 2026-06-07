@@ -70,6 +70,7 @@ public static class StShared
         {
             ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
                 Environment.NewLine, sb);
+            ConsoleWriteInformationLine(logger, useConsole, "ExitCode is {0}", proc.ExitCode);
             return (sb.ToString(), proc.ExitCode);
         }
 

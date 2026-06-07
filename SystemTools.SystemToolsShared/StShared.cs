@@ -62,6 +62,8 @@ public static class StShared
 
             sb.AppendLine(line);
         }
+
+        proc.WaitForExit();
         //message = "output for '{0} {1}' is{2}{3}";
 
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
@@ -113,6 +115,8 @@ public static class StShared
         proc.WaitForExit(waitForExit < 0 ? Timeout.Infinite : waitForExit);
 
         ConsoleWriteInformationLine(logger, useConsole, "{0} finished", programFileName);
+
+        proc.WaitForExit();
 
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
         {

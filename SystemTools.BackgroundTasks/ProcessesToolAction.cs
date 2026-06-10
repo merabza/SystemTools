@@ -14,8 +14,8 @@ public /*open*/ class ProcessesToolAction : ToolAction
 
     protected ProcessesToolAction(ILogger logger, IMessagesDataManager? messagesDataManager, string? userName,
         ProcessManager? processManager, string actionName, int procLineId = 0,
-        ResiliencePipeline<bool>? retryPipeline = null) : base(logger, actionName, messagesDataManager, userName,
-        false, retryPipeline)
+        ResiliencePipeline<bool>? retryPipeline = null) : base(logger, actionName, messagesDataManager, userName, false,
+        retryPipeline)
     {
         ProcessManager = processManager;
         ProcLineId = procLineId;

@@ -21,7 +21,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             ////დავადგინოთ არის თუ არა უკვე მინიჭებული ცხრილის სახელი
             string? tableNameAnnotation = entityType.GetTableName();
             ////თუ ცხრილის სახელი ცარიელია, მაშინ მივანიჭოთ ენტიტის ტიპის სახელის მრავლობითი ფორმა.
-            ////ასევე ცხრილის სახელის შექქმნისას პირველი ასო დავაპატარავოთ
+            ////ასევე ცხრილის სახელის შექმნისას პირველი ასო დავაპატარავოთ
             if (string.IsNullOrEmpty(tableNameAnnotation))
             {
                 continue;

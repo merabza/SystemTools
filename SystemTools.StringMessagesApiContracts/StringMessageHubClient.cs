@@ -17,6 +17,7 @@ public sealed class StringMessageHubClient : IMessageHubClient
     private HubConnection? _connection;
 
     // ReSharper disable once MemberCanBePrivate.Global
+
     // ReSharper disable once ConvertToPrimaryConstructor
     public StringMessageHubClient(string server, string? apiKey)
     {

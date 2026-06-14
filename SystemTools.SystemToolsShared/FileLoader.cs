@@ -8,7 +8,6 @@ public sealed class FileLoader
 {
     private readonly bool _useConsole;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
     private FileLoader(bool useConsole)
     {
         _useConsole = useConsole;

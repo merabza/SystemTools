@@ -26,7 +26,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly bool _useConsole;
 
     //protected იყენებს SystemTools
-    // ReSharper disable once MemberCanBePrivate.Global
+    // ReSharper disable once FieldCanBeMadeReadOnly.Global
     protected string? AccessToken;
 
     // ReSharper disable once ConvertToPrimaryConstructor

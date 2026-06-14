@@ -19,6 +19,7 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
     //ანუ როცა გამოყენებულია SeederRulesHasMorePriority, ან DatabaseDataHasMorePriority
+    // ReSharper disable once ConvertToPrimaryConstructor
     public DataSeeder(string dataSeedFolder, IDataSeederRepository repo, IDatabaseAbstraction databaseAbstraction,
         ESeedDataType seedDataType = ESeedDataType.OnlyDatabase, List<string>? keyFieldNamesList = null)
     {

@@ -15,7 +15,7 @@
 //    private readonly string? _logFileName;
 //    private readonly string? _logFolder;
 
-//    // ReSharper disable once ConvertToPrimaryConstructor
+//    
 //    public ServicesCreator(string? logFolder, string? logFileName, string appName)
 //    {
 //        _logFolder = logFolder;

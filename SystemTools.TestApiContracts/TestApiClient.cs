@@ -11,7 +11,6 @@ namespace SystemTools.TestApiContracts;
 
 public sealed class TestApiClient : ApiClient
 {
-
     // ReSharper disable once ConvertToPrimaryConstructor
     public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, bool useConsole) : base(
         logger, httpClientFactory, server, null, null, useConsole)

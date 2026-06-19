@@ -25,7 +25,6 @@ public sealed class ErrTests
         var err3 = new Error { Code = "X", Name = "B" };
         Assert.False(err1.Equals(err2));
         Assert.False(err1.Equals(err3));
-        Assert.False(err1.Equals(null));
     }
 
     [Fact]

@@ -182,8 +182,15 @@ public /*open*/ class ReCounter
         }
         finally
         {
-            await OnFinishReCounter(cancellationToken);
-            await SetProcessRun(false, cancellationToken);
+            try
+            {
+                await OnFinishReCounter(cancellationToken);
+                await SetProcessRun(false, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                //გაჩერების/შეწყვეტის დროს კლიენტებისთვის დასასრულის შეტყობინების გაგზავნა ვერ ხერხდება — იგნორირდება
+            }
         }
     }
 }

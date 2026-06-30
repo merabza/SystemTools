@@ -27,4 +27,10 @@ public sealed class TestApiClient : ApiClient
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
     }
+
+    public Task<OneOf<bool, Error[]>> TestConnection(CancellationToken cancellationToken = default)
+    {
+        return GetAsyncReturn<bool>(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.TestConnection, false,
+            cancellationToken);
+    }
 }

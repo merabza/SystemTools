@@ -49,11 +49,10 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             if (progressData.StrData.Count > 0)
             {
-                string? procName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcName);
-                if (ProcessMonitoringManager.Instance.LastProcName != procName)
+                foreach (KeyValuePair<string, string> strDataItem in
+                         new SortedDictionary<string, string>(progressData.StrData))
                 {
-                    Console.WriteLine(procName);
-                    ProcessMonitoringManager.Instance.LastProcName = procName;
+                    Console.WriteLine($"{strDataItem.Key}: {strDataItem.Value}");
                 }
             }
 

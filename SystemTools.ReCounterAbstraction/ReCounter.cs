@@ -117,11 +117,16 @@ public /*open*/ class ReCounter
     {
         return LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
     }
-
+    
     protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken = default)
     {
         await LogMessage(ReCounterConstants.LevelName, string.Empty, true, cancellationToken);
         await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
+    }
+
+    protected virtual async Task LogProcMessage(string messageName, string message, CancellationToken cancellationToken = default)
+    {
+        await LogMessage(messageName, message, true, cancellationToken);
     }
 
     protected virtual async Task<Exception> LogProcMessageAndException(string message,

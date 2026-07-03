@@ -37,6 +37,11 @@ public /*open*/ class ReCounter
         }
     }
 
+    protected void ClearMessages()
+    {
+        _progressDataManager.Clear();
+    }
+
     protected ValueTask LogMessage(string name, string message, bool instantly,
         CancellationToken cancellationToken = default)
     {
@@ -53,7 +58,7 @@ public /*open*/ class ReCounter
     protected async Task SetProcLength(int length, CancellationToken cancellationToken = default)
     {
         _procPosition = 0;
-        await SetProcPosition(cancellationToken);
+        await SetProcPosition(false, cancellationToken);
         await SetProgressValue(ReCounterConstants.ProcLength, length, true, cancellationToken);
     }
 
@@ -63,9 +68,9 @@ public /*open*/ class ReCounter
             cancellationToken);
     }
 
-    private ValueTask SetProcPosition(CancellationToken cancellationToken = default)
+    private ValueTask SetProcPosition(bool instantly, CancellationToken cancellationToken = default)
     {
-        return SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, false, cancellationToken);
+        return SetProgressValue(ReCounterConstants.ProcPosition, _procPosition, instantly, cancellationToken);
     }
 
     private async Task ClearProgress(CancellationToken cancellationToken = default)
@@ -83,7 +88,7 @@ public /*open*/ class ReCounter
         {
             _byLevelPosition = length - realToDo;
             _procPosition += _byLevelPosition;
-            await SetProcPosition(cancellationToken);
+            await SetProcPosition(false, cancellationToken);
         }
 
         await SetByLevelPosition(cancellationToken);
@@ -95,10 +100,10 @@ public /*open*/ class ReCounter
         return SetProgressValue(ReCounterConstants.ByLevelPosition, _byLevelPosition, false, cancellationToken);
     }
 
-    protected ValueTask IncreaseProcPosition(CancellationToken cancellationToken = default)
+    protected ValueTask IncreaseProcPosition(bool instantly, CancellationToken cancellationToken = default)
     {
         _procPosition++;
-        return SetProcPosition(cancellationToken);
+        return SetProcPosition(instantly, cancellationToken);
     }
 
     protected ValueTask IncreaseByLevelPosition(CancellationToken cancellationToken = default)
@@ -117,14 +122,15 @@ public /*open*/ class ReCounter
     {
         return LogMessage(ReCounterConstants.LevelName, message, true, cancellationToken);
     }
-    
+
     protected virtual async Task LogProcMessage(string message, CancellationToken cancellationToken = default)
     {
         await LogMessage(ReCounterConstants.LevelName, string.Empty, true, cancellationToken);
         await LogMessage(ReCounterConstants.ProcName, message, true, cancellationToken);
     }
 
-    protected virtual async Task LogProcMessage(string messageName, string message, CancellationToken cancellationToken = default)
+    protected virtual async Task LogProcMessage(string messageName, string message,
+        CancellationToken cancellationToken = default)
     {
         await LogMessage(messageName, message, true, cancellationToken);
     }
@@ -170,6 +176,7 @@ public /*open*/ class ReCounter
 
             await RunRecount(cancellationToken);
 
+            ClearMessages();
             await LogProcMessage($"{_processName} დასრულდა", cancellationToken);
         }
         catch (TaskCanceledException)
@@ -189,6 +196,9 @@ public /*open*/ class ReCounter
         {
             try
             {
+                //გაუქმების შემთხვევაშიც გასუფთავდეს დაგროვილი შეტყობინებები,
+                //რომ დასრულების შეტყობინებას ნარჩენი ინფორმაცია არ მიჰყვეს
+                ClearMessages();
                 await OnFinishReCounter(cancellationToken);
                 await SetProcessRun(false, cancellationToken);
             }

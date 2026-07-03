@@ -42,4 +42,11 @@ public sealed class ProgressData
     {
         BoolData[name] = value;
     }
+
+    public void Clear()
+    {
+        StrData.Clear();
+        IntData.Clear();
+        BoolData.Clear();
+    }
 }

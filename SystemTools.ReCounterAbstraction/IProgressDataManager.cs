@@ -7,7 +7,7 @@ namespace SystemTools.ReCounterAbstraction;
 public interface IProgressDataManager
 {
     ProgressData? AccumulatedProgressData { get; }
-
+    void Clear();
     ValueTask SetProgressData(string? userName, string name, string message, bool instantly,
         CancellationToken cancellationToken = default);
 

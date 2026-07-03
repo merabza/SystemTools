@@ -26,8 +26,9 @@ public /*open*/ class ReCounterApiClient : ApiClient
 
     public Task<OneOf<bool, Error[]>> CancelCurrentProcess(CancellationToken cancellationToken = default)
     {
+        //გაუქმების მოთხოვნისას პროგრესის შეტყობინებები არ უნდა მივიღოთ და დავბეჭდოთ
         return PostAsyncReturn<bool>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CancelCurrentProcess,
-            cancellationToken);
+            false, cancellationToken);
     }
 }

@@ -17,6 +17,9 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     private string? _accessToken;
 
     private HubConnection? _connection;
+    private int _startLine = -1;
+    private readonly Dictionary<string, int> _keyLines = new();
+    private readonly List<int> _lineLengths = new();
 
     // ReSharper disable once MemberCanBePrivate.Global
 
@@ -47,12 +50,34 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
                 ProcessMonitoringManager.Instance.ProcessIsRunning = processIsRunning;
             }
 
+            //პროცესი დასრულებულია — მიმდინარეობის ინფორმაცია აღარ დაიბეჭდოს
+            if (!ProcessMonitoringManager.Instance.ProcessIsRunning)
+            {
+                if (_startLine >= 0)
+                {
+                    Console.SetCursorPosition(0, _startLine + _keyLines.Count + 1);
+                }
+
+                return;
+            }
+
+            if (_startLine < 0)
+            {
+                _startLine = Console.CursorTop;
+            }
+
             if (progressData.StrData.Count > 0)
             {
                 foreach (KeyValuePair<string, string> strDataItem in
                          new SortedDictionary<string, string>(progressData.StrData))
                 {
-                    Console.WriteLine($"{strDataItem.Key}: {strDataItem.Value}");
+                    if (!_keyLines.TryGetValue(strDataItem.Key, out int lineOffset))
+                    {
+                        lineOffset = _keyLines.Count;
+                        _keyLines[strDataItem.Key] = lineOffset;
+                    }
+
+                    WriteOnLine(lineOffset, $"{strDataItem.Key}: {strDataItem.Value}");
                 }
             }
 
@@ -60,24 +85,15 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
             int? procLength = progressData.IntData.GetValueOrDefault(ReCounterConstants.ProcLength);
             string? progressValueName = progressData.StrData.GetValueOrDefault(ReCounterConstants.ProcProgressMessage);
 
-            int lineNo = Console.CursorTop;
             if (procPosition is not null && procLength is not null && (decimal)procLength > 0)
             {
                 decimal procPercentage = Math.Round((decimal)procPosition / (decimal)procLength * 100);
                 string conMessage =
                     $"[{_server}]: {progressValueName ?? ""} {procPosition}-{procLength} {procPercentage}%";
-                int conMessageLength = conMessage.Length;
-                if (ProcessMonitoringManager.Instance.LastLength > conMessageLength)
-                {
-                    conMessage = conMessage.PadRight(ProcessMonitoringManager.Instance.LastLength);
-                }
-
-                ProcessMonitoringManager.Instance.LastLength = conMessageLength;
-                Console.Write(conMessage);
-                Console.SetCursorPosition(0, lineNo);
+                WriteOnLine(_keyLines.Count, conMessage);
             }
 
-            Console.SetCursorPosition(0, lineNo);
+            Console.SetCursorPosition(0, _startLine + _keyLines.Count);
         });
         try
         {
@@ -118,6 +134,18 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         {
             Console.WriteLine(e);
         }
+        finally
+        {
+            //კურსორი პროგრესის ბლოკის ქვემოთ გადავიდეს, რომ შემდეგი ტექსტი პროგრესის ხაზებს არ გადაეწეროს
+            //და მდგომარეობა განულდეს შემდეგი მონიტორინგის სესიისთვის
+            if (_startLine >= 0)
+            {
+                Console.SetCursorPosition(0, _startLine + _keyLines.Count + 1);
+                _startLine = -1;
+                _keyLines.Clear();
+                _lineLengths.Clear();
+            }
+        }
 
         return false;
     }
@@ -125,5 +153,23 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
     public void SetToken(string accessToken)
     {
         _accessToken = accessToken;
+    }
+
+    private void WriteOnLine(int lineOffset, string text)
+    {
+        while (_lineLengths.Count <= lineOffset)
+        {
+            _lineLengths.Add(0);
+        }
+
+        int textLength = text.Length;
+        if (_lineLengths[lineOffset] > textLength)
+        {
+            text = text.PadRight(_lineLengths[lineOffset]);
+        }
+
+        _lineLengths[lineOffset] = textLength;
+        Console.SetCursorPosition(0, _startLine + lineOffset);
+        Console.Write(text);
     }
 }

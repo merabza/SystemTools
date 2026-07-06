@@ -57,11 +57,11 @@ public /*open*/ class ToolAction : MessageLogger
         }
         catch (OperationCanceledException)
         {
-            StShared.WriteErrorLine("Operation Canceled", UseConsole, Logger);
+            StShared.WriteErrorLine("Operation Canceled", UseConsole, Logger, false);
         }
         catch (Exception e)
         {
-            StShared.WriteErrorLine($"Error when run Tool Action: {e.Message}", UseConsole, Logger);
+            StShared.WriteException(e, $"Error when run Tool Action {ToolActionName}", UseConsole, Logger, false);
         }
 
         return false;

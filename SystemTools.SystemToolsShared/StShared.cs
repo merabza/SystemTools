@@ -188,6 +188,13 @@ public static class StShared
 
     public static void Pause()
     {
+        //როცა კონსოლი ინტერაქტიული არ არის (მაგალითად Linux-ზე სერვისად გაშვებისას),
+        //Console.ReadKey ისვრის InvalidOperationException-ს ან სამუდამოდ იბლოკება
+        if (Console.IsInputRedirected)
+        {
+            return;
+        }
+
         Console.WriteLine("press any key...");
         Console.ReadKey(true);
     }

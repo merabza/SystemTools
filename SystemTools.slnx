@@ -11,7 +11,9 @@
     </Folder>
     <Project Path="SystemTools.ApiContracts/SystemTools.ApiContracts.csproj" />
     <Project Path="SystemTools.ApiKeysManagement/SystemTools.ApiKeysManagement.csproj" />
+    <Project Path="SystemTools.BackgroundTasks/SystemTools.BackgroundTasks.csproj" />
     <Project Path="SystemTools.DatabaseToolsShared/SystemTools.DatabaseToolsShared.csproj" />
+    <Project Path="SystemTools.DependencyInjection/SystemTools.DependencyInjection.csproj" />
     <Project Path="SystemTools.Domain.Abstractions/SystemTools.Domain.Abstractions.csproj" />
     <Project Path="SystemTools.DomainShared/SystemTools.DomainShared.csproj" />
     <Project Path="SystemTools.JetBrainsResharperGlobalToolsWork/SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
@@ -19,6 +21,7 @@
     <Project Path="SystemTools.ReCounterAbstraction/SystemTools.ReCounterAbstraction.csproj" />
     <Project Path="SystemTools.ReCounterContracts/SystemTools.ReCounterContracts.csproj" />
     <Project Path="SystemTools.RepositoriesShared/SystemTools.RepositoriesShared.csproj" />
+    <Project Path="SystemTools.SerilogStuff/SystemTools.SerilogStuff.csproj" />
     <Project Path="SystemTools.StringMessagesApiContracts/SystemTools.StringMessagesApiContracts.csproj" />
     <Project Path="SystemTools.SystemToolsShared/SystemTools.SystemToolsShared.csproj" />
     <Project Path="SystemTools.TestApiContracts/SystemTools.TestApiContracts.csproj" />

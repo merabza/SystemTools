@@ -14,7 +14,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 {
     private readonly string? _apiKey;
     private readonly Dictionary<string, int> _keyLines = new();
-    private readonly List<int> _lineLengths = new();
+    private readonly List<int> _lineLengths = [];
     private readonly string _server;
     private string? _accessToken;
 

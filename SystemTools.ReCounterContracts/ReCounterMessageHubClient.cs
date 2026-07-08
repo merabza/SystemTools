@@ -13,13 +13,13 @@ namespace SystemTools.ReCounterContracts;
 public sealed class ReCounterMessageHubClient : IMessageHubClient
 {
     private readonly string? _apiKey;
+    private readonly Dictionary<string, int> _keyLines = new();
+    private readonly List<int> _lineLengths = [];
     private readonly string _server;
     private string? _accessToken;
 
     private HubConnection? _connection;
     private int _startLine = -1;
-    private readonly Dictionary<string, int> _keyLines = new();
-    private readonly List<int> _lineLengths = new();
 
     // ReSharper disable once MemberCanBePrivate.Global
 
@@ -68,8 +68,8 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
             if (progressData.StrData.Count > 0)
             {
-                foreach (KeyValuePair<string, string> strDataItem in
-                         new SortedDictionary<string, string>(progressData.StrData))
+                foreach (KeyValuePair<string, string> strDataItem in new SortedDictionary<string, string>(progressData
+                             .StrData))
                 {
                     if (!_keyLines.TryGetValue(strDataItem.Key, out int lineOffset))
                     {

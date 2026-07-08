@@ -78,23 +78,23 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
                 case "*":
                     continue;
                 case "[]":
+                {
+                    if (!int.TryParse(dKeys[i], out _))
                     {
-                        if (!int.TryParse(dKeys[i], out _))
-                        {
-                            return false;
-                        }
-
-                        break;
+                        return false;
                     }
+
+                    break;
+                }
                 default:
+                {
+                    if (keys[i] != dKeys[i])
                     {
-                        if (keys[i] != dKeys[i])
-                        {
-                            return false;
-                        }
-
-                        break;
+                        return false;
                     }
+
+                    break;
+                }
             }
         }
 

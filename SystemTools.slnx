@@ -20,7 +20,6 @@
     <Project Path="SystemTools.ReCounterContracts/SystemTools.ReCounterContracts.csproj" />
     <Project Path="SystemTools.RepositoriesShared/SystemTools.RepositoriesShared.csproj" />
     <Project Path="SystemTools.StringMessagesApiContracts/SystemTools.StringMessagesApiContracts.csproj" />
-    <Project Path="SystemTools/SystemTools.csproj" Id="2621fdcb-807f-4fab-acee-a8ba54386fc6" />
     <Project Path="SystemTools.SystemToolsShared/SystemTools.SystemToolsShared.csproj" />
     <Project Path="SystemTools.TestApiContracts/SystemTools.TestApiContracts.csproj" />
 </Solution>

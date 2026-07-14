@@ -10,6 +10,7 @@ public interface IProgressDataManager
     ProgressData? AccumulatedProgressData { get; }
     void Clear();
     void SetSendDelay(TimeSpan sendDelay);
+
     ValueTask SetProgressData(string? userName, string name, string message, bool instantly,
         CancellationToken cancellationToken = default);
 

@@ -156,7 +156,9 @@ public static class StShared
     {
         var psiNpmRunDist = new ProcessStartInfo
         {
+#pragma warning disable S4036
             FileName = "cmd",
+#pragma warning restore S4036
             RedirectStandardInput = true,
             WorkingDirectory = projectPath ?? Directory.GetCurrentDirectory()
         };

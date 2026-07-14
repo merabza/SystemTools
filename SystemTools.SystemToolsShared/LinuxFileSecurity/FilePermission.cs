@@ -63,7 +63,9 @@ public sealed class FilePermission
         try
         {
             string permission = ToString();
+#pragma warning disable S4036
             var filePermission = new ProcessStartInfo(Command, permission);
+#pragma warning restore S4036
             Process.Start(filePermission);
             return this;
         }

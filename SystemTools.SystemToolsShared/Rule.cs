@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace SystemTools.SystemToolsShared;
 
@@ -10,7 +11,7 @@ public sealed class Rule
     // ReSharper disable once ConvertToPrimaryConstructor
     public Rule(string pattern, string replacement)
     {
-        _regex = new Regex(pattern, RegexOptions.IgnoreCase);
+        _regex = new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
         _replacement = replacement;
     }
 

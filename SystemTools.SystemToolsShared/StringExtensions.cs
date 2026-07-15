@@ -92,7 +92,7 @@ public static class StringExtensions
                 regexFileMask = '^' + regexFileMask;
             }
 
-            var mask = new Regex(regexFileMask);
+            var mask = new Regex(regexFileMask, RegexOptions.None, TimeSpan.FromSeconds(1));
             bool toRet = mask.IsMatch(dest);
             return toRet;
         }

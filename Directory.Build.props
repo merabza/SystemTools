@@ -11,6 +11,8 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
         <NoWarn>NU1608</NoWarn>
+        <!-- NU1900 (vulnerability data unavailable) must not fail the build while the BaGetter feed is offline -->
+        <WarningsNotAsErrors>NU1900</WarningsNotAsErrors>
     </PropertyGroup>
     <ItemGroup Condition="'$(MSBuildProjectExtension)' != '.dcproj'">
         <PackageReference Include="SonarAnalyzer.CSharp">

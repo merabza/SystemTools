@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace SystemTools.SystemToolsShared;
 
 public static class Inflector
 {
+    private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
     private static readonly List<Rule> Plurals = [];
     private static readonly List<Rule> Singulars = [];
     private static readonly List<string> Uncountables = [];
@@ -142,18 +144,18 @@ public static class Inflector
     public static string Titleize(this string word)
     {
         return Regex.Replace(word.Underscore().Humanize(), @"\b([a-z])",
-            match => match.Captures[0].Value.ToUpper(CultureInfo.CurrentCulture));
+            match => match.Captures[0].Value.ToUpper(CultureInfo.CurrentCulture), RegexOptions.None, RegexTimeout);
     }
 
     public static string Humanize(this string lowercaseAndUnderscoredWord)
     {
-        return Regex.Replace(lowercaseAndUnderscoredWord, "_", " ").Capitalize();
+        return Regex.Replace(lowercaseAndUnderscoredWord, "_", " ", RegexOptions.None, RegexTimeout).Capitalize();
     }
 
     public static string Pascalize(this string lowercaseAndUnderscoredWord)
     {
         return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)",
-            match => match.Groups[1].Value.ToUpper(CultureInfo.CurrentCulture));
+            match => match.Groups[1].Value.ToUpper(CultureInfo.CurrentCulture), RegexOptions.None, RegexTimeout);
     }
 
     public static string Camelize(this string lowercaseAndUnderscoredWord)
@@ -165,8 +167,10 @@ public static class Inflector
     {
         return Regex
             .Replace(
-                Regex.Replace(Regex.Replace(pascalCasedWord, "([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                    "$1_$2"), @"[-\s]", "_").ToLower(CultureInfo.CurrentCulture);
+                Regex.Replace(
+                    Regex.Replace(pascalCasedWord, "([A-Z]+)([A-Z][a-z])", "$1_$2", RegexOptions.None, RegexTimeout),
+                    @"([a-z\d])([A-Z])", "$1_$2", RegexOptions.None, RegexTimeout), @"[-\s]", "_", RegexOptions.None,
+                RegexTimeout).ToLower(CultureInfo.CurrentCulture);
     }
 
     public static string Capitalize(this string word)

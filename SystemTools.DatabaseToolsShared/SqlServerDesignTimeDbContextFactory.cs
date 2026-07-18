@@ -3,7 +3,6 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace SystemTools.DatabaseToolsShared;
 
@@ -31,7 +30,7 @@ public abstract class SqlServerDesignTimeDbContextFactory<T> : IDesignTimeDbCont
         _parametersJsonFileName = parametersJsonFileName;
         Console.WriteLine($"DesignTimeDbContextFactory assemblyName = {assemblyName}");
         Console.WriteLine($"DesignTimeDbContextFactory connectionParamName = {connectionParamName}");
-        Console.WriteLine($"DesignTimeDbContextFactory parametersJsonFileName = {parametersJsonFileName??"null"}");
+        Console.WriteLine($"DesignTimeDbContextFactory parametersJsonFileName = {parametersJsonFileName ?? "null"}");
     }
 
     //ეს კონსტრუქტორი გამოიყენება მაშინ, როცა პარამეტრები უნდა წამოვიდეს გამშვები პროექტის appsettings.json ფაილიდან.

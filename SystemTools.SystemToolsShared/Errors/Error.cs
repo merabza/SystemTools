@@ -25,7 +25,7 @@ public record Error
         var errors = new List<Error>();
         errors.AddRange(haveErrors);
         errors.Add(addError);
-        return errors.ToArray();
+        return [.. errors];
     }
 
     public static Error[] RecreateErrors(IEnumerable<Error> haveErrors, IEnumerable<Error> addError)
@@ -33,7 +33,7 @@ public record Error
         var errors = new List<Error>();
         errors.AddRange(haveErrors);
         errors.AddRange(addError);
-        return errors.ToArray();
+        return [.. errors];
     }
 
     public static void PrintErrorsOnConsole(IEnumerable<Error> errors)

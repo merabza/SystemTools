@@ -33,7 +33,7 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
         }
 
         string key = _source.Key;
-        List<string> appSetEnKeys = appSetEnKeysList.Keys.ToList();
+        List<string> appSetEnKeys = [.. appSetEnKeysList.Keys];
 
         // Do decryption here, you can tap into the Data property like so:
         foreach (string s in Data.Keys)

@@ -49,13 +49,15 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
 
     private static void SetRelationConstraintNames(IConventionEntityType entityType, string tableNameAnnotation)
     {
-        List<IConventionForeignKey> foreignKeys = entityType.GetForeignKeys().ToList();
+        List<IConventionForeignKey> foreignKeys = [.. entityType.GetForeignKeys()];
         //foreignKeys.Select(s=>s.PrincipalEntityType.GetTableName()).GroupBy(g=>g)
 
-        List<string> uniqueTableNamesWithMoreThenOneOccurence = foreignKeys
-            .Select(s => s.PrincipalEntityType.GetTableName()).Where(w => w is not null).Cast<string>().GroupBy(s => s)
-            .Select(g => new { Value = g.Key, Count = g.Count() }).Where(w => w.Count > 1).Select(s => s.Value)
-            .ToList();
+        List<string> uniqueTableNamesWithMoreThenOneOccurence =
+        [
+            .. foreignKeys.Select(s => s.PrincipalEntityType.GetTableName()).Where(w => w is not null).Cast<string>()
+                .GroupBy(s => s).Select(g => new { Value = g.Key, Count = g.Count() }).Where(w => w.Count > 1)
+                .Select(s => s.Value)
+        ];
 
         int selfRelatedNumber = 0;
         //თითოეული გამოცხადებული კავშირისთვის
@@ -94,7 +96,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             }
             else
             {
-                string[] relatedFieldName = foreignKey.Properties.Select(s => s.GetColumnName()).ToArray();
+                string[] relatedFieldName = [.. foreignKey.Properties.Select(s => s.GetColumnName())];
                 constraintName = tableNameAnnotation.CreateConstraintName(relatedTableName, relatedFieldName);
             }
 
@@ -146,7 +148,7 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             }
 
             //დავადგინოთ ინდექსში შემავალი ველების სახელები
-            string[] properties = index.Properties.Select(p => p.GetColumnName()).ToArray();
+            string[] properties = [.. index.Properties.Select(p => p.GetColumnName())];
 
             //ნდექსის სახელი შევქმნათ ცხრილის სახელზე ველების სახელების დამატევით და უნიკალურობის გათვალისწინებით
             indexNameAnnotation = tableNameAnnotation.CreateIndexName(index.IsUnique, properties);

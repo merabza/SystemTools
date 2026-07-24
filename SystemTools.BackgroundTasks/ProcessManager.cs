@@ -50,7 +50,7 @@ public sealed class ProcessManager : IDisposable
         _source.Cancel();
         try
         {
-            ProcessLine[] processLines = _processLines.Values.ToArray();
+            ProcessLine[] processLines = [.. _processLines.Values];
             foreach (ProcessLine processLine in processLines)
             {
                 processLine.WaitForFinish();

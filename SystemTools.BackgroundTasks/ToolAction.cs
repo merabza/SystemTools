@@ -9,8 +9,6 @@ namespace SystemTools.BackgroundTasks;
 
 public /*open*/ class ToolAction : MessageLogger
 {
-    private readonly ResiliencePipeline<bool>? _retryPipeline;
-
     //protected საჭიროა SupportTools პროექტისათვის
     // ReSharper disable once MemberCanBePrivate.Global
     protected readonly ILogger? Logger;
@@ -18,6 +16,7 @@ public /*open*/ class ToolAction : MessageLogger
     //protected საჭიროა ProcessorWorker პროექტისათვის
     // ReSharper disable once MemberCanBePrivate.Global
     protected readonly string ToolActionName;
+    private readonly ResiliencePipeline<bool>? _retryPipeline;
 
     protected ToolAction(ILogger? logger, string actionName, IMessagesDataManager? messagesDataManager,
         string? userName, bool useConsole = false, ResiliencePipeline<bool>? retryPipeline = null) : base(logger,

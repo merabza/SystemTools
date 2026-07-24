@@ -10,11 +10,11 @@ namespace SystemTools.DatabaseToolsShared;
 
 public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : class where TMo : class
 {
+    protected readonly IDataSeederRepository DataSeederRepo;
     private readonly string _dataSeedFolder;
     private readonly List<string> _keyFieldNamesList;
     private readonly ESeedDataType _seedDataType;
     private readonly string _tableName;
-    protected readonly IDataSeederRepository DataSeederRepo;
 
     //keyFieldNamesList პარამეტრის გადაცემას აზრი აქვს მხოლოდ მაშინ,
     //როცა გამოყენებულია Adjust მეთოდი,
@@ -191,7 +191,9 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         Type tableDataType = typeof(TDst);
 
-        var keyPropertiesList = _keyFieldNamesList.Select(keyFieldName => tableDataType.GetProperty(keyFieldName) ?? throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}")).ToList();
+        var keyPropertiesList = _keyFieldNamesList.Select(keyFieldName =>
+            tableDataType.GetProperty(keyFieldName) ??
+            throw new Exception($"KeyProperty {keyFieldName} does not exists {_tableName}")).ToList();
 
         List<string> duplicatePriorityKeys =
         [

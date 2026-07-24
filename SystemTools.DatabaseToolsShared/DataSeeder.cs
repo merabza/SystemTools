@@ -161,7 +161,8 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
     }
 
     //ამ მეთოდის დანიშნულებაა ჯეისონიდან ჩატვირთოს ინფორმაცია და აქციოს მოდელების სიად
-    private static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
+    //public საჭიროა StsApiKeysSeeder-ისთვის
+    public static List<T> LoadFromJsonFile<T>(string folderName, string fileName)
     {
         string jsonFullFileName = Path.Combine(folderName, fileName);
         return File.Exists(jsonFullFileName)

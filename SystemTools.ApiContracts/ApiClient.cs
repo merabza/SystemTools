@@ -26,8 +26,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly bool _useConsole;
 
     //protected იყენებს SystemTools
-    // ReSharper disable once FieldCanBeMadeReadOnly.Global
-    protected string? AccessToken;
+    // ReSharper disable once MemberCanBePrivate.Global
+    protected readonly string? AccessToken;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
@@ -43,6 +43,7 @@ public /*open*/ abstract class ApiClient : IApiClient
     }
 
     //protected იყენებს SystemTools
+    // ReSharper disable once MemberCanBePrivate.Global
     protected IMessageHubClient? MessageHubClient { get; }
 
     private async ValueTask<Option<Error[]>> LogResponseErrorMessage(HttpResponseMessage response, string? bodyJsonData,

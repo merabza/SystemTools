@@ -26,8 +26,9 @@ public /*open*/ abstract class ApiClient : IApiClient
     private readonly bool _useConsole;
 
     //protected იყენებს SystemTools
+    //readonly არ გამოდგება, JwtContractReCounterApiClient სეტავს
     // ReSharper disable once MemberCanBePrivate.Global
-    protected readonly string? AccessToken;
+    protected string? AccessToken;
 
     // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,

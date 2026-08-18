@@ -73,7 +73,7 @@ public abstract class SqlServerDesignTimeDbContextFactory<T> : IDesignTimeDbCont
         Console.WriteLine("Pass 4...");
 
         var builder = new DbContextOptionsBuilder<T>();
-        Console.WriteLine("Pass 5...");
+        Console.WriteLine($"Pass 5... migration assembly name is {_assemblyName}");
         builder.UseSqlServer(connectionString, b => b.MigrationsAssembly(_assemblyName));
         Console.WriteLine("Pass 6...");
         return CreateDbContext(builder.Options);

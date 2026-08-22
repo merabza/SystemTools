@@ -56,7 +56,7 @@ public sealed class FilePermission
 
         if (!File.Exists(FilePath))
         {
-            Console.WriteLine("Error finding file " + FilePath + ".");
+            Console.WriteLine("ErrorOmd finding file " + FilePath + ".");
             return null;
         }
 

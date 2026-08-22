@@ -102,7 +102,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine("Error when connecting");
+            Console.WriteLine("ErrorOmd when connecting");
             Console.WriteLine(ex.Message);
             //Console.WriteLine(ex.StackTrace);
         }
@@ -128,7 +128,7 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
         }
         catch (HttpRequestException)
         {
-            Console.WriteLine("Error when Stop connection");
+            Console.WriteLine("ErrorOmd when Stop connection");
         }
         catch (Exception e)
         {

@@ -43,7 +43,8 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, $"Error when creating CreateEntities type: {typeof(T)}", true, _logger, false);
+            StShared.WriteException(e, $"ErrorOmd when creating CreateEntities type: {typeof(T)}", true, _logger,
+                false);
             return false;
         }
     }
@@ -66,7 +67,8 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, $"Error when creating CreateEntities type: {typeof(T)}", true, _logger, false);
+            StShared.WriteException(e, $"ErrorOmd when creating CreateEntities type: {typeof(T)}", true, _logger,
+                false);
             return false;
         }
     }
@@ -80,7 +82,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, "Error when saving changes", true, _logger, false);
+            StShared.WriteException(e, "ErrorOmd when saving changes", true, _logger, false);
             return false;
         }
     }
@@ -103,7 +105,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, $"Error when SetUpdates type: {typeof(T)}", true, _logger, false);
+            StShared.WriteException(e, $"ErrorOmd when SetUpdates type: {typeof(T)}", true, _logger, false);
             return false;
         }
     }
@@ -122,7 +124,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, $"Error when RemoveNeedlessRecords type: {typeof(T)}", true, _logger, false);
+            StShared.WriteException(e, $"ErrorOmd when RemoveNeedlessRecords type: {typeof(T)}", true, _logger, false);
             return false;
         }
     }

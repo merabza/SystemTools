@@ -47,7 +47,7 @@ public sealed class ToolActionsQueuedRunner : BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred executing toolAction.");
+                _logger.LogError(ex, "ErrorOmd occurred executing toolAction.");
             }
 
             IsBusy = false;

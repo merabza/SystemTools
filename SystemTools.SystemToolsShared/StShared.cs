@@ -32,7 +32,7 @@ public static class StShared
     {
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 
-        //    return (Error[])option;
+        //    return (ErrorOmd[])option;
 
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
@@ -94,8 +94,8 @@ public static class StShared
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
-    public static Option<ErrorOmd[]> RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
-        int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
+    public static Option<ErrorOmd[]> RunProcess(bool useConsole, ILogger? logger, string programFileName,
+        string arguments, int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
@@ -134,20 +134,20 @@ public static class StShared
         return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
     }
 
-    //private static Option<Error[]> CheckFileExists(string programFileName)
+    //private static Option<ErrorOmd[]> CheckFileExists(string programFileName)
     //{
     //    // Check if the program file exists before starting the process
     //    if (!File.Exists(programFileName))
     //    {
     //        var errorMsg = $"File not found: {programFileName}";
-    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
+    //        return ErrorOmd.CreateArr(new ErrorOmd { Code = "FileNotFound", Name = errorMsg });
     //    }
 
     //    //also check if the file exists in the current directory
     //    if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), programFileName)))
     //    {
     //        var errorMsg = $"File not found in current directory: {programFileName}";
-    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
+    //        return ErrorOmd.CreateArr(new ErrorOmd { Code = "FileNotFound", Name = errorMsg });
     //    }
     //    return null;
     //}
@@ -388,7 +388,7 @@ public static class StShared
         }
 
         Console.WriteLine($"{ex?.GetType().Name} thrown with message: {ex?.Message}");
-        Console.WriteLine($"Error message is: {ex?.Message}");
+        Console.WriteLine($"ErrorOmd message is: {ex?.Message}");
         Console.WriteLine($"StackTrace: {ex?.StackTrace}");
         if (pauseAfter)
         {

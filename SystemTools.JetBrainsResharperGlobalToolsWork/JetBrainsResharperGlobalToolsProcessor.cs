@@ -18,7 +18,7 @@ public sealed class JetBrainsResharperGlobalToolsProcessor
         _useConsole = useConsole;
     }
 
-    public Option<Error[]> Cleanupcode(string path, bool includeJson = false)
+    public Option<ErrorOmd[]> Cleanupcode(string path, bool includeJson = false)
     {
         return StShared.RunProcess(_useConsole, _logger, Jb,
             $"cleanupcode{(includeJson ? "" : " --exclude=\"**.json\"")} {path}");

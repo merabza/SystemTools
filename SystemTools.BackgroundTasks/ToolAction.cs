@@ -60,7 +60,7 @@ public /*open*/ class ToolAction : MessageLogger
         }
         catch (Exception e)
         {
-            StShared.WriteException(e, $"Error when run Tool Action {ToolActionName}", UseConsole, Logger, false);
+            StShared.WriteException(e, $"ErrorOmd when run Tool Action {ToolActionName}", UseConsole, Logger, false);
         }
 
         return false;

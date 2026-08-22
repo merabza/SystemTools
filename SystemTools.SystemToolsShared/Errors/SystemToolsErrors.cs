@@ -18,7 +18,7 @@ public static class SystemToolsErrors
 
     public static ErrorOmd ErrorCaught(string methodName, string errorMessage)
     {
-        return new ErrorOmd { Code = nameof(ErrorCaught), Name = $"Error in {methodName} {errorMessage}" };
+        return new ErrorOmd { Code = nameof(ErrorCaught), Name = $"ErrorOmd in {methodName} {errorMessage}" };
     }
 
     public static ErrorOmd VirtualMethodOverrideNotImplemented(string methodName)
@@ -45,7 +45,7 @@ public static class SystemToolsErrors
         return new ErrorOmd
         {
             Code = nameof(ErrorWhenRunningMethod),
-            Name = $"{errorGuid} Error When Loading Data With Method {methodName}"
+            Name = $"{errorGuid} ErrorOmd When Loading Data With Method {methodName}"
         };
     }
 

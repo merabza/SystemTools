@@ -58,7 +58,7 @@ public sealed class ProcessManager : IDisposable
         }
         catch (OperationCanceledException e)
         {
-            _logger.LogError(e, "Error when Cancel Processes");
+            _logger.LogError(e, "ErrorOmd when Cancel Processes");
         }
         finally
         {

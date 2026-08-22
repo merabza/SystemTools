@@ -6,7 +6,7 @@ public static class ApiClientErrors
 {
     public static readonly ErrorOmd UnexpectedServerError = new()
     {
-        Code = nameof(UnexpectedServerError), Name = "Unexpected Server Error"
+        Code = nameof(UnexpectedServerError), Name = "Unexpected Server ErrorOmd"
     };
 
     public static readonly ErrorOmd ApiUnknownError = new()
@@ -21,10 +21,10 @@ public static class ApiClientErrors
 
     public static ErrorOmd ApiReturnedAnError(string errorMessage)
     {
-        return new ErrorOmd { Code = nameof(ApiReturnedAnError), Name = $"Api Returned an Error: {errorMessage}" };
+        return new ErrorOmd { Code = nameof(ApiReturnedAnError), Name = $"Api Returned an ErrorOmd: {errorMessage}" };
     }
 
     /*
-            return new Error[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
+            return new ErrorOmd[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
      */
 }

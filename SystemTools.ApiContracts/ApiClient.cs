@@ -47,8 +47,8 @@ public /*open*/ abstract class ApiClient : IApiClient
     // ReSharper disable once MemberCanBePrivate.Global
     protected IMessageHubClient? MessageHubClient { get; }
 
-    private async ValueTask<Option<ErrorOmd[]>> LogResponseErrorMessage(HttpResponseMessage response, string? bodyJsonData,
-        CancellationToken cancellationToken = default)
+    private async ValueTask<Option<ErrorOmd[]>> LogResponseErrorMessage(HttpResponseMessage response,
+        string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         if (response.IsSuccessStatusCode)
         {
@@ -66,7 +66,7 @@ public /*open*/ abstract class ApiClient : IApiClient
                 StShared.WriteErrorLine($"request body was : {bodyJsonData}", true, null, false);
             }
 
-            StShared.WriteErrorLine($"Error from server: {response.StatusCode} {response.ReasonPhrase}", true, null,
+            StShared.WriteErrorLine($"ErrorOmd from server: {response.StatusCode} {response.ReasonPhrase}", true, null,
                 false);
         }
 
@@ -82,7 +82,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         {
             foreach (ErrorOmd err in errors)
             {
-                StShared.WriteErrorLine($"Error from server: {err.Name}", true);
+                StShared.WriteErrorLine($"ErrorOmd from server: {err.Name}", true);
             }
         }
 
@@ -92,7 +92,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];
     }
 
-    protected Task<Option<ErrorOmd[]>> GetAsync(string afterServerAddress, CancellationToken cancellationToken = default)
+    protected Task<Option<ErrorOmd[]>> GetAsync(string afterServerAddress,
+        CancellationToken cancellationToken = default)
     {
         return GetAsync(afterServerAddress, true, cancellationToken);
     }
@@ -303,7 +304,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         return new[] { ApiClientErrors.ApiUnknownError };
     }
 
-    protected Task<Option<ErrorOmd[]>> PutAsync(string afterServerAddress, CancellationToken cancellationToken = default)
+    protected Task<Option<ErrorOmd[]>> PutAsync(string afterServerAddress,
+        CancellationToken cancellationToken = default)
     {
         return PutAsync(afterServerAddress, null, cancellationToken);
     }

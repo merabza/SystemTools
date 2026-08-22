@@ -5,7 +5,7 @@ namespace SystemTools.SystemToolsShared.Errors;
 public record ErrorOmd
 {
     public static readonly ErrorOmd None = new() { Code = string.Empty, Name = string.Empty };
-    public static readonly ErrorOmd NullValue = new() { Code = "Error.NullValue", Name = "Null value was provided" };
+    public static readonly ErrorOmd NullValue = new() { Code = "ErrorOmd.NullValue", Name = "Null value was provided" };
 
     public required string Code { get; init; }
     public required string Name { get; init; }

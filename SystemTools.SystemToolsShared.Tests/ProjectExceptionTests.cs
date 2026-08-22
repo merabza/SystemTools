@@ -54,8 +54,8 @@ public sealed class ProjectExceptionTests
 
     [Theory]
     [InlineData("")]
-    [InlineData("Error message")]
-    [InlineData("Error\nwith\nmultiple\nlines")]
+    [InlineData("ErrorOmd message")]
+    [InlineData("ErrorOmd\nwith\nmultiple\nlines")]
     public void Constructor_WithDifferentMessages_SetsMessageCorrectly(string message)
     {
         // Act

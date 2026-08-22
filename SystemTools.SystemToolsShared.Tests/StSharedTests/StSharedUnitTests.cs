@@ -22,7 +22,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcessWithOutput_ValidProcess_ReturnsOutput()
     {
-        OneOf<(string, int), Error[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
+        OneOf<(string, int), ErrorOmd[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
         Assert.True(result.IsT0);
         (string output, int exitCode) = result.AsT0;
         Assert.False(string.IsNullOrWhiteSpace(output));
@@ -41,7 +41,7 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcess_ValidProcess_ReturnsNull()
     {
-        Option<Error[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
+        Option<ErrorOmd[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
         Assert.True(result.IsNone);
     }
 
@@ -125,11 +125,11 @@ public sealed class StSharedUnitTests
     //    var logger = new Mock<ILogger>();
     //    using var sw = new StringWriter();
     //    Console.SetOut(sw);
-    //    StShared.WriteErrorLine("Error!", true, logger.Object, false);
+    //    StShared.WriteErrorLine("ErrorOmd!", true, logger.Object, false);
     //    var output = sw.ToString();
     //    Assert.Contains("[ERROR]", output);
-    //    Assert.Contains("Error!", output);
-    //    logger.Verify(l => l.LogError("Error!"), Times.Once);
+    //    Assert.Contains("ErrorOmd!", output);
+    //    logger.Verify(l => l.LogError("ErrorOmd!"), Times.Once);
     //}
 
     [Fact]

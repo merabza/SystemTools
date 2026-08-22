@@ -2,7 +2,7 @@
 
 public static class ReCounterConstants
 {
-    public const string ErrorOmd = nameof(ErrorOmd);
+    public const string ReCounterError = nameof(ReCounterError);
     public const string ProcLength = nameof(ProcLength);
     public const string ProcessRun = nameof(ProcessRun);
     public const string ProcPosition = nameof(ProcPosition);

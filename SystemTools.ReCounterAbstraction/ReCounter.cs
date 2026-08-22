@@ -33,11 +33,11 @@ public /*open*/ class ReCounter
     {
         foreach (ErrorOmd error in errors)
         {
-            await LogMessage(ReCounterConstants.Error, error.Name, true, cancellationToken);
+            await LogMessage(ReCounterConstants.ReCounterError, error.Name, true, cancellationToken);
         }
     }
 
-    protected void ClearMessages()
+    private void ClearMessages()
     {
         _progressDataManager.Clear();
     }
@@ -189,7 +189,7 @@ public /*open*/ class ReCounter
         }
         catch (Exception e)
         {
-            await LogMessage(ReCounterConstants.Error, e.Message, false, cancellationToken);
+            await LogMessage(ReCounterConstants.ReCounterError, e.Message, false, cancellationToken);
             throw;
         }
         finally

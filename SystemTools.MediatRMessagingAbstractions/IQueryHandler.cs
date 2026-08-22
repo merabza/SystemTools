@@ -4,5 +4,5 @@ using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface IQueryHandler<in TQuery, TResponse> : IRequestHandler<TQuery, OneOf<TResponse, Error[]>>
+public interface IQueryHandler<in TQuery, TResponse> : IRequestHandler<TQuery, OneOf<TResponse, ErrorOmd[]>>
     where TQuery : IQuery<TResponse>;

@@ -169,24 +169,24 @@ public /*open*/ class MessageLogger
         }
     }
 
-    protected async ValueTask<Error[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+    protected async ValueTask<ErrorOmd[]> LogErrorAndSendMessageFromError(string errorCode, string message,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(message, UseConsole, _logger);
 
         if (_messagesDataManager is null)
         {
-            return [new Error { Code = errorCode, Name = message }];
+            return [new ErrorOmd { Code = errorCode, Name = message }];
         }
 
         await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
-        return [new Error { Code = errorCode, Name = message }];
+        return [new ErrorOmd { Code = errorCode, Name = message }];
     }
 
-    public async ValueTask<Error[]> LogErrorsAndSendMessageFromError(Error[] errors,
+    public async ValueTask<ErrorOmd[]> LogErrorsAndSendMessageFromError(ErrorOmd[] errors,
         CancellationToken cancellationToken = default)
     {
-        foreach (Error error in errors)
+        foreach (ErrorOmd error in errors)
         {
             await LogErrorAndSendMessageFromError(error, cancellationToken);
         }
@@ -194,7 +194,7 @@ public /*open*/ class MessageLogger
         return errors;
     }
 
-    public async ValueTask<Error[]> LogErrorAndSendMessageFromError(Error error,
+    public async ValueTask<ErrorOmd[]> LogErrorAndSendMessageFromError(ErrorOmd error,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(error.Name, UseConsole, _logger);
@@ -208,11 +208,11 @@ public /*open*/ class MessageLogger
         return [error];
     }
 
-    protected async ValueTask<Error> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+    protected async ValueTask<ErrorOmd> LogErrorAndSendMessageFromException(Exception ex, string methodName,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
-        Error error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
+        ErrorOmd error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
         {
             return error;

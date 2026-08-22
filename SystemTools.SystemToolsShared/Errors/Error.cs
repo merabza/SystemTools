@@ -2,43 +2,43 @@
 
 namespace SystemTools.SystemToolsShared.Errors;
 
-public record Error
+public record ErrorOmd
 {
-    public static readonly Error None = new() { Code = string.Empty, Name = string.Empty };
-    public static readonly Error NullValue = new() { Code = "Error.NullValue", Name = "Null value was provided" };
+    public static readonly ErrorOmd None = new() { Code = string.Empty, Name = string.Empty };
+    public static readonly ErrorOmd NullValue = new() { Code = "Error.NullValue", Name = "Null value was provided" };
 
     public required string Code { get; init; }
     public required string Name { get; init; }
 
-    public static Error[] Create(Error err)
+    public static ErrorOmd[] Create(ErrorOmd err)
     {
         return [err];
     }
 
-    public static Error[] CreateArr(Error err)
+    public static ErrorOmd[] CreateArr(ErrorOmd err)
     {
         return [err];
     }
 
-    public static Error[] RecreateErrors(IEnumerable<Error> haveErrors, Error addError)
+    public static ErrorOmd[] RecreateErrors(IEnumerable<ErrorOmd> haveErrors, ErrorOmd addError)
     {
-        var errors = new List<Error>();
+        var errors = new List<ErrorOmd>();
         errors.AddRange(haveErrors);
         errors.Add(addError);
         return [.. errors];
     }
 
-    public static Error[] RecreateErrors(IEnumerable<Error> haveErrors, IEnumerable<Error> addError)
+    public static ErrorOmd[] RecreateErrors(IEnumerable<ErrorOmd> haveErrors, IEnumerable<ErrorOmd> addError)
     {
-        var errors = new List<Error>();
+        var errors = new List<ErrorOmd>();
         errors.AddRange(haveErrors);
         errors.AddRange(addError);
         return [.. errors];
     }
 
-    public static void PrintErrorsOnConsole(IEnumerable<Error> errors)
+    public static void PrintErrorsOnConsole(IEnumerable<ErrorOmd> errors)
     {
-        foreach (Error error in errors)
+        foreach (ErrorOmd error in errors)
         {
             StShared.WriteErrorLine(error.Name, true, null, false);
         }

@@ -17,18 +17,18 @@ public sealed class TestApiClient : ApiClient
     {
     }
 
-    public Task<OneOf<string, Error[]>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
+    public Task<OneOf<string, ErrorOmd[]>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetAppSettingsVersion,
             cancellationToken);
     }
 
-    public Task<OneOf<string, Error[]>> GetVersion(CancellationToken cancellationToken = default)
+    public Task<OneOf<string, ErrorOmd[]>> GetVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
     }
 
-    public Task<OneOf<bool, Error[]>> TestConnection(CancellationToken cancellationToken = default)
+    public Task<OneOf<bool, ErrorOmd[]>> TestConnection(CancellationToken cancellationToken = default)
     {
         return GetAsyncReturn<bool>(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.TestConnection, false,
             cancellationToken);

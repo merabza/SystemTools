@@ -4,6 +4,6 @@ using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface ICommand : IRequest<OneOf<Unit, Error[]>>;
+public interface ICommand : IRequest<OneOf<Unit, ErrorOmd[]>>;
 
-public interface ICommand<TResponse> : IRequest<OneOf<TResponse, Error[]>>;
+public interface ICommand<TResponse> : IRequest<OneOf<TResponse, ErrorOmd[]>>;

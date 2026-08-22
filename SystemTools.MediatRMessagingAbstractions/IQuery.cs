@@ -4,4 +4,4 @@ using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface IQuery<TResponse> : IRequest<OneOf<TResponse, Error[]>>;
+public interface IQuery<TResponse> : IRequest<OneOf<TResponse, ErrorOmd[]>>;

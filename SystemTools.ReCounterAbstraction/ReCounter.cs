@@ -29,9 +29,9 @@ public /*open*/ class ReCounter
         _progressDataManager = progressDataManager;
     }
 
-    protected async Task LogErrors(IEnumerable<Error> errors, CancellationToken cancellationToken = default)
+    protected async Task LogErrors(IEnumerable<ErrorOmd> errors, CancellationToken cancellationToken = default)
     {
-        foreach (Error error in errors)
+        foreach (ErrorOmd error in errors)
         {
             await LogMessage(ReCounterConstants.Error, error.Name, true, cancellationToken);
         }

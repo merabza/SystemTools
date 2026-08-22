@@ -5,69 +5,69 @@ namespace SystemTools.SystemToolsShared.Errors;
 
 public static class SystemToolsErrors
 {
-    public static readonly Error UnexpectedError = new()
+    public static readonly ErrorOmd UnexpectedError = new()
     {
         Code = nameof(UnexpectedError), Name = "გაუთვალისწინებელი შეცდომა"
     };
 
-    public static Error SuchARecordAlreadyExists =>
+    public static ErrorOmd SuchARecordAlreadyExists =>
         new() { Code = nameof(SuchARecordAlreadyExists), Name = "ასეთი ჩანაწერი უკვე არსებობს" };
 
-    public static Error TheEntryHasBeenUsedAndCannotBeDeleted =>
+    public static ErrorOmd TheEntryHasBeenUsedAndCannotBeDeleted =>
         new() { Code = nameof(TheEntryHasBeenUsedAndCannotBeDeleted), Name = "ჩანაწერი გამოყენებულია და ვერ წაიშლება" };
 
-    public static Error ErrorCaught(string methodName, string errorMessage)
+    public static ErrorOmd ErrorCaught(string methodName, string errorMessage)
     {
-        return new Error { Code = nameof(ErrorCaught), Name = $"Error in {methodName} {errorMessage}" };
+        return new ErrorOmd { Code = nameof(ErrorCaught), Name = $"Error in {methodName} {errorMessage}" };
     }
 
-    public static Error VirtualMethodOverrideNotImplemented(string methodName)
+    public static ErrorOmd VirtualMethodOverrideNotImplemented(string methodName)
     {
-        return new Error
+        return new ErrorOmd
         {
             Code = nameof(VirtualMethodOverrideNotImplemented),
             Name = $"Virtual Method {methodName} Override did Not Implemented"
         };
     }
 
-    public static Error MethodNotImplemented(string methodName)
+    public static ErrorOmd MethodNotImplemented(string methodName)
     {
-        return new Error { Code = nameof(MethodNotImplemented), Name = $"Method {methodName} did Not Implemented" };
+        return new ErrorOmd { Code = nameof(MethodNotImplemented), Name = $"Method {methodName} did Not Implemented" };
     }
 
-    public static Error HandlerNotImplemented(string methodName)
+    public static ErrorOmd HandlerNotImplemented(string methodName)
     {
-        return new Error { Code = nameof(MethodNotImplemented), Name = $"Handler {methodName} did Not Implemented" };
+        return new ErrorOmd { Code = nameof(MethodNotImplemented), Name = $"Handler {methodName} did Not Implemented" };
     }
 
-    public static Error ErrorWhenRunningMethod(string methodName, Guid errorGuid)
+    public static ErrorOmd ErrorWhenRunningMethod(string methodName, Guid errorGuid)
     {
-        return new Error
+        return new ErrorOmd
         {
             Code = nameof(ErrorWhenRunningMethod),
             Name = $"{errorGuid} Error When Loading Data With Method {methodName}"
         };
     }
 
-    public static Error UnexpectedApiException(Exception e)
+    public static ErrorOmd UnexpectedApiException(Exception e)
     {
         var errorId = Guid.NewGuid();
         Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
             e.StackTrace);
-        return new Error { Code = nameof(UnexpectedApiException), Name = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
+        return new ErrorOmd { Code = nameof(UnexpectedApiException), Name = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
     }
 
-    public static Error RunProcessError(string errorMessage)
+    public static ErrorOmd RunProcessError(string errorMessage)
     {
-        return new Error { Code = nameof(RunProcessError), Name = $"RunProcessError: {errorMessage}" };
+        return new ErrorOmd { Code = nameof(RunProcessError), Name = $"RunProcessError: {errorMessage}" };
     }
 
-    public static Error UnexpectedDatabaseException(Exception e)
+    public static ErrorOmd UnexpectedDatabaseException(Exception e)
     {
         var errorId = Guid.NewGuid();
         Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
             e.StackTrace);
-        return new Error
+        return new ErrorOmd
         {
             Code = nameof(UnexpectedDatabaseException),
             Name = $"მონაცემთა ბაზასთან დაკავშირებული გაუთვალისწინებელი შეცდომა: {errorId}"

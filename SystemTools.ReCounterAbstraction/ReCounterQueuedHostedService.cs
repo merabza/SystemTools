@@ -48,7 +48,7 @@ public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounter
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error occurred executing {nameof(workItem)}.");
+                _logger.LogError(ex, $"ErrorOmd occurred executing {nameof(workItem)}.");
             }
         }
 

@@ -18,4 +18,3 @@ public abstract class Entity
         _domainEvents.Add(domainEvent);
     }
 }
-

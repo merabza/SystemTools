@@ -1,6 +1,6 @@
 ﻿namespace SystemTools.SystemToolsShared.App;
 
-public class ApplicationOptions
+public class AppOptions
 {
     public required string AppName { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace SystemTools.SystemToolsShared.App;
 
-public class Application(IOptions<ApplicationOptions> options) : IApplication
+public class App(IOptions<AppOptions> options) : IApplication
 {
     public string AppName { get; } = options.Value.AppName;
 }

@@ -2,10 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using OneOf;
 using SystemTools.ApiContracts;
 using SystemTools.ReCounterContracts.V1.Routes;
-using SystemTools.SystemToolsShared.Errors;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.ReCounterContracts;
 
@@ -17,14 +16,14 @@ public /*open*/ class ReCounterApiClient : ApiClient
     {
     }
 
-    public Task<OneOf<ProgressData, ErrorOmd[]>> GetCurrentProcessStatus(CancellationToken cancellationToken = default)
+    public Task<Result<ProgressData>> GetCurrentProcessStatus(CancellationToken cancellationToken = default)
     {
         return GetAsyncReturn<ProgressData>(
             RecountMessagesRoutes.ReCounterRoute.Recounter + RecountMessagesRoutes.ReCounterRoute.CurrentProcessStatus,
             false, cancellationToken);
     }
 
-    public Task<OneOf<bool, ErrorOmd[]>> CancelCurrentProcess(CancellationToken cancellationToken = default)
+    public Task<Result<bool>> CancelCurrentProcess(CancellationToken cancellationToken = default)
     {
         //გაუქმების მოთხოვნისას პროგრესის შეტყობინებები არ უნდა მივიღოთ და დავბეჭდოთ
         return PostAsyncReturn<bool>(

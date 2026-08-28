@@ -11,11 +11,36 @@ namespace SystemTools.Application.Abstractions.Behaviors;
 
 internal static class ValidationDecorator
 {
+    private static async Task<ValidationFailure[]> ValidateAsync<TCommand>(TCommand command,
+        IEnumerable<IValidator<TCommand>> validators)
+    {
+        IEnumerable<IValidator<TCommand>> enumerable = validators as IValidator<TCommand>[] ?? [.. validators];
+        if (!enumerable.Any())
+        {
+            return [];
+        }
+
+        var context = new ValidationContext<TCommand>(command);
+
+        ValidationResult[] validationResults = await Task.WhenAll(
+            enumerable.Select(validator => validator.ValidateAsync(context)));
+
+        ValidationFailure[] validationFailures =
+        [
+            .. validationResults.Where(validationResult => !validationResult.IsValid)
+                .SelectMany(validationResult => validationResult.Errors)
+        ];
+
+        return validationFailures;
+    }
+
+    private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
+        new([.. validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage))]);
+
     internal sealed class CommandHandler<TCommand, TResponse>(
         ICommandHandler<TCommand, TResponse> innerHandler,
         IEnumerable<IValidator<TCommand>> validators)
-        : ICommandHandler<TCommand, TResponse>
-        where TCommand : ICommand<TResponse>
+        : ICommandHandler<TCommand, TResponse> where TCommand : ICommand<TResponse>
     {
         public async Task<Result<TResponse>> Handle(TCommand command, CancellationToken cancellationToken)
         {
@@ -32,9 +57,7 @@ internal static class ValidationDecorator
 
     internal sealed class CommandBaseHandler<TCommand>(
         ICommandHandler<TCommand> innerHandler,
-        IEnumerable<IValidator<TCommand>> validators)
-        : ICommandHandler<TCommand>
-        where TCommand : ICommand
+        IEnumerable<IValidator<TCommand>> validators) : ICommandHandler<TCommand> where TCommand : ICommand
     {
         public async Task<Result> Handle(TCommand command, CancellationToken cancellationToken)
         {
@@ -48,32 +71,4 @@ internal static class ValidationDecorator
             return Result.Failure(CreateValidationError(validationFailures));
         }
     }
-
-    private static async Task<ValidationFailure[]> ValidateAsync<TCommand>(
-        TCommand command,
-        IEnumerable<IValidator<TCommand>> validators)
-    {
-        IEnumerable<IValidator<TCommand>> enumerable = validators as IValidator<TCommand>[] ?? [.. validators];
-        if (!enumerable.Any())
-        {
-            return [];
-        }
-
-        var context = new ValidationContext<TCommand>(command);
-
-        ValidationResult[] validationResults = await Task.WhenAll(
-            enumerable.Select(validator => validator.ValidateAsync(context)));
-
-        ValidationFailure[] validationFailures =
-        [
-            .. validationResults
-                .Where(validationResult => !validationResult.IsValid)
-                .SelectMany(validationResult => validationResult.Errors)
-        ];
-
-        return validationFailures;
-    }
-
-    private static ValidationError CreateValidationError(ValidationFailure[] validationFailures) =>
-        new([.. validationFailures.Select(f => Error.Problem(f.ErrorCode, f.ErrorMessage))]);
 }

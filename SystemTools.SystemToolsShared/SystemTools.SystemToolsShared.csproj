@@ -16,4 +16,8 @@
         <PackageReference Include="Serilog.Sinks.Console" />
         <PackageReference Include="Serilog.Sinks.File" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SystemTools.SharedKernel\SystemTools.SharedKernel.csproj" />
+    </ItemGroup>
 </Project>

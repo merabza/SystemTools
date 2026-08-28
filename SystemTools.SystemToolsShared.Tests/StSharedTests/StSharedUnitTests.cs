@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using LanguageExt;
-using OneOf;
+using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
@@ -22,9 +22,9 @@ public sealed class StSharedUnitTests
     [Fact]
     public void RunProcessWithOutput_ValidProcess_ReturnsOutput()
     {
-        OneOf<(string, int), ErrorOmd[]> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
-        Assert.True(result.IsT0);
-        (string output, int exitCode) = result.AsT0;
+        Result<(string, int)> result = StShared.RunProcessWithOutput(false, null, "dotnet", "--version");
+        Assert.True(result.IsSuccess);
+        (string output, int exitCode) = result.Value;
         Assert.False(string.IsNullOrWhiteSpace(output));
         Assert.Equal(0, exitCode);
     }

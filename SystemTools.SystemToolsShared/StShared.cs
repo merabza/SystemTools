@@ -9,7 +9,7 @@ using System.Threading;
 using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using OneOf;
+using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.SystemToolsShared;
@@ -27,7 +27,7 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static OneOf<(string, int), ErrorOmd[]> RunProcessWithOutput(bool useConsole, ILogger? logger,
+    public static Result<(string, int)> RunProcessWithOutput(bool useConsole, ILogger? logger,
         string programFileName, string arguments, int[]? allowExitCodes = null)
     {
         //var option = CheckFileExists(programFileName);
@@ -81,7 +81,7 @@ public static class StShared
             WriteErrorLine(errorMessage, useConsole, logger);
         }
 
-        return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
+        return Result.Failure<(string, int)>(SystemToolsErrors.RunProcessError(errorMessage).ToError());
     }
 
     private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)

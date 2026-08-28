@@ -1,5 +1,6 @@
 ﻿using System;
 using Serilog;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.SystemToolsShared.Errors;
 
@@ -49,12 +50,12 @@ public static class SystemToolsErrors
         };
     }
 
-    public static ErrorOmd UnexpectedApiException(Exception e)
+    public static Error UnexpectedApiException(Exception e)
     {
         var errorId = Guid.NewGuid();
         Log.Error("{ErrorId} - {EMessage}{NewLine}{EStackTrace}", errorId, e.Message, Environment.NewLine,
             e.StackTrace);
-        return new ErrorOmd { Code = nameof(UnexpectedApiException), Name = $"გაუთვალისწინებელი შეცდომა: {errorId}" };
+        return Error.Failure(nameof(UnexpectedApiException), $"გაუთვალისწინებელი შეცდომა: {errorId}");
     }
 
     public static ErrorOmd RunProcessError(string errorMessage)

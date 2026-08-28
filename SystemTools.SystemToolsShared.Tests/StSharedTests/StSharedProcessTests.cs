@@ -1,7 +1,7 @@
 using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
-using OneOf;
+using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
@@ -23,12 +23,12 @@ public sealed class StSharedProcessTests
         bool useConsole = false;
 
         // Act
-        OneOf<(string, int), ErrorOmd[]> result =
+        Result<(string, int)> result =
             StShared.RunProcessWithOutput(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
-        Assert.True(result.IsT0);
-        (string output, int exitCode) = result.AsT0;
+        Assert.True(result.IsSuccess);
+        (string output, int exitCode) = result.Value;
         Assert.Equal(0, exitCode);
         Assert.Contains("test", output);
     }

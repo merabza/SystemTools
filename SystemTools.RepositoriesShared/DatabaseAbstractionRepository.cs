@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage;
+using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared;
 using SystemTools.SystemToolsShared.Errors;
 
@@ -36,17 +36,16 @@ public /*open*/ class DatabaseAbstractionRepository : IDatabaseAbstraction
         _dbContext.Database.SetCommandTimeout(timeout);
     }
 
-    public async Task<Option<ErrorOmd[]>> ExecuteSqlRawRetOptionAsync(string sql,
-        CancellationToken cancellationToken = default)
+    public async Task<Result> ExecuteSqlRawRetOptionAsync(string sql, CancellationToken cancellationToken = default)
     {
         try
         {
             await _dbContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);
-            return null;
+            return Result.Success();
         }
         catch (Exception e)
         {
-            return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
+            return Result.Failure(SystemToolsErrors.UnexpectedDatabaseException(e).ToError());
         }
     }
 }

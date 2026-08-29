@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using LanguageExt;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SystemTools.SharedKernel;
@@ -94,13 +93,13 @@ public static class StShared
         return allowExitCodes is not null && allowExitCodes.Contains(exitCode);
     }
 
-    public static Option<ErrorOmd[]> RunProcess(bool useConsole, ILogger? logger, string programFileName,
-        string arguments, int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
+    public static Result RunProcess(bool useConsole, ILogger? logger, string programFileName, string arguments,
+        int[]? allowExitCodes = null, bool useErrorLine = true, int waitForExit = Timeout.Infinite)
     {
         ConsoleWriteInformationLine(logger, useConsole, "Running {0} {1}...", programFileName, arguments);
 
         //var option = CheckFileExists(programFileName);
-        //if (option.IsSome) 
+        //if (option.IsSome)
         //    return option;
 
         // ReSharper disable once using
@@ -108,7 +107,7 @@ public static class StShared
 
         if (waitForExit == 0)
         {
-            return null;
+            return Result.Success();
         }
 
         ConsoleWriteInformationLine(logger, useConsole, "Wait For Exit {0}", programFileName);
@@ -121,7 +120,7 @@ public static class StShared
 
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
         {
-            return null;
+            return Result.Success();
         }
 
         string errorMessage =
@@ -131,7 +130,7 @@ public static class StShared
             WriteErrorLine(errorMessage, useConsole, logger);
         }
 
-        return new[] { SystemToolsErrors.RunProcessError(errorMessage) };
+        return Result.Failure(SystemToolsErrors.RunProcessError(errorMessage).ToError());
     }
 
     //private static Option<ErrorOmd[]> CheckFileExists(string programFileName)

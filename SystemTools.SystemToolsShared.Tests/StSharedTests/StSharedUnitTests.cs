@@ -1,9 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using LanguageExt;
 using SystemTools.SharedKernel;
-using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 
 namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
@@ -39,10 +37,10 @@ public sealed class StSharedUnitTests
     //}
 
     [Fact]
-    public void RunProcess_ValidProcess_ReturnsNull()
+    public void RunProcess_ValidProcess_ReturnsSuccess()
     {
-        Option<ErrorOmd[]> result = StShared.RunProcess(false, null, "dotnet", "--version");
-        Assert.True(result.IsNone);
+        Result result = StShared.RunProcess(false, null, "dotnet", "--version");
+        Assert.True(result.IsSuccess);
     }
 
     //[Fact]

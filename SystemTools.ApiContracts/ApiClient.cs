@@ -6,7 +6,6 @@ using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SystemTools.ApiContracts.Errors;
@@ -47,12 +46,12 @@ public /*open*/ abstract class ApiClient : IApiClient
     // ReSharper disable once MemberCanBePrivate.Global
     protected IMessageHubClient? MessageHubClient { get; }
 
-    private async ValueTask<Option<ErrorOmd[]>> LogResponseErrorMessage(HttpResponseMessage response,
-        string? bodyJsonData, CancellationToken cancellationToken = default)
+    private async ValueTask<Result> LogResponseErrorMessage(HttpResponseMessage response, string? bodyJsonData,
+        CancellationToken cancellationToken = default)
     {
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
         if (_useConsole)
@@ -74,7 +73,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (string.IsNullOrWhiteSpace(responseBody))
         {
-            return new[] { ApiClientErrors.UnexpectedServerError };
+            return Result.Failure(ApiClientErrors.UnexpectedServerError.ToError());
         }
 
         ErrorOmd[]? errors = JsonConvert.DeserializeObject<ErrorOmd[]>(responseBody)?.ToArray();
@@ -89,11 +88,12 @@ public /*open*/ abstract class ApiClient : IApiClient
         string errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
         _logger?.LogError("Returned error message from ApiClient: {Name}", errorMessage);
 
-        return errors?.Length > 0 ? errors : [ApiClientErrors.ApiReturnedAnError(errorMessage)];
+        return errors?.Length > 0
+            ? Result.Failure(errors.ToError())
+            : Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage).ToError());
     }
 
-    protected Task<Option<ErrorOmd[]>> GetAsync(string afterServerAddress,
-        CancellationToken cancellationToken = default)
+    protected Task<Result> GetAsync(string afterServerAddress, CancellationToken cancellationToken = default)
     {
         return GetAsync(afterServerAddress, true, cancellationToken);
     }
@@ -118,7 +118,7 @@ public /*open*/ abstract class ApiClient : IApiClient
         return await MessageHubClient.StopMessages(cancellationToken);
     }
 
-    private async Task<Option<ErrorOmd[]>> GetAsync(string afterServerAddress, bool useMessageHubClient,
+    private async Task<Result> GetAsync(string afterServerAddress, bool useMessageHubClient,
         CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
@@ -140,19 +140,19 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return (ErrorOmd[])respResult;
+            return respResult;
         }
 
-        return new[] { ApiClientErrors.ApiUnknownError };
+        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
     }
 
-    protected async Task<Option<ErrorOmd[]>> GetWithTokenAsync(string token, string afterServerAddress,
+    protected async Task<Result> GetWithTokenAsync(string token, string afterServerAddress,
         CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
@@ -164,16 +164,16 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return (ErrorOmd[])respResult;
+            return respResult;
         }
 
-        return new[] { ApiClientErrors.ApiUnknownError };
+        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
     }
 
     private void SetAuthorizationAccessToken()
@@ -209,16 +209,16 @@ public /*open*/ abstract class ApiClient : IApiClient
             return await response.Content.ReadAsStringAsync(cancellationToken);
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return Result.Failure<string>(((ErrorOmd[])respResult).ToError());
+            return Result.Failure<string>(respResult.Error);
         }
 
         return Result.Failure<string>(ApiClientErrors.ApiUnknownError.ToError());
     }
 
-    protected async ValueTask<Option<ErrorOmd[]>> DeleteAsync(string afterServerAddress,
+    protected async ValueTask<Result> DeleteAsync(string afterServerAddress,
         CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
@@ -238,25 +238,24 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return (ErrorOmd[])respResult;
+            return respResult;
         }
 
-        return new[] { ApiClientErrors.ApiUnknownError };
+        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
     }
 
-    protected ValueTask<Option<ErrorOmd[]>> PostAsync(string afterServerAddress,
-        CancellationToken cancellationToken = default)
+    protected ValueTask<Result> PostAsync(string afterServerAddress, CancellationToken cancellationToken = default)
     {
         return PostAsync(afterServerAddress, true, null, cancellationToken);
     }
 
-    protected ValueTask<Option<ErrorOmd[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
+    protected ValueTask<Result> PostAsync(string afterServerAddress, bool useMessageHubClient,
         CancellationToken cancellationToken = default)
     {
         return PostAsync(afterServerAddress, useMessageHubClient, null, cancellationToken);
@@ -264,7 +263,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     //გამოიყენება SupportTools პროექტში DatabaseApiClient-ის მიერ
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async ValueTask<Option<ErrorOmd[]>> PostAsync(string afterServerAddress, bool useMessageHubClient,
+    protected async ValueTask<Result> PostAsync(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
@@ -292,27 +291,26 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return (ErrorOmd[])respResult;
+            return respResult;
         }
 
-        return new[] { ApiClientErrors.ApiUnknownError };
+        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
     }
 
-    protected Task<Option<ErrorOmd[]>> PutAsync(string afterServerAddress,
-        CancellationToken cancellationToken = default)
+    protected Task<Result> PutAsync(string afterServerAddress, CancellationToken cancellationToken = default)
     {
         return PutAsync(afterServerAddress, null, cancellationToken);
     }
 
     //გამოიყენება SupportTools პროექტში
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task<Option<ErrorOmd[]>> PutAsync(string afterServerAddress, string? bodyJsonData,
+    protected async Task<Result> PutAsync(string afterServerAddress, string? bodyJsonData,
         CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
@@ -338,16 +336,16 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (response.IsSuccessStatusCode)
         {
-            return null;
+            return Result.Success();
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return (ErrorOmd[])respResult;
+            return respResult;
         }
 
-        return new[] { ApiClientErrors.ApiUnknownError };
+        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
     }
 
     protected ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress,
@@ -393,10 +391,10 @@ public /*open*/ abstract class ApiClient : IApiClient
             return await response.Content.ReadAsStringAsync(cancellationToken);
         }
 
-        Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsSome)
+        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
+        if (respResult.IsFailure)
         {
-            return Result.Failure<string>(((ErrorOmd[])respResult).ToError());
+            return Result.Failure<string>(respResult.Error);
         }
 
         return Result.Failure<string>(ApiClientErrors.ApiUnknownError.ToError());
@@ -442,10 +440,10 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (!response.IsSuccessStatusCode)
         {
-            Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-            if (respResult.IsSome)
+            Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
+            if (respResult.IsFailure)
             {
-                return Result.Failure<T>(((ErrorOmd[])respResult).ToError());
+                return Result.Failure<T>(respResult.Error);
             }
 
             return Result.Failure<T>(ApiClientErrors.ApiUnknownError.ToError());
@@ -483,10 +481,10 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (!response.IsSuccessStatusCode)
         {
-            Option<ErrorOmd[]> respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-            if (respResult.IsSome)
+            Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
+            if (respResult.IsFailure)
             {
-                return Result.Failure<T>(((ErrorOmd[])respResult).ToError());
+                return Result.Failure<T>(respResult.Error);
             }
 
             return Result.Failure<T>(ApiClientErrors.ApiUnknownError.ToError());

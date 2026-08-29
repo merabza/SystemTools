@@ -356,16 +356,16 @@ public /*open*/ abstract class ApiClient : IApiClient
         return PostAsyncReturnString(afterServerAddress, true, null, cancellationToken);
     }
 
-    protected ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress,
-        bool useMessageHubClient, CancellationToken cancellationToken = default)
+    protected ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
+        CancellationToken cancellationToken = default)
     {
         return PostAsyncReturnString(afterServerAddress, useMessageHubClient, null, cancellationToken);
     }
 
     //გამოიყენება SupportTools პროექტში
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress,
-        bool useMessageHubClient, string? bodyJsonData, CancellationToken cancellationToken = default)
+    protected async ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress, bool useMessageHubClient,
+        string? bodyJsonData, CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
 

@@ -12,9 +12,7 @@ public static class ErrorOmdExtensions
 
     public static Error ToError(this ErrorOmd[] errors)
     {
-        return errors.Length == 1
-            ? errors[0].ToError()
-            : new ValidationError([.. errors.Select(x => x.ToError())]);
+        return errors.Length == 1 ? errors[0].ToError() : new ValidationError([.. errors.Select(x => x.ToError())]);
     }
 
     // Reverse conversion for call sites that must keep producing the legacy

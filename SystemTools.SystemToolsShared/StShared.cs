@@ -27,8 +27,8 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
-    public static Result<(string, int)> RunProcessWithOutput(bool useConsole, ILogger? logger,
-        string programFileName, string arguments, int[]? allowExitCodes = null)
+    public static Result<(string, int)> RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
+        string arguments, int[]? allowExitCodes = null)
     {
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 

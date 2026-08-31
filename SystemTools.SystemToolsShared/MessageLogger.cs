@@ -15,7 +15,6 @@ public /*open*/ class MessageLogger
     private readonly IMessagesDataManager? _messagesDataManager;
     private readonly string? _userName;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
     public MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName, bool useConsole)
     {
         _logger = logger;

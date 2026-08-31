@@ -8,7 +8,6 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 {
     private readonly JsonConfigurationSource _source;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
     public JsonConfigurationProvider(JsonConfigurationSource source) : base(source)
     {
         _source = source;

@@ -28,7 +28,6 @@ public /*open*/ abstract class ApiClient : IApiClient
     // ReSharper disable once MemberCanBePrivate.Global
     protected string? AccessToken;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
     protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
         IMessageHubClient? messageHubClient, bool useConsole, string? accessToken = null)
     {

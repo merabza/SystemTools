@@ -23,7 +23,6 @@ public sealed class ReCounterMessageHubClient : IMessageHubClient
 
     // ReSharper disable once MemberCanBePrivate.Global
 
-    // ReSharper disable once ConvertToPrimaryConstructor
     public ReCounterMessageHubClient(string server, string? apiKey)
     {
         _server = server;

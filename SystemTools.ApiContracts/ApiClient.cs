@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 using SystemTools.ApiContracts.Errors;
 using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared;
-using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.ApiContracts;
 
@@ -90,7 +89,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         //return errors?.Length > 0
         //    ? Result.Failure(errors)
-           return Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage));
+        return Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage));
     }
 
     protected Task<Result> GetAsync(string afterServerAddress, CancellationToken cancellationToken = default)

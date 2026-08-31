@@ -45,7 +45,7 @@ public /*open*/ class DatabaseAbstractionRepository : IDatabaseAbstraction
         }
         catch (Exception e)
         {
-            return Result.Failure(SystemToolsErrors.UnexpectedDatabaseException(e).ToError());
+            return Result.Failure(SystemToolsErrors.UnexpectedDatabaseException(e));
         }
     }
 }

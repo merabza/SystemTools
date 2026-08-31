@@ -80,7 +80,7 @@ public static class StShared
             WriteErrorLine(errorMessage, useConsole, logger);
         }
 
-        return Result.Failure<(string, int)>(SystemToolsErrors.RunProcessError(errorMessage).ToError());
+        return Result.Failure<(string, int)>(SystemToolsErrors.RunProcessError(errorMessage));
     }
 
     private static bool IsAllowExitCode(int exitCode, int[]? allowExitCodes)
@@ -130,7 +130,7 @@ public static class StShared
             WriteErrorLine(errorMessage, useConsole, logger);
         }
 
-        return Result.Failure(SystemToolsErrors.RunProcessError(errorMessage).ToError());
+        return Result.Failure(SystemToolsErrors.RunProcessError(errorMessage));
     }
 
     //private static Option<ErrorOmd[]> CheckFileExists(string programFileName)

@@ -73,24 +73,24 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         if (string.IsNullOrWhiteSpace(responseBody))
         {
-            return Result.Failure(ApiClientErrors.UnexpectedServerError.ToError());
+            return Result.Failure(ApiClientErrors.UnexpectedServerError);
         }
 
-        ErrorOmd[]? errors = JsonConvert.DeserializeObject<ErrorOmd[]>(responseBody)?.ToArray();
+        Error[]? errors = JsonConvert.DeserializeObject<Error[]>(responseBody)?.ToArray();
         if (_useConsole && errors is not null)
         {
-            foreach (ErrorOmd err in errors)
+            foreach (Error err in errors)
             {
-                StShared.WriteErrorLine($"ErrorOmd from server: {err.Name}", true);
+                StShared.WriteErrorLine($"Error from server: {err.Code}", true);
             }
         }
 
         string errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
         _logger?.LogError("Returned error message from ApiClient: {Name}", errorMessage);
 
-        return errors?.Length > 0
-            ? Result.Failure(errors.ToError())
-            : Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage).ToError());
+        //return errors?.Length > 0
+        //    ? Result.Failure(errors)
+           return Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage));
     }
 
     protected Task<Result> GetAsync(string afterServerAddress, CancellationToken cancellationToken = default)
@@ -149,7 +149,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return respResult;
         }
 
-        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure(ApiClientErrors.ApiUnknownError);
     }
 
     protected async Task<Result> GetWithTokenAsync(string token, string afterServerAddress,
@@ -173,7 +173,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return respResult;
         }
 
-        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure(ApiClientErrors.ApiUnknownError);
     }
 
     private void SetAuthorizationAccessToken()
@@ -215,7 +215,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return Result.Failure<string>(respResult.Error);
         }
 
-        return Result.Failure<string>(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure<string>(ApiClientErrors.ApiUnknownError);
     }
 
     protected async ValueTask<Result> DeleteAsync(string afterServerAddress,
@@ -247,7 +247,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return respResult;
         }
 
-        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure(ApiClientErrors.ApiUnknownError);
     }
 
     protected ValueTask<Result> PostAsync(string afterServerAddress, CancellationToken cancellationToken = default)
@@ -300,7 +300,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return respResult;
         }
 
-        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure(ApiClientErrors.ApiUnknownError);
     }
 
     protected Task<Result> PutAsync(string afterServerAddress, CancellationToken cancellationToken = default)
@@ -345,7 +345,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return respResult;
         }
 
-        return Result.Failure(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure(ApiClientErrors.ApiUnknownError);
     }
 
     protected ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress,
@@ -397,7 +397,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             return Result.Failure<string>(respResult.Error);
         }
 
-        return Result.Failure<string>(ApiClientErrors.ApiUnknownError.ToError());
+        return Result.Failure<string>(ApiClientErrors.ApiUnknownError);
     }
 
     protected Task<Result<T>> PostAsyncReturn<T>(string afterServerAddress,
@@ -446,14 +446,14 @@ public /*open*/ abstract class ApiClient : IApiClient
                 return Result.Failure<T>(respResult.Error);
             }
 
-            return Result.Failure<T>(ApiClientErrors.ApiUnknownError.ToError());
+            return Result.Failure<T>(ApiClientErrors.ApiUnknownError);
         }
 
         string result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
         if (desResult is null)
         {
-            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything.ToError());
+            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything);
         }
 
         return desResult;
@@ -487,14 +487,14 @@ public /*open*/ abstract class ApiClient : IApiClient
                 return Result.Failure<T>(respResult.Error);
             }
 
-            return Result.Failure<T>(ApiClientErrors.ApiUnknownError.ToError());
+            return Result.Failure<T>(ApiClientErrors.ApiUnknownError);
         }
 
         string result = await response.Content.ReadAsStringAsync(cancellationToken);
         var desResult = JsonConvert.DeserializeObject<T>(result);
         if (desResult is null)
         {
-            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything.ToError());
+            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything);
         }
 
         return desResult;

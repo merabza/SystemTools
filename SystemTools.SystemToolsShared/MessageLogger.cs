@@ -183,18 +183,25 @@ public /*open*/ class MessageLogger
         return Error.Problem(errorCode, message);
     }
 
-    public async ValueTask<Error[]> LogErrorsAndSendMessageFromError(Error[] errors,
+    public async ValueTask<Error> LogErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {
-        foreach (Error error in errors)
+        if (error is ValidationError validationError)
         {
-            await LogErrorAndSendMessageFromError(error, cancellationToken);
+            foreach (Error err in validationError.Errors)
+            {
+                await LogOneErrorAndSendMessageFromError(err, cancellationToken);
+            }
+        }
+        else
+        {
+            await LogOneErrorAndSendMessageFromError(error, cancellationToken);
         }
 
-        return errors;
+        return error;
     }
 
-    public async ValueTask<Error[]> LogErrorAndSendMessageFromError(Error error,
+    protected async ValueTask<Error[]> LogOneErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(error.Description, UseConsole, _logger);

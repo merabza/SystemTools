@@ -133,7 +133,7 @@ public static class StShared
         return Result.Failure(SystemToolsErrors.RunProcessError(errorMessage));
     }
 
-    //private static Option<ErrorOmd[]> CheckFileExists(string programFileName)
+    //private static Result CheckFileExists(string programFileName)
     //{
     //    // Check if the program file exists before starting the process
     //    if (!File.Exists(programFileName))

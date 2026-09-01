@@ -16,7 +16,7 @@
 //    }
 
 //    // Reverse conversion for call sites that must keep producing the legacy
-//    // ErrorOmd[] wire format (BadRequest payloads, Option<ErrorOmd[]> flows).
+//    // ErrorOmd[] wire format (BadRequest payloads, Result flows).
 //    public static ErrorOmd[] ToErrorOmdArray(this Error error)
 //    {
 //        return error is ValidationError validationError

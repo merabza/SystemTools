@@ -26,7 +26,9 @@ public /*open*/ abstract class ApiClient : IApiClient
     //protected იყენებს SystemTools
     //readonly არ გამოდგება, JwtContractReCounterApiClient სეტავს
     // ReSharper disable once MemberCanBePrivate.Global
+#pragma warning disable IDE0044
     protected string? AccessToken;
+#pragma warning restore IDE0044
 
     protected ApiClient(ILogger? logger, IHttpClientFactory httpClientFactory, string server, string? apiKey,
         IMessageHubClient? messageHubClient, bool useConsole, string? accessToken = null)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemTools.ReCounterContracts;
-using SystemTools.SystemToolsShared.Errors;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.ReCounterAbstraction;
 
@@ -29,11 +29,11 @@ public /*open*/ class ReCounter
         _progressDataManager = progressDataManager;
     }
 
-    protected async Task LogErrors(IEnumerable<ErrorOmd> errors, CancellationToken cancellationToken = default)
+    protected async Task LogErrors(IEnumerable<Error> errors, CancellationToken cancellationToken = default)
     {
-        foreach (ErrorOmd error in errors)
+        foreach (Error error in errors)
         {
-            await LogMessage(ReCounterConstants.ReCounterError, error.Name, true, cancellationToken);
+            await LogMessage(ReCounterConstants.ReCounterError, error.Description, true, cancellationToken);
         }
     }
 

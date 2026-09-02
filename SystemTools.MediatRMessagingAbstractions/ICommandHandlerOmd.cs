@@ -1,11 +1,10 @@
-﻿using MediatR;
-using OneOf;
-using SystemTools.SystemToolsShared.Errors;
+using MediatR;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface ICommandHandlerOmd<in TCommand> : IRequestHandler<TCommand, OneOf<Unit, ErrorOmd[]>>
+public interface ICommandHandlerOmd<in TCommand> : IRequestHandler<TCommand, Result>
     where TCommand : ICommandOmd;
 
-public interface ICommandHandlerOmd<in TCommand, TResponse> : IRequestHandler<TCommand, OneOf<TResponse, ErrorOmd[]>>
+public interface ICommandHandlerOmd<in TCommand, TResponse> : IRequestHandler<TCommand, Result<TResponse>>
     where TCommand : ICommandOmd<TResponse>;

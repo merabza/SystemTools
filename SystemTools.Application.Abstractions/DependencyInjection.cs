@@ -13,14 +13,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services, ILogger? debugLogger,
         params Type[] types)
     {
-        if (debugLogger is not null)
-        {
-            debugLogger.Information("{MethodName} Started", nameof(AddApplication));
-        }
-        else
-        {
-            return services;
-        }
+        debugLogger?.Information("{MethodName} Started", nameof(AddApplication));
 
         services.Scan(scan => scan.FromAssembliesOf(types)
             .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)), false).AsImplementedInterfaces()
@@ -29,12 +22,14 @@ public static class DependencyInjection
             .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)), false).AsImplementedInterfaces()
             .WithScopedLifetime());
 
-        services.Decorate(typeof(ICommandHandler<,>), typeof(ValidationDecorator.CommandHandler<,>));
-        services.Decorate(typeof(ICommandHandler<>), typeof(ValidationDecorator.CommandBaseHandler<>));
+        //TryDecorate, რომ იმ სოლუშენებში, სადაც რომელიმე სახეობის ჰენდლერი საერთოდ არ არის
+        //რეგისტრირებული, Decorate-მა DecorationException არ ისროლოს
+        services.TryDecorate(typeof(ICommandHandler<,>), typeof(ValidationDecorator.CommandHandler<,>));
+        services.TryDecorate(typeof(ICommandHandler<>), typeof(ValidationDecorator.CommandBaseHandler<>));
 
-        services.Decorate(typeof(IQueryHandler<,>), typeof(LoggingDecorator.QueryHandler<,>));
-        services.Decorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
-        services.Decorate(typeof(ICommandHandler<>), typeof(LoggingDecorator.CommandBaseHandler<>));
+        services.TryDecorate(typeof(IQueryHandler<,>), typeof(LoggingDecorator.QueryHandler<,>));
+        services.TryDecorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
+        services.TryDecorate(typeof(ICommandHandler<>), typeof(LoggingDecorator.CommandBaseHandler<>));
 
         services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))
             .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), false).AsImplementedInterfaces()
@@ -42,7 +37,7 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly, includeInternalTypes: true);
 
-        debugLogger.Information("{MethodName} Finished", nameof(AddApplication));
+        debugLogger?.Information("{MethodName} Finished", nameof(AddApplication));
 
         return services;
     }

@@ -1,25 +1,17 @@
-﻿using SystemTools.SystemToolsShared.Errors;
+﻿using SystemTools.SharedKernel;
 
 namespace SystemTools.ApiContracts.Errors;
 
 public static class ApiErrors
 {
-    public static readonly ErrorOmd InvalidRemoteAddress = new()
-    {
-        Code = nameof(InvalidRemoteAddress), Name = "Invalid Remote Address"
-    };
+    public static Error InvalidRemoteAddress => Error.Problem(nameof(InvalidRemoteAddress), "Invalid Remote Address");
 
-    public static readonly ErrorOmd ApiKeyIsInvalid = new()
-    {
-        Code = nameof(ApiKeyIsInvalid), Name = "API Key is invalid"
-    };
+    public static Error ApiKeyIsInvalid => Error.Problem(nameof(ApiKeyIsInvalid), "API Key is invalid");
 
-    public static readonly ErrorOmd RequestIsEmpty = new() { Code = nameof(RequestIsEmpty), Name = "Request is Empty" };
+    public static Error RequestIsEmpty => Error.Problem(nameof(RequestIsEmpty), "Request is Empty");
 
-    public static readonly ErrorOmd SomeRequestParametersAreNotValid = new()
-    {
-        Code = nameof(SomeRequestParametersAreNotValid), Name = "Some request parameters are not valid"
-    };
+    public static Error SomeRequestParametersAreNotValid =>
+        Error.Problem(nameof(SomeRequestParametersAreNotValid), "Some request parameters are not valid");
 
     public static string IsEmptyErrMessage(string propertyNameLocalized)
     {

@@ -2,12 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage;
 using SystemTools.Domain.Abstractions;
-using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.RepositoriesShared;
 
@@ -31,27 +28,32 @@ public /*open*/ class UnitOfWork : IUnitOfWork
         return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    public IEntityType? GetEntityTypeByTableName(string tableName)
     {
-        return _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        return _dbContext.Model.GetEntityTypes().SingleOrDefault(w => w.GetTableName() == tableName);
     }
+
+    //public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    //{
+    //    return _dbContext.Database.BeginTransactionAsync(cancellationToken);
+    //}
 
     public void SetCommandTimeout(TimeSpan timeout)
     {
         _dbContext.Database.SetCommandTimeout(timeout);
     }
 
-    public async Task<Option<ErrorOmd[]>> ExecuteSqlRawRetOptionAsync(string sql,
-        CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            await _dbContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);
-            return null;
-        }
-        catch (Exception e)
-        {
-            return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
-        }
-    }
+    //public async Task<Option<ErrorOmd[]>> ExecuteSqlRawRetOptionAsync(string sql,
+    //    CancellationToken cancellationToken = default)
+    //{
+    //    try
+    //    {
+    //        await _dbContext.Database.ExecuteSqlRawAsync(sql, cancellationToken);
+    //        return null;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return new[] { SystemToolsErrors.UnexpectedDatabaseException(e) };
+    //    }
+    //}
 }

@@ -8,7 +8,6 @@ public sealed class JsonConfigurationProvider : Microsoft.Extensions.Configurati
 {
     private readonly JsonConfigurationSource _source;
 
-    
     public JsonConfigurationProvider(JsonConfigurationSource source) : base(source)
     {
         _source = source;

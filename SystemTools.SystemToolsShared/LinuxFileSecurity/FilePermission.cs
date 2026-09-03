@@ -8,7 +8,6 @@ public sealed class FilePermission
 {
     private const string Command = "chmod";
 
-    
     public FilePermission(string filePath)
     {
         FilePath = filePath;

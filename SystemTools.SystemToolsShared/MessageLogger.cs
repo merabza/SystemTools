@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared.Errors;
 
 namespace SystemTools.SystemToolsShared;
@@ -14,7 +15,6 @@ public /*open*/ class MessageLogger
     private readonly IMessagesDataManager? _messagesDataManager;
     private readonly string? _userName;
 
-    
     public MessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName, bool useConsole)
     {
         _logger = logger;
@@ -169,56 +169,63 @@ public /*open*/ class MessageLogger
         }
     }
 
-    protected async ValueTask<ErrorOmd[]> LogErrorAndSendMessageFromError(string errorCode, string message,
+    protected async ValueTask<Error> LogErrorAndSendMessageFromError(string errorCode, string message,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteErrorLine(message, UseConsole, _logger);
 
         if (_messagesDataManager is null)
         {
-            return [new ErrorOmd { Code = errorCode, Name = message }];
+            return Error.Problem(errorCode, message);
         }
 
         await _messagesDataManager.SendMessage(_userName, message, cancellationToken);
-        return [new ErrorOmd { Code = errorCode, Name = message }];
+        return Error.Problem(errorCode, message);
     }
 
-    public async ValueTask<ErrorOmd[]> LogErrorsAndSendMessageFromError(ErrorOmd[] errors,
+    public async ValueTask<Error> LogErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {
-        foreach (ErrorOmd error in errors)
+        if (error is ValidationError validationError)
         {
-            await LogErrorAndSendMessageFromError(error, cancellationToken);
+            foreach (Error err in validationError.Errors)
+            {
+                await LogOneErrorAndSendMessageFromError(err, cancellationToken);
+            }
+        }
+        else
+        {
+            await LogOneErrorAndSendMessageFromError(error, cancellationToken);
         }
 
-        return errors;
+        return error;
     }
 
-    public async ValueTask<ErrorOmd[]> LogErrorAndSendMessageFromError(ErrorOmd error,
+    protected async ValueTask<Error[]> LogOneErrorAndSendMessageFromError(Error error,
         CancellationToken cancellationToken = default)
     {
-        StShared.WriteErrorLine(error.Name, UseConsole, _logger);
+        StShared.WriteErrorLine(error.Description, UseConsole, _logger);
 
         if (_messagesDataManager is null)
         {
             return [error];
         }
 
-        await _messagesDataManager.SendMessage(_userName, error.Name, cancellationToken);
+        await _messagesDataManager.SendMessage(_userName, error.Description, cancellationToken);
         return [error];
     }
 
-    protected async ValueTask<ErrorOmd> LogErrorAndSendMessageFromException(Exception ex, string methodName,
+    protected async ValueTask<Error> LogErrorAndSendMessageFromException(Exception ex, string methodName,
         CancellationToken cancellationToken = default)
     {
         StShared.WriteException(ex, UseConsole, _logger);
-        ErrorOmd error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
+        Error error = SystemToolsErrors.ErrorCaught(methodName, ex.Message);
         if (_messagesDataManager is null)
         {
             return error;
         }
 
-        await _messagesDataManager.SendMessage(_userName, error.Name, cancellationToken);
+        await _messagesDataManager.SendMessage(_userName, error.Description, cancellationToken);
         return error;
     }
 }

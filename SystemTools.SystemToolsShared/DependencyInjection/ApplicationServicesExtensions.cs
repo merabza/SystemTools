@@ -6,10 +6,9 @@ namespace SystemTools.SystemToolsShared.DependencyInjection;
 
 public static class ApplicationServicesExtensions
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services,
-        Action<ApplicationOptions> setupAction)
+    public static IServiceCollection AddApp(this IServiceCollection services, Action<AppOptions> setupAction)
     {
-        services.AddSingleton<IApplication, Application>();
+        services.AddSingleton<IApplication, App.App>();
         services.Configure(setupAction);
         return services;
     }

@@ -1,9 +1,8 @@
-﻿using MediatR;
-using OneOf;
-using SystemTools.SystemToolsShared.Errors;
+using MediatR;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface ICommandOmd : IRequest<OneOf<Unit, ErrorOmd[]>>;
+public interface ICommandOmd : IRequest<Result>;
 
-public interface ICommandOmd<TResponse> : IRequest<OneOf<TResponse, ErrorOmd[]>>;
+public interface ICommandOmd<TResponse> : IRequest<Result<TResponse>>;

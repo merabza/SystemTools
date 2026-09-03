@@ -4,7 +4,6 @@ public abstract class DataSeederBase
 {
     private readonly bool _checkOnly;
 
-    
     protected DataSeederBase(bool checkOnly)
     {
         _checkOnly = checkOnly;

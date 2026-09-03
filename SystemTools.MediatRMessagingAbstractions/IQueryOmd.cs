@@ -1,7 +1,6 @@
-﻿using MediatR;
-using OneOf;
-using SystemTools.SystemToolsShared.Errors;
+using MediatR;
+using SystemTools.SharedKernel;
 
 namespace SystemTools.MediatRMessagingAbstractions;
 
-public interface IQueryOmd<TResponse> : IRequest<OneOf<TResponse, ErrorOmd[]>>;
+public interface IQueryOmd<TResponse> : IRequest<Result<TResponse>>;

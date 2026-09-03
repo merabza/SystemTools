@@ -37,7 +37,17 @@ public sealed class ReCounterQueuedHostedService : BackgroundService, IReCounter
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            Func<CancellationToken, Task>? workItem = await TaskQueue.DequeueAsync(stoppingToken);
+            Func<CancellationToken, Task>? workItem;
+            try
+            {
+                workItem = await TaskQueue.DequeueAsync(stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                //გაუქმება შტატური გაჩერებაა (StopAsync/host shutdown). თუ OperationCanceledException
+                //აქედან გავარდა, ExecuteTask faulted ხდება და ჰოსტი StopHost ქცევით მთლიანად ჩერდება
+                break;
+            }
 
             try
             {

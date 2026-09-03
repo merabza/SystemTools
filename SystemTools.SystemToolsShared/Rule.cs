@@ -8,7 +8,6 @@ public sealed class Rule
     private readonly Regex _regex;
     private readonly string _replacement;
 
-    
     public Rule(string pattern, string replacement)
     {
         _regex = new Regex(pattern, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));

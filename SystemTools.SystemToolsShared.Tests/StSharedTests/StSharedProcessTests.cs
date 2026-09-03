@@ -1,8 +1,6 @@
-using LanguageExt;
 using Microsoft.Extensions.Logging;
 using Moq;
-using OneOf;
-using SystemTools.SystemToolsShared.Errors;
+using SystemTools.SharedKernel;
 using Xunit;
 
 namespace SystemTools.SystemToolsShared.Tests.StSharedTests;
@@ -23,46 +21,46 @@ public sealed class StSharedProcessTests
         bool useConsole = false;
 
         // Act
-        OneOf<(string, int), ErrorOmd[]> result =
+        Result<(string, int)> result =
             StShared.RunProcessWithOutput(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
-        Assert.True(result.IsT0);
-        (string output, int exitCode) = result.AsT0;
+        Assert.True(result.IsSuccess);
+        (string output, int exitCode) = result.Value;
         Assert.Equal(0, exitCode);
         Assert.Contains("test", output);
     }
 
     [Fact]
-    public void RunProcess_WithValidCommand_ReturnsNone()
+    public void RunProcess_WithValidCommand_ReturnsSuccess()
     {
         // Arrange
         bool useConsole = false;
 
         // Act
-        Option<ErrorOmd[]> result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
+        Result result = StShared.RunProcess(useConsole, _mockLogger.Object, "cmd", "/c echo test");
 
         // Assert
-        Assert.True(result.IsNone);
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public void IsAllowExitCode_WithZero_ReturnsTrue()
     {
         // Arrange & Act
-        Option<ErrorOmd[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
+        Result result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 0");
 
         // Assert
-        Assert.True(result.IsNone);
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public void IsAllowExitCode_WithAllowedCode_ReturnsTrue()
     {
         // Arrange & Act
-        Option<ErrorOmd[]> result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
+        Result result = StShared.RunProcess(false, _mockLogger.Object, "cmd", "/c exit 1", [1]);
 
         // Assert
-        Assert.True(result.IsNone);
+        Assert.True(result.IsSuccess);
     }
 }

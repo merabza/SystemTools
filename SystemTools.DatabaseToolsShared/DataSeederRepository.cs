@@ -12,7 +12,6 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     private readonly DbContext _context;
     private readonly ILogger<DataSeederRepository> _logger;
 
-    
     public DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger)
     {
         _context = ctx;

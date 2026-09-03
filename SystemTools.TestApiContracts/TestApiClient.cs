@@ -2,33 +2,31 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using OneOf;
 using SystemTools.ApiContracts;
-using SystemTools.SystemToolsShared.Errors;
+using SystemTools.SharedKernel;
 using SystemTools.TestApiContracts.V1.Routes;
 
 namespace SystemTools.TestApiContracts;
 
 public sealed class TestApiClient : ApiClient
 {
-    
     public TestApiClient(ILogger logger, IHttpClientFactory httpClientFactory, string server, bool useConsole) : base(
         logger, httpClientFactory, server, null, null, useConsole)
     {
     }
 
-    public Task<OneOf<string, ErrorOmd[]>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
+    public Task<Result<string>> GetAppSettingsVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetAppSettingsVersion,
             cancellationToken);
     }
 
-    public Task<OneOf<string, ErrorOmd[]>> GetVersion(CancellationToken cancellationToken = default)
+    public Task<Result<string>> GetVersion(CancellationToken cancellationToken = default)
     {
         return GetAsyncAsString(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.GetVersion, cancellationToken);
     }
 
-    public Task<OneOf<bool, ErrorOmd[]>> TestConnection(CancellationToken cancellationToken = default)
+    public Task<Result<bool>> TestConnection(CancellationToken cancellationToken = default)
     {
         return GetAsyncReturn<bool>(TestApiRoutes.Test.TestBase + TestApiRoutes.Test.TestConnection, false,
             cancellationToken);

@@ -11,7 +11,7 @@ public sealed class Processes : IProcesses, IDisposable
 
     private ProcessManager? _processManager;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
+    
     public Processes(ILogger<Processes> logger)
     {
         _logger = logger;

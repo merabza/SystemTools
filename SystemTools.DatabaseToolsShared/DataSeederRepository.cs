@@ -12,7 +12,7 @@ public /*open*/ class DataSeederRepository : IDataSeederRepository
     private readonly DbContext _context;
     private readonly ILogger<DataSeederRepository> _logger;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
+    
     public DataSeederRepository(DbContext ctx, ILogger<DataSeederRepository> logger)
     {
         _context = ctx;

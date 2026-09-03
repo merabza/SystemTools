@@ -4,7 +4,7 @@ public abstract class DataSeederBase
 {
     private readonly bool _checkOnly;
 
-    // ReSharper disable once ConvertToPrimaryConstructor
+    
     protected DataSeederBase(bool checkOnly)
     {
         _checkOnly = checkOnly;

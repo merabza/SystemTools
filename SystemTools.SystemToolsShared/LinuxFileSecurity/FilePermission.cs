@@ -8,7 +8,7 @@ public sealed class FilePermission
 {
     private const string Command = "chmod";
 
-    // ReSharper disable once ConvertToPrimaryConstructor
+    
     public FilePermission(string filePath)
     {
         FilePath = filePath;

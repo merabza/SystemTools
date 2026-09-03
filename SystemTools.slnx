@@ -5,6 +5,7 @@
         <File Path="Directory.Packages.props" />
     </Folder>
     <Folder Name="/Tests/">
+        <Project Path="SystemTools.ApiContracts.Tests/SystemTools.ApiContracts.Tests.csproj" />
         <Project Path="SystemTools.DatabaseToolsShared.Tests/SystemTools.DatabaseToolsShared.Tests.csproj" />
         <Project Path="SystemTools.StringMessagesApiContracts.Tests/SystemTools.StringMessagesApiContracts.Tests.csproj" />
         <Project Path="SystemTools.SystemToolsShared.Tests/SystemTools.SystemToolsShared.Tests.csproj" />

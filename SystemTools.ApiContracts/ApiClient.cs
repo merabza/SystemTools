@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SystemTools.ApiContracts.Errors;
 using SystemTools.SharedKernel;
 using SystemTools.SystemToolsShared;
@@ -16,6 +18,9 @@ namespace SystemTools.ApiContracts;
 
 public /*open*/ abstract class ApiClient : IApiClient
 {
+    //შეცდომის შეტყობინებაში პასუხის სხეულის მაქსიმალური სიგრძე
+    private const int MaxErrorBodyLengthInMessage = 500;
+
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger? _logger;
@@ -45,53 +50,6 @@ public /*open*/ abstract class ApiClient : IApiClient
     //protected იყენებს SystemTools
     // ReSharper disable once MemberCanBePrivate.Global
     protected IMessageHubClient? MessageHubClient { get; }
-
-    private async ValueTask<Result> LogResponseErrorMessage(HttpResponseMessage response, string? bodyJsonData,
-        CancellationToken cancellationToken = default)
-    {
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        if (_useConsole)
-        {
-            StShared.WriteErrorLine(
-                $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true,
-                null, false);
-
-            if (!string.IsNullOrWhiteSpace(bodyJsonData))
-            {
-                StShared.WriteErrorLine($"request body was : {bodyJsonData}", true, null, false);
-            }
-
-            StShared.WriteErrorLine($"ErrorOmd from server: {response.StatusCode} {response.ReasonPhrase}", true, null,
-                false);
-        }
-
-        string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-
-        if (string.IsNullOrWhiteSpace(responseBody))
-        {
-            return Result.Failure(ApiClientErrors.UnexpectedServerError);
-        }
-
-        Error[]? errors = JsonConvert.DeserializeObject<Error[]>(responseBody)?.ToArray();
-        if (_useConsole && errors is not null)
-        {
-            foreach (Error err in errors)
-            {
-                StShared.WriteErrorLine($"Error from server: {err.Code}", true);
-            }
-        }
-
-        string errorMessage = await response.Content.ReadAsStringAsync(cancellationToken);
-        _logger?.LogError("Returned error message from ApiClient: {Name}", errorMessage);
-
-        //return errors?.Length > 0
-        //    ? Result.Failure(errors)
-        return Result.Failure(ApiClientErrors.ApiReturnedAnError(errorMessage));
-    }
 
     protected Task<Result> GetAsync(string afterServerAddress, CancellationToken cancellationToken = default)
     {
@@ -130,26 +88,14 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         SetAuthorizationAccessToken();
 
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.GetAsync(uri, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Get, uri, null, cancellationToken);
 
         if (useMessageHubClient && MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return respResult;
-        }
-
-        return Result.Failure(ApiClientErrors.ApiUnknownError);
+        return ToResult(result);
     }
 
     protected async Task<Result> GetWithTokenAsync(string token, string afterServerAddress,
@@ -159,21 +105,7 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.GetAsync(uri, cancellationToken);
-
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return respResult;
-        }
-
-        return Result.Failure(ApiClientErrors.ApiUnknownError);
+        return ToResult(await SendAndReadAsync(HttpMethod.Get, uri, null, cancellationToken));
     }
 
     private void SetAuthorizationAccessToken()
@@ -196,26 +128,14 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.GetAsync(uri, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Get, uri, null, cancellationToken);
 
         if (MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadAsStringAsync(cancellationToken);
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return Result.Failure<string>(respResult.Error);
-        }
-
-        return Result.Failure<string>(ApiClientErrors.ApiUnknownError);
+        return result;
     }
 
     protected async ValueTask<Result> DeleteAsync(string afterServerAddress,
@@ -228,26 +148,14 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.DeleteAsync(uri, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Delete, uri, null, cancellationToken);
 
         if (MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return respResult;
-        }
-
-        return Result.Failure(ApiClientErrors.ApiUnknownError);
+        return ToResult(result);
     }
 
     protected ValueTask<Result> PostAsync(string afterServerAddress, CancellationToken cancellationToken = default)
@@ -275,32 +183,14 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         SetAuthorizationAccessToken();
 
-        // ReSharper disable once using
-        using StringContent? content = bodyJsonData is null
-            ? null
-            // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
-
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.PostAsync(uri, content, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Post, uri, bodyJsonData, cancellationToken);
 
         if (useMessageHubClient && MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return respResult;
-        }
-
-        return Result.Failure(ApiClientErrors.ApiUnknownError);
+        return ToResult(result);
     }
 
     protected Task<Result> PutAsync(string afterServerAddress, CancellationToken cancellationToken = default)
@@ -320,32 +210,14 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        // ReSharper disable once using
-        using StringContent? content = bodyJsonData is null
-            ? null
-            // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
-
-        // ReSharper disable once using
-        HttpResponseMessage response = await _client.PutAsync(uri, content, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Put, uri, bodyJsonData, cancellationToken);
 
         if (MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return Result.Success();
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return respResult;
-        }
-
-        return Result.Failure(ApiClientErrors.ApiUnknownError);
+        return ToResult(result);
     }
 
     protected ValueTask<Result<string>> PostAsyncReturnString(string afterServerAddress,
@@ -372,32 +244,14 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        // ReSharper disable once using
-        using StringContent? content = bodyJsonData is null
-            ? null
-            // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
-
-        // ReSharper disable once using
-        HttpResponseMessage response = await _client.PostAsync(uri, content, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Post, uri, bodyJsonData, cancellationToken);
 
         if (useMessageHubClient && MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            return await response.Content.ReadAsStringAsync(cancellationToken);
-        }
-
-        Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-        if (respResult.IsFailure)
-        {
-            return Result.Failure<string>(respResult.Error);
-        }
-
-        return Result.Failure<string>(ApiClientErrors.ApiUnknownError);
+        return result;
     }
 
     protected Task<Result<T>> PostAsyncReturn<T>(string afterServerAddress,
@@ -424,39 +278,14 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        // ReSharper disable once using
-        using StringContent? content = bodyJsonData is null
-            ? null
-            // ReSharper disable once DisposableConstructor
-            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
-
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.PostAsync(uri, content, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Post, uri, bodyJsonData, cancellationToken);
 
         if (useMessageHubClient && MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (!response.IsSuccessStatusCode)
-        {
-            Result respResult = await LogResponseErrorMessage(response, bodyJsonData, cancellationToken);
-            if (respResult.IsFailure)
-            {
-                return Result.Failure<T>(respResult.Error);
-            }
-
-            return Result.Failure<T>(ApiClientErrors.ApiUnknownError);
-        }
-
-        string result = await response.Content.ReadAsStringAsync(cancellationToken);
-        var desResult = JsonConvert.DeserializeObject<T>(result);
-        if (desResult is null)
-        {
-            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything);
-        }
-
-        return desResult;
+        return Deserialize<T>(result);
     }
 
     protected async Task<Result<T>> GetAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
@@ -471,33 +300,174 @@ public /*open*/ abstract class ApiClient : IApiClient
 
         SetAuthorizationAccessToken();
 
-        // ReSharper disable once using
-        using HttpResponseMessage response = await _client.GetAsync(uri, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Get, uri, null, cancellationToken);
 
-        if (MessageHubClient is not null)
+        if (useMessageHubClient && MessageHubClient is not null)
         {
             await MessageHubClient.StopMessages(cancellationToken);
         }
 
-        if (!response.IsSuccessStatusCode)
+        return Deserialize<T>(result);
+    }
+
+    //ერთადერთი ადგილი, სადაც მოთხოვნა იგზავნება და პასუხი იკითხება.
+    //წარმატებისას აბრუნებს პასუხის ტექსტს, შეცდომისას — სერვერის მიერ დაბრუნებულ Error-ს.
+    //ქსელური შეცდომა და HttpClient-ის Timeout Result-ის შეცდომად იქცევა, ნამდვილი გაუქმება (OperationCanceledException) კი გადის
+    private async Task<Result<string>> SendAndReadAsync(HttpMethod method, Uri uri, string? bodyJsonData,
+        CancellationToken cancellationToken)
+    {
+        // ReSharper disable once using
+        using StringContent? content = bodyJsonData is null
+            ? null
+            // ReSharper disable once DisposableConstructor
+            : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        // ReSharper disable once using
+        using var request = new HttpRequestMessage(method, uri) { Content = content };
+
+        try
         {
-            Result respResult = await LogResponseErrorMessage(response, null, cancellationToken);
-            if (respResult.IsFailure)
+            // ReSharper disable once using
+            using HttpResponseMessage response = await _client.SendAsync(request, cancellationToken);
+            string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+            return response.IsSuccessStatusCode
+                ? Result.Success(responseBody)
+                : Result.Failure<string>(CreateErrorFromResponse(response, responseBody, bodyJsonData));
+        }
+        catch (Exception e) when (e is HttpRequestException or IOException ||
+                                  e is TaskCanceledException && !cancellationToken.IsCancellationRequested)
+        {
+            //TaskCanceledException გაუქმების მოთხოვნის გარეშე HttpClient.Timeout-ს ნიშნავს
+            return Result.Failure<string>(CreateRequestFailedError(uri, e));
+        }
+    }
+
+    private static Result ToResult(Result<string> result)
+    {
+        return result.IsSuccess ? Result.Success() : Result.Failure(result.Error);
+    }
+
+    //ქსელური შეცდომა ან Timeout — გამონაკლისის ნაცვლად Result-ის შეცდომა. მისამართიდან query (apikey) მოცილებულია
+    private Error CreateRequestFailedError(Uri uri, Exception e)
+    {
+        string address = uri.GetLeftPart(UriPartial.Path);
+
+        if (_useConsole)
+        {
+            StShared.WriteErrorLine($"request to {address} failed: {e.Message}", true, null, false);
+        }
+
+        if (_logger is not null && _logger.IsEnabled(LogLevel.Error))
+        {
+            _logger.LogError(e, "Request to {Address} failed", address);
+        }
+
+        return ApiClientErrors.ApiRequestFailed($"{address}: {e.Message}");
+    }
+
+    //არაწარმატებული პასუხიდან Error-ის აწყობა. გამონაკლისს არ ისვრის
+    private Error CreateErrorFromResponse(HttpResponseMessage response, string responseBody, string? bodyJsonData)
+    {
+        string statusLine = $"{(int)response.StatusCode} {response.ReasonPhrase}".Trim();
+
+        if (_useConsole)
+        {
+            StShared.WriteErrorLine(
+                $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true,
+                null, false);
+
+            if (!string.IsNullOrWhiteSpace(bodyJsonData))
             {
-                return Result.Failure<T>(respResult.Error);
+                StShared.WriteErrorLine($"request body was : {bodyJsonData}", true, null, false);
             }
 
-            return Result.Failure<T>(ApiClientErrors.ApiUnknownError);
+            StShared.WriteErrorLine($"Error from server: {statusLine}", true, null, false);
         }
 
-        string result = await response.Content.ReadAsStringAsync(cancellationToken);
-        var desResult = JsonConvert.DeserializeObject<T>(result);
-        if (desResult is null)
+        if (_logger is not null && _logger.IsEnabled(LogLevel.Error))
         {
-            return Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything);
+            _logger.LogError("Api returned error {StatusLine}: {ResponseBody}", statusLine, responseBody);
         }
 
-        return desResult;
+        Error[] errors = ParseServerErrors(responseBody);
+
+        return errors.Length switch
+        {
+            0 => ApiClientErrors.ApiReturnedAnError(BuildFallbackMessage(statusLine, responseBody)),
+            1 => errors[0],
+            //რამდენიმე შეცდომა ერთად — PrintErrorsOnConsole თითოეულს ცალ-ცალკე დაბეჭდავს
+            _ => new ValidationError(errors)
+        };
+    }
+
+    //BadRequest-ის პასუხი მასივია ([{code,description,type}]), გამონაკლისის დამმუშავებელი კი ერთ ობიექტს აბრუნებს — ორივე იკითხება.
+    //ცარიელი code-ის ჩანაწერები იგნორირდება, რომ Error.None-ის ტოლი მნიშვნელობა Result-ში არ მოხვდეს (Result-ის კონსტრუქტორი ისვრის)
+    private static Error[] ParseServerErrors(string responseBody)
+    {
+        if (string.IsNullOrWhiteSpace(responseBody))
+        {
+            return [];
+        }
+
+        try
+        {
+            JToken token = JToken.Parse(responseBody);
+            Error?[] parsed = token switch
+            {
+                JArray array => array.ToObject<Error?[]>() ?? [],
+                JObject obj => [obj.ToObject<Error>()],
+                _ => []
+            };
+
+            return [.. parsed.OfType<Error>().Where(e => !string.IsNullOrWhiteSpace(e.Code))];
+        }
+        catch (JsonException)
+        {
+            //პასუხი JSON არ არის (მაგალითად, HTML პროქსიდან) ან Error-ის ფორმას არ ემთხვევა
+            return [];
+        }
+    }
+
+    private static string BuildFallbackMessage(string statusLine, string responseBody)
+    {
+        string body = responseBody.Trim();
+        if (body.Length == 0)
+        {
+            return statusLine;
+        }
+
+        if (body.Length > MaxErrorBodyLengthInMessage)
+        {
+            body = body[..MaxErrorBodyLengthInMessage] + "...";
+        }
+
+        return $"{statusLine}: {body}";
+    }
+
+    //წარმატებული პასუხის JSON-ის T ტიპად გარდაქმნა: არასწორი JSON → ApiReturnedInvalidData, null → ApiDidNotReturnAnything
+    private Result<T> Deserialize<T>(Result<string> bodyResult)
+    {
+        if (bodyResult.IsFailure)
+        {
+            return Result.Failure<T>(bodyResult.Error);
+        }
+
+        try
+        {
+            var desResult = JsonConvert.DeserializeObject<T>(bodyResult.Value);
+            return desResult is null
+                ? Result.Failure<T>(ApiClientErrors.ApiDidNotReturnAnything)
+                : Result.Success(desResult);
+        }
+        catch (JsonException e)
+        {
+            if (_logger is not null && _logger.IsEnabled(LogLevel.Error))
+            {
+                _logger.LogError(e, "Api response could not be deserialized to {TypeName}", typeof(T).Name);
+            }
+
+            return Result.Failure<T>(ApiClientErrors.ApiReturnedInvalidData(e.Message));
+        }
     }
 
     private Uri CreateUri(string afterServerAddress)

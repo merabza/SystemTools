@@ -17,6 +17,18 @@ public static class ApiClientErrors
         return Error.Problem(nameof(ApiReturnedAnError), $"Api Returned an Error: {errorMessage}");
     }
 
+    //ქსელური შეცდომა ან Timeout — მოთხოვნა სერვერამდე ვერ მივიდა ან პასუხი ვერ მოვიდა
+    public static Error ApiRequestFailed(string errorMessage)
+    {
+        return Error.Problem(nameof(ApiRequestFailed), $"Api request failed: {errorMessage}");
+    }
+
+    //წარმატებული პასუხის სხეული მოსალოდნელი ტიპის JSON არ არის
+    public static Error ApiReturnedInvalidData(string errorMessage)
+    {
+        return Error.Problem(nameof(ApiReturnedInvalidData), $"Api returned invalid data: {errorMessage}");
+    }
+
     /*
             return new ErrorOmd[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
      */

@@ -18,7 +18,6 @@ public sealed class StringMessageHubClient : IMessageHubClient
 
     // ReSharper disable once MemberCanBePrivate.Global
 
-    
     public StringMessageHubClient(string server, string? apiKey)
     {
         _server = server.RemoveNotNeedLastPart('/');

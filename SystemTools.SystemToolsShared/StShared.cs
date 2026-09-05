@@ -387,7 +387,7 @@ public static class StShared
         }
 
         Console.WriteLine($"{ex?.GetType().Name} thrown with message: {ex?.Message}");
-        Console.WriteLine($"ErrorOmd message is: {ex?.Message}");
+        Console.WriteLine($"Error message is: {ex?.Message}");
         Console.WriteLine($"StackTrace: {ex?.StackTrace}");
         if (pauseAfter)
         {

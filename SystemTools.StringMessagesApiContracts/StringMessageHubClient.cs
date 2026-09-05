@@ -39,7 +39,7 @@ public sealed class StringMessageHubClient : IMessageHubClient
         }
         catch (HttpRequestException ex)
         {
-            Console.WriteLine($"ErrorOmd when connecting {ex.Message}");
+            Console.WriteLine($"Error when connecting {ex.Message}");
         }
         catch (Exception e)
         {
@@ -63,7 +63,7 @@ public sealed class StringMessageHubClient : IMessageHubClient
         }
         catch (HttpRequestException)
         {
-            Console.WriteLine("ErrorOmd when Stop connection");
+            Console.WriteLine("Error when Stop connection");
         }
         catch (Exception e)
         {

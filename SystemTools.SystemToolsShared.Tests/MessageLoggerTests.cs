@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using SystemTools.SystemToolsShared.Errors;
 using Xunit;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -52,48 +51,6 @@ public sealed class MessageLoggerTests
             Times.Once);
     }
 
-    [Fact]
-    public async Task LogErrorAndSendMessageFromError_LogsErrorAndSends()
-    {
-        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
-
-        ErrorOmd[] result = await logger.LogErrorAndSendMessageFromError("E1", "ErrorOmd message");
-
-        _mockMessagesDataManager.Verify(m => m.SendMessage(UserName, "ErrorOmd message", It.IsAny<CancellationToken>()),
-            Times.Once);
-        ErrorOmd err = Assert.Single(result);
-        Assert.Equal("E1", err.Code);
-        Assert.Equal("ErrorOmd message", err.Name);
-    }
-
-    [Fact]
-    public async Task LogErrorAndSendMessageFromError_ReturnsError_WhenNoDataManager()
-    {
-        var logger = new TestMessageLogger(_mockLogger.Object, null, UserName, false);
-
-        ErrorOmd[] result = await logger.LogErrorAndSendMessageFromError("E2", "No manager");
-
-        ErrorOmd err = Assert.Single(result);
-        Assert.Equal("E2", err.Code);
-        Assert.Equal("No manager", err.Name);
-    }
-
-    [Fact]
-    public async Task LogErrorAndSendMessageFromException_LogsAndSends()
-    {
-        var logger = new TestMessageLogger(_mockLogger.Object, _mockMessagesDataManager.Object, UserName, false);
-        var ex = new InvalidOperationException("fail");
-
-        ErrorOmd result = await logger.LogErrorAndSendMessageFromException(ex, "TestMethod");
-
-        _mockMessagesDataManager.Verify(
-            m => m.SendMessage(UserName, It.Is<string>(s => s.Contains("ErrorOmd in TestMethod")),
-                It.IsAny<CancellationToken>()), Times.Once);
-
-        Assert.Equal("ErrorCaught", result.Code);
-        Assert.Contains("ErrorOmd in TestMethod", result.Name);
-    }
-
     private sealed class TestMessageLogger : MessageLogger
     {
         public TestMessageLogger(ILogger? logger, IMessagesDataManager? messagesDataManager, string? userName,
@@ -107,63 +64,9 @@ public sealed class MessageLoggerTests
             return base.LogInfoAndSendMessage(message, cancellationToken);
         }
 
-        //public new ValueTask LogInfoAndSendMessage(string message, object? arg1,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogInfoAndSendMessage(message, arg1, cancellationToken);
-        //}
-
-        //public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogInfoAndSendMessage(message, arg1, arg2, cancellationToken);
-        //}
-
-        //public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogInfoAndSendMessage(message, arg1, arg2, arg3, cancellationToken);
-        //}
-
-        //public new ValueTask LogInfoAndSendMessage(string message, object? arg1, object? arg2, object? arg3,
-        //    object? arg4, CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogInfoAndSendMessage(message, arg1, arg2, arg3, arg4, cancellationToken);
-        //}
-
         public new ValueTask LogWarningAndSendMessage(string message, CancellationToken cancellationToken = default)
         {
             return base.LogWarningAndSendMessage(message, cancellationToken);
-        }
-
-        //public new ValueTask LogWarningAndSendMessage(string message, object? arg1,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogWarningAndSendMessage(message, arg1, cancellationToken);
-        //}
-
-        //public new ValueTask LogWarningAndSendMessage(string message, object? arg1, object? arg2,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogWarningAndSendMessage(message, arg1, arg2, cancellationToken);
-        //}
-
-        public new ValueTask<ErrorOmd[]> LogErrorAndSendMessageFromError(string errorCode, string message,
-            CancellationToken cancellationToken = default)
-        {
-            return base.LogErrorAndSendMessageFromError(errorCode, message, cancellationToken);
-        }
-
-        //public new ValueTask<Err[]> LogErrorAndSendMessageFromError(Err error,
-        //    CancellationToken cancellationToken = default)
-        //{
-        //    return base.LogErrorAndSendMessageFromError(error, cancellationToken);
-        //}
-
-        public new ValueTask<ErrorOmd> LogErrorAndSendMessageFromException(Exception ex, string methodName,
-            CancellationToken cancellationToken = default)
-        {
-            return base.LogErrorAndSendMessageFromException(ex, methodName, cancellationToken);
         }
     }
 }

@@ -22,6 +22,7 @@
     <Project Path="SystemTools.ReCounterContracts/SystemTools.ReCounterContracts.csproj" />
     <Project Path="SystemTools.RepositoriesShared/SystemTools.RepositoriesShared.csproj" />
     <Project Path="SystemTools.SerilogStuff/SystemTools.SerilogStuff.csproj" />
+    <Project Path="SystemTools.SharedKernel/SystemTools.SharedKernel.csproj" />
     <Project Path="SystemTools.StringMessagesApiContracts/SystemTools.StringMessagesApiContracts.csproj" />
     <Project Path="SystemTools.SystemToolsShared/SystemTools.SystemToolsShared.csproj" />
     <Project Path="SystemTools.TestApiContracts/SystemTools.TestApiContracts.csproj" />

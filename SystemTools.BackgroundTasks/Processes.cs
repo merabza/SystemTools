@@ -11,7 +11,6 @@ public sealed class Processes : IProcesses, IDisposable
 
     private ProcessManager? _processManager;
 
-    
     public Processes(ILogger<Processes> logger)
     {
         _logger = logger;

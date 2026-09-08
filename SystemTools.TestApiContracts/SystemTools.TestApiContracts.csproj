@@ -2,6 +2,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SystemTools.ApiContracts\SystemTools.ApiContracts.csproj" />
+        <ProjectReference Include="..\SystemTools.SharedKernel\SystemTools.SharedKernel.csproj" />
         <ProjectReference Include="..\SystemTools.SystemToolsShared\SystemTools.SystemToolsShared.csproj" />
     </ItemGroup>
 

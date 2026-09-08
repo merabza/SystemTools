@@ -17,7 +17,6 @@
     <Project Path="SystemTools.DependencyInjection/SystemTools.DependencyInjection.csproj" />
     <Project Path="SystemTools.Domain.Abstractions/SystemTools.Domain.Abstractions.csproj" />
     <Project Path="SystemTools.JetBrainsResharperGlobalToolsWork/SystemTools.JetBrainsResharperGlobalToolsWork.csproj" />
-    <Project Path="SystemTools.MediatRMessagingAbstractions/SystemTools.MediatRMessagingAbstractions.csproj" />
     <Project Path="SystemTools.ReCounterAbstraction/SystemTools.ReCounterAbstraction.csproj" />
     <Project Path="SystemTools.ReCounterContracts/SystemTools.ReCounterContracts.csproj" />
     <Project Path="SystemTools.RepositoriesShared/SystemTools.RepositoriesShared.csproj" />

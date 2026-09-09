@@ -50,7 +50,18 @@ public static class StShared
         };
 
         var sb = new StringBuilder();
+        //stderr ცალკე, ასინქრონულად იკითხება: სავსე pipe-ზე პროცესი გაიჭედებოდა, ხოლო შეცდომის ტექსტი
+        //(მაგალითად, რატომ დაბრუნდა dotnet outdated ExitCode=1-ით) საერთოდ იკარგებოდა
+        var errorSb = new StringBuilder();
+        proc.ErrorDataReceived += (_, e) =>
+        {
+            if (e.Data is not null)
+            {
+                errorSb.AppendLine(e.Data);
+            }
+        };
         proc.Start();
+        proc.BeginErrorReadLine();
         while (!proc.StandardOutput.EndOfStream)
         {
             string? line = proc.StandardOutput.ReadLine();
@@ -62,19 +73,27 @@ public static class StShared
             sb.AppendLine(line);
         }
 
+        //უპარამეტრო WaitForExit ელოდება stderr-ის ასინქრონული კითხვის დასრულებასაც
         proc.WaitForExit();
+        string errorOutput = errorSb.ToString().TrimEnd();
         //message = "output for '{0} {1}' is{2}{3}";
 
         if (IsAllowExitCode(proc.ExitCode, allowExitCodes))
         {
             ConsoleWriteInformationLine(logger, useConsole, "output for '{0} {1}' is{2}{3}", programFileName, arguments,
                 Environment.NewLine, sb);
+            if (errorOutput.Length > 0)
+            {
+                ConsoleWriteInformationLine(logger, useConsole, "error output for '{0} {1}' is{2}{3}", programFileName,
+                    arguments, Environment.NewLine, errorOutput);
+            }
+
             ConsoleWriteInformationLine(logger, useConsole, "ExitCode is {0}", proc.ExitCode);
             return (sb.ToString(), proc.ExitCode);
         }
 
         string errorMessage =
-            $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}";
+            $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}{(errorOutput.Length == 0 ? string.Empty : $"{Environment.NewLine}{errorOutput}")}";
         if (useConsole || logger is not null)
         {
             WriteErrorLine(errorMessage, useConsole, logger);

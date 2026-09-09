@@ -63,4 +63,44 @@ public sealed class StSharedProcessTests
         // Assert
         Assert.True(result.IsSuccess);
     }
+
+    [Fact]
+    public void RunProcessWithOutput_WithFailingCommand_ReturnsErrorOutputInMessage()
+    {
+        // Act
+        Result<(string, int)> result = StShared.RunProcessWithOutput(false, _mockLogger.Object, "cmd",
+            "/c \"echo boom 1>&2 & exit 3\"");
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains("ExitCode=3", result.Error.Description);
+        Assert.Contains("boom", result.Error.Description);
+    }
+
+    [Fact]
+    public void RunProcessWithOutput_WithErrorOutputAndZeroExitCode_ReturnsSuccess()
+    {
+        // Act
+        Result<(string, int)> result = StShared.RunProcessWithOutput(false, _mockLogger.Object, "cmd",
+            "/c \"echo warn 1>&2 & echo out\"");
+
+        // Assert
+        Assert.True(result.IsSuccess);
+        (string output, int exitCode) = result.Value;
+        Assert.Equal(0, exitCode);
+        Assert.Contains("out", output);
+        Assert.DoesNotContain("warn", output);
+    }
+
+    //pipe-ის ბუფერზე მეტი stderr არ უნდა გაჭედოს პროცესი
+    [Fact]
+    public void RunProcessWithOutput_WithLargeErrorOutput_DoesNotHang()
+    {
+        // Act
+        Result<(string, int)> result = StShared.RunProcessWithOutput(false, _mockLogger.Object, "cmd",
+            "/c \"for /L %i in (1,1,4000) do @echo 0123456789012345678901234567890123456789012345678901234567890123 1>&2\"");
+
+        // Assert
+        Assert.True(result.IsSuccess);
+    }
 }

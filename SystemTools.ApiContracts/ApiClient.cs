@@ -323,7 +323,9 @@ public /*open*/ abstract class ApiClient : IApiClient
             : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
         // ReSharper disable once using
-        using var request = new HttpRequestMessage(method, uri) { Content = content };
+        // ReSharper disable once DisposableConstructor
+        using var request = new HttpRequestMessage(method, uri);
+        request.Content = content;
 
         try
         {

@@ -26,8 +26,9 @@ public static class StShared
             $"Time taken {(totalHours == 0 ? string.Empty : $"{totalHours} hours, ")}{(totalMinutes == 0 ? string.Empty : $"{taken.Minutes} minutes, ")}{taken.Seconds} seconds";
     }
 
+    //useErrorLine=false - წარუმატებლობისას [ERROR] ხაზი და პაუზა არ იბეჭდება, შეცდომის ტექსტი (stderr-იანად) Result-ში ბრუნდება
     public static Result<(string, int)> RunProcessWithOutput(bool useConsole, ILogger? logger, string programFileName,
-        string arguments, int[]? allowExitCodes = null)
+        string arguments, int[]? allowExitCodes = null, bool useErrorLine = true)
     {
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 
@@ -94,7 +95,7 @@ public static class StShared
 
         string errorMessage =
             $"{programFileName} {arguments} process was finished with errors. ExitCode={proc.ExitCode}{(errorOutput.Length == 0 ? string.Empty : $"{Environment.NewLine}{errorOutput}")}";
-        if (useConsole || logger is not null)
+        if (useErrorLine && (useConsole || logger is not null))
         {
             WriteErrorLine(errorMessage, useConsole, logger);
         }

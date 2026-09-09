@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SystemTools.SharedKernel;
@@ -90,6 +91,21 @@ public sealed class StSharedProcessTests
         Assert.Equal(0, exitCode);
         Assert.Contains("out", output);
         Assert.DoesNotContain("warn", output);
+    }
+
+    [Fact]
+    public void RunProcessWithOutput_WithUseErrorLineFalse_ReturnsErrorWithoutLogging()
+    {
+        // Act
+        Result<(string, int)> result = StShared.RunProcessWithOutput(false, _mockLogger.Object, "cmd",
+            "/c \"echo boom 1>&2 & exit 3\"", null, false);
+
+        // Assert
+        Assert.True(result.IsFailure);
+        Assert.Contains("boom", result.Error.Description);
+        _mockLogger.Verify(
+            l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.IsAny<It.IsAnyType>(), It.IsAny<Exception?>(),
+                It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Never);
     }
 
     //pipe-ის ბუფერზე მეტი stderr არ უნდა გაჭედოს პროცესი

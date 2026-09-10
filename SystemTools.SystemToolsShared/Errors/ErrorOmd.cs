@@ -2,43 +2,43 @@
 
 //namespace SystemTools.SystemToolsShared.Errors;
 
-//public record ErrorOmd
+//public record Error
 //{
-//    public static readonly ErrorOmd None = new() { Code = string.Empty, Name = string.Empty };
-//    public static readonly ErrorOmd NullValue = new() { Code = "ErrorOmd.NullValue", Name = "Null value was provided" };
+//    public static readonly Error None = new() { Code = string.Empty, Name = string.Empty };
+//    public static readonly Error NullValue = new() { Code = "Error.NullValue", Name = "Null value was provided" };
 
 //    public required string Code { get; init; }
 //    public required string Name { get; init; }
 
-//    public static ErrorOmd[] Create(ErrorOmd err)
+//    public static Error[] Create(Error err)
 //    {
 //        return [err];
 //    }
 
-//    public static ErrorOmd[] CreateArr(ErrorOmd err)
+//    public static Error[] CreateArr(Error err)
 //    {
 //        return [err];
 //    }
 
-//    public static ErrorOmd[] RecreateErrors(IEnumerable<ErrorOmd> haveErrors, ErrorOmd addError)
+//    public static Error[] RecreateErrors(IEnumerable<Error> haveErrors, Error addError)
 //    {
-//        var errors = new List<ErrorOmd>();
+//        var errors = new List<Error>();
 //        errors.AddRange(haveErrors);
 //        errors.Add(addError);
 //        return [.. errors];
 //    }
 
-//    public static ErrorOmd[] RecreateErrors(IEnumerable<ErrorOmd> haveErrors, IEnumerable<ErrorOmd> addError)
+//    public static Error[] RecreateErrors(IEnumerable<Error> haveErrors, IEnumerable<Error> addError)
 //    {
-//        var errors = new List<ErrorOmd>();
+//        var errors = new List<Error>();
 //        errors.AddRange(haveErrors);
 //        errors.AddRange(addError);
 //        return [.. errors];
 //    }
 
-//    public static void PrintErrorsOnConsole(IEnumerable<ErrorOmd> errors)
+//    public static void PrintErrorsOnConsole(IEnumerable<Error> errors)
 //    {
-//        foreach (ErrorOmd error in errors)
+//        foreach (Error error in errors)
 //        {
 //            StShared.WriteErrorLine(error.Name, true, null, false);
 //        }

@@ -30,6 +30,6 @@ public static class ApiClientErrors
     }
 
     /*
-            return new ErrorOmd[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
+            return new Error[] { new() { Code = "ApiReturnNothing", Name = "Nothing returned Api" } };
      */
 }

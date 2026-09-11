@@ -32,7 +32,7 @@ public static class StShared
     {
         //var option = CheckFileExists(programFileName);
         //if (option.IsSome) 
-        //    return (ErrorOmd[])option;
+        //    return (Error[])option;
 
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
@@ -159,14 +159,14 @@ public static class StShared
     //    if (!File.Exists(programFileName))
     //    {
     //        var errorMsg = $"File not found: {programFileName}";
-    //        return ErrorOmd.CreateArr(new ErrorOmd { Code = "FileNotFound", Name = errorMsg });
+    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
     //    }
 
     //    //also check if the file exists in the current directory
     //    if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), programFileName)))
     //    {
     //        var errorMsg = $"File not found in current directory: {programFileName}";
-    //        return ErrorOmd.CreateArr(new ErrorOmd { Code = "FileNotFound", Name = errorMsg });
+    //        return Error.CreateArr(new Error { Code = "FileNotFound", Name = errorMsg });
     //    }
     //    return null;
     //}

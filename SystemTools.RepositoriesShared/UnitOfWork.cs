@@ -43,7 +43,7 @@ public /*open*/ class UnitOfWork : IUnitOfWork
         _dbContext.Database.SetCommandTimeout(timeout);
     }
 
-    //public async Task<Option<ErrorOmd[]>> ExecuteSqlRawRetOptionAsync(string sql,
+    //public async Task<Option<Error[]>> ExecuteSqlRawRetOptionAsync(string sql,
     //    CancellationToken cancellationToken = default)
     //{
     //    try

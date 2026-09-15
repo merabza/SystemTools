@@ -26,10 +26,10 @@ public /*open*/ class DatabaseAbstractionRepository : IDatabaseAbstraction
         return entType?.GetTableName() ?? throw new Exception($"Table Name is null for {typeof(T).Name}");
     }
 
-    public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        return _dbContext.Database.BeginTransactionAsync(cancellationToken);
-    }
+    //public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    //{
+    //    return _dbContext.Database.BeginTransactionAsync(cancellationToken);
+    //}
 
     public void SetCommandTimeout(TimeSpan timeout)
     {

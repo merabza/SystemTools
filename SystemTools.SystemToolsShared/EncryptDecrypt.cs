@@ -20,7 +20,6 @@ public static class EncryptDecrypt
             byte[] aesKey = new byte[32];
             Array.Copy(hash, aesKey, 32);
 
-            // ReSharper disable once using
             using var aes = Aes.Create();
             aes.Key = aesKey;
             aes.Mode = CipherMode.CBC; // Changed from ECB to CBC
@@ -87,7 +86,6 @@ public static class EncryptDecrypt
 
             byte[] fullCipher = Convert.FromBase64String(str);
 
-            // ReSharper disable once using
             using var aes = Aes.Create();
             aes.Key = aesKey;
             aes.Mode = CipherMode.CBC; // Changed from ECB to CBC
@@ -101,7 +99,6 @@ public static class EncryptDecrypt
 
             aes.IV = iv;
 
-            // ReSharper disable once using
             using ICryptoTransform transform = aes.CreateDecryptor();
             result = Encoding.UTF8.GetString(transform.TransformFinalBlock(cipher, 0, cipher.Length));
         }

@@ -316,20 +316,15 @@ public /*open*/ abstract class ApiClient : IApiClient
     private async Task<Result<string>> SendAndReadAsync(HttpMethod method, Uri uri, string? bodyJsonData,
         CancellationToken cancellationToken)
     {
-        // ReSharper disable once using
         using StringContent? content = bodyJsonData is null
             ? null
-            // ReSharper disable once DisposableConstructor
             : new StringContent(bodyJsonData, Encoding.UTF8, MediaTypeNames.Application.Json);
 
-        // ReSharper disable once using
-        // ReSharper disable once DisposableConstructor
         using var request = new HttpRequestMessage(method, uri);
         request.Content = content;
 
         try
         {
-            // ReSharper disable once using
             using HttpResponseMessage response = await _client.SendAsync(request, cancellationToken);
             string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             return response.IsSuccessStatusCode

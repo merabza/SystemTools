@@ -37,8 +37,6 @@ public static class StShared
         ConsoleWriteInformationLine(logger, useConsole, "Running{0}{1} {2}", Environment.NewLine, programFileName,
             arguments);
 
-        // ReSharper disable once using
-        // ReSharper disable once DisposableConstructor
         using var proc = new Process();
         proc.StartInfo = new ProcessStartInfo
         {
@@ -122,7 +120,6 @@ public static class StShared
         //if (option.IsSome)
         //    return option;
 
-        // ReSharper disable once using
         using Process proc = Process.Start(programFileName, arguments);
 
         if (waitForExit == 0)
@@ -181,7 +178,7 @@ public static class StShared
             RedirectStandardInput = true,
             WorkingDirectory = projectPath ?? Directory.GetCurrentDirectory()
         };
-        // ReSharper disable once using
+
         using Process? pNpmRunDist = Process.Start(psiNpmRunDist);
         if (pNpmRunDist is null)
         {
@@ -465,7 +462,6 @@ public static class StShared
 
     public static string? GetMainModulePath()
     {
-        // ReSharper disable once using
         using ProcessModule? processModule = Process.GetCurrentProcess().MainModule;
         string? pathToExe = processModule?.FileName;
         return pathToExe is not null ? Path.GetDirectoryName(pathToExe) : null;
@@ -473,7 +469,6 @@ public static class StShared
 
     public static string? GetMainModuleFileName()
     {
-        // ReSharper disable once using
         using ProcessModule? processModule = Process.GetCurrentProcess().MainModule;
         string? pathToExe = processModule?.FileName;
         return pathToExe is not null ? Path.GetFileName(pathToExe) : null;

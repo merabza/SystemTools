@@ -16,8 +16,7 @@ public sealed class FileLoader
     private static string Load(string filePath)
     {
         // Open the text file using a stream reader.
-        // ReSharper disable once using
-        // ReSharper disable once DisposableConstructor
+
         using var reader = new StreamReader(filePath);
         // Read the stream to a string, and return.
         return reader.ReadToEnd();

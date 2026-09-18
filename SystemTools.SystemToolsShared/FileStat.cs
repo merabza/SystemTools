@@ -101,11 +101,9 @@ public static class FileStat
         }
 
         // Open the two files.
-        // ReSharper disable once using
-        // ReSharper disable once DisposableConstructor
+
         using var fs1 = new FileStream(file1, FileMode.Open);
-        // ReSharper disable once using
-        // ReSharper disable once DisposableConstructor
+
         using var fs2 = new FileStream(file2, FileMode.Open);
 
         // Check the file sizes. If they are not the same, the files

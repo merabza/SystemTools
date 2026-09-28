@@ -146,6 +146,101 @@ public sealed class ApiClientTests
     }
 
     [Fact]
+    public async Task GetAsyncReturn_ReturnsServerError_When404ProblemDetails()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.NotFound,
+            """{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.4","title":"TaskWithNameNotFound","status":404,"detail":"Task with name x not found"}""",
+            MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result<SampleDto> result = await client.GetReturn<SampleDto>("/tasks/getbyname/x", false);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal("TaskWithNameNotFound", result.Error.Code);
+        Assert.Equal("Task with name x not found", result.Error.Description);
+        Assert.Equal(ErrorType.NotFound, result.Error.Type);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ReturnsConflictError_When409ProblemDetails()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.Conflict,
+            """{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.8","title":"TaskIsInUse","status":409,"detail":"Task x is in use"}""",
+            MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result result = await client.Delete("/tasks/delete/x");
+
+        Assert.True(result.IsFailure);
+        Assert.Equal("TaskIsInUse", result.Error.Code);
+        Assert.Equal("Task x is in use", result.Error.Description);
+        Assert.Equal(ErrorType.Conflict, result.Error.Type);
+    }
+
+    [Fact]
+    public async Task PostAsync_ReturnsProblemError_When400ProblemDetails()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.BadRequest,
+            """{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"TaskNameRequired","status":400,"detail":"Task name is required"}""",
+            MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result result = await client.Post("/tasks/create", false, """{"TaskName":""}""");
+
+        Assert.True(result.IsFailure);
+        Assert.Equal("TaskNameRequired", result.Error.Code);
+        Assert.Equal(ErrorType.Problem, result.Error.Type);
+    }
+
+    [Fact]
+    public async Task PostAsync_ReturnsValidationError_When400ProblemDetailsWithErrors()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.BadRequest,
+            """{"type":"https://tools.ietf.org/html/rfc7231#section-6.5.1","title":"Validation.General","status":400,"detail":"One or more validation errors occurred","errors":[{"code":"First","description":"first error","type":2},{"code":"Second","description":"second error","type":2}]}""",
+            MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result result = await client.Post("/tasks/create", false, """{"TaskName":"x"}""");
+
+        Assert.True(result.IsFailure);
+        ValidationError validationError = Assert.IsType<ValidationError>(result.Error);
+        Assert.Equal(2, validationError.Errors.Length);
+        Assert.Equal("First", validationError.Errors[0].Code);
+        Assert.Equal("second error", validationError.Errors[1].Description);
+        Assert.Equal(ErrorType.Problem, validationError.Errors[1].Type);
+    }
+
+    [Fact]
+    public async Task GetAsync_ReturnsFailureTypeWithTitleAsDescription_WhenProblemDetailsHasOtherStatusAndNoDetail()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.UnprocessableEntity,
+            """{"title":"TaskIsLocked","status":422}""", MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result result = await client.Get(ListAddress);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal("TaskIsLocked", result.Error.Code);
+        Assert.Equal("TaskIsLocked", result.Error.Description);
+        Assert.Equal(ErrorType.Failure, result.Error.Type);
+    }
+
+    [Fact]
+    public async Task GetAsync_ReturnsFallbackError_When500ProblemDetailsTitleIsNotACode()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.InternalServerError,
+            """{"type":"https://tools.ietf.org/html/rfc7231#section-6.6.1","title":"Server failure","status":500,"detail":"An unexpected error occurred"}""",
+            MediaTypeNames.Application.ProblemJson);
+        TestableApiClient client = CreateClient(handler);
+
+        Result result = await client.Get(ListAddress);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal(nameof(ApiClientErrors.ApiReturnedAnError), result.Error.Code);
+        Assert.Contains("500", result.Error.Description, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task GetAsync_IgnoresEntriesWithEmptyCode_When400()
     {
         using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.BadRequest,

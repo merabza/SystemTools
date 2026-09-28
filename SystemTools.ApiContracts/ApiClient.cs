@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
@@ -412,6 +413,7 @@ public /*open*/ abstract class ApiClient : IApiClient
             Error?[] parsed = token switch
             {
                 JArray array => array.ToObject<Error?[]>() ?? [],
+                JObject obj when IsProblemDetails(obj) => ParseProblemDetails(obj),
                 JObject obj => [obj.ToObject<Error>()],
                 _ => []
             };
@@ -423,6 +425,44 @@ public /*open*/ abstract class ApiClient : IApiClient
             //პასუხი JSON არ არის (მაგალითად, HTML პროქსიდან) ან Error-ის ფორმას არ ემთხვევა
             return [];
         }
+    }
+
+    //CustomResults.Problem-ის პასუხი ProblemDetails-ია: შეცდომის კოდი title-შია, აღწერა detail-ში, ტიპი კი HTTP სტატუსიდან დგინდება
+    private static bool IsProblemDetails(JObject obj)
+    {
+        return obj["code"] is null && obj["title"] is not null;
+    }
+
+    //ValidationError-ის ცალკეული შეცდომები errors გაფართოებაში მოდის.
+    //ფრეიმვორკის მიერ შექმნილი ProblemDetails-ის title ჩვეულებრივი ტექსტია (მაგალითად, "Bad Request"),
+    //ამიტომ ჰარის შემცველი title შეცდომის კოდად არ ითვლება
+    private static Error?[] ParseProblemDetails(JObject problemDetails)
+    {
+        if (problemDetails["errors"] is JArray errors)
+        {
+            return errors.ToObject<Error?[]>() ?? [];
+        }
+
+        string? title = problemDetails.Value<string>("title");
+        if (string.IsNullOrWhiteSpace(title) || title.Any(char.IsWhiteSpace))
+        {
+            return [];
+        }
+
+        string description = problemDetails.Value<string>("detail") ?? title;
+        return [new Error(title, description, GetErrorType(problemDetails.Value<int?>("status")))];
+    }
+
+    //CustomResults.Problem-ის შესაბამისობის შებრუნება: 400 — Problem, 404 — NotFound, 409 — Conflict
+    private static ErrorType GetErrorType(int? status)
+    {
+        return status switch
+        {
+            (int)HttpStatusCode.BadRequest => ErrorType.Problem,
+            (int)HttpStatusCode.NotFound => ErrorType.NotFound,
+            (int)HttpStatusCode.Conflict => ErrorType.Conflict,
+            _ => ErrorType.Failure
+        };
     }
 
     private static string BuildFallbackMessage(string statusLine, string responseBody)

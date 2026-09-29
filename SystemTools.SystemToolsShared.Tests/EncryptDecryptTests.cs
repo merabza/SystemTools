@@ -55,11 +55,12 @@ public sealed class EncryptDecryptTests
         const string original = "Тестовые данные 你好";
         string? encrypted = EncryptDecrypt.EncryptString(original, key);
 
-        // Encrypted string may lose non-ASCII chars due to Encoding.ASCII, so decrypted may not match
-        string? decrypted = EncryptDecrypt.DecryptString(encrypted, key);
+        Assert.False(string.IsNullOrWhiteSpace(encrypted));
+        Assert.NotEqual(original, encrypted);
 
-        // Because ASCII encoding is used, non-ASCII chars will be lost, so decrypted != original
-        Assert.NotEqual(original, decrypted);
+        // Both the text and the key are encoded as UTF-8, so non-ASCII characters survive the round trip
+        string? decrypted = EncryptDecrypt.DecryptString(encrypted, key);
+        Assert.Equal(original, decrypted);
     }
 
     [Fact]

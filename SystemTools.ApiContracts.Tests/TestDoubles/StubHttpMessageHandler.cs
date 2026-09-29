@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,7 @@ internal sealed class StubHttpMessageHandler : HttpMessageHandler
     public HttpMethod? LastRequestMethod { get; private set; }
     public string? LastRequestBody { get; private set; }
     public string? LastRequestContentType { get; private set; }
+    public AuthenticationHeaderValue? LastRequestAuthorization { get; private set; }
 
     public static StubHttpMessageHandler Respond(HttpStatusCode statusCode, string? body,
         string mediaType = MediaTypeNames.Application.Json)
@@ -51,6 +53,7 @@ internal sealed class StubHttpMessageHandler : HttpMessageHandler
         LastRequestUri = request.RequestUri;
         LastRequestMethod = request.Method;
         LastRequestContentType = request.Content?.Headers.ContentType?.MediaType;
+        LastRequestAuthorization = request.Headers.Authorization;
         LastRequestBody = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken);
 
         HttpResponseMessage response = await _responder(request, cancellationToken);

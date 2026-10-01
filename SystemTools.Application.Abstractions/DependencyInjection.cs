@@ -31,7 +31,8 @@ public static class DependencyInjection
         services.TryDecorate(typeof(ICommandHandler<,>), typeof(LoggingDecorator.CommandHandler<,>));
         services.TryDecorate(typeof(ICommandHandler<>), typeof(LoggingDecorator.CommandBaseHandler<>));
 
-        services.Scan(scan => scan.FromAssembliesOf(typeof(DependencyInjection))
+        //დომენის მოვლენების ჰენდლერები გამომძახებლის ასამბლეებშიც იძებნება, ისევე როგორც ბრძანებების ჰენდლერები
+        services.Scan(scan => scan.FromAssembliesOf((Type[])[typeof(DependencyInjection), .. types])
             .AddClasses(classes => classes.AssignableTo(typeof(IDomainEventHandler<>)), false).AsImplementedInterfaces()
             .WithScopedLifetime());
 

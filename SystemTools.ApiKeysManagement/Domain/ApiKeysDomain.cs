@@ -8,6 +8,9 @@ namespace SystemTools.ApiKeysManagement.Domain;
 
 public sealed class ApiKeysDomain
 {
+    //RemoteIpAddress-ის ეს მნიშვნელობა ნიშნავს, რომ გასაღები ნებისმიერი IP მისამართიდან მოქმედებს
+    public const string AnyRemoteIpAddress = "*";
+
     //public საჭიროა ApiKeysChecker-ში ლოგირებისას
     // ReSharper disable once MemberCanBePrivate.Global
     public HashSet<ApiKeyAndRemoteIpAddressDomain> ApiKeys { get; } = [];
@@ -32,8 +35,14 @@ public sealed class ApiKeysDomain
             //logger.LogInformation("ApiKey={ApiKey} for {RemoteIpAddress}", apiKey, remoteIpAddress);
             if (apiKeyByRemoteIpAddressModel.ApiKey is null || apiKeyByRemoteIpAddressModel.RemoteIpAddress is null)
             {
-                logger.LogError("Invalid ApiKey or RemoteIpAddress ApiKey={ApiKey} for {RemoteIpAddress}", apiKey,
-                    remoteIpAddress);
+                //გასაღები საიდუმლოა, ამიტომ ლოგში მხოლოდ მისი სიგრძე იწერება
+                if (logger.IsEnabled(LogLevel.Error))
+                {
+                    logger.LogError(
+                        "Invalid ApiKey or RemoteIpAddress: ApiKey length is {ApiKeyLength} for {RemoteIpAddress}",
+                        apiKey?.Length, remoteIpAddress);
+                }
+
                 continue;
             }
 
@@ -47,8 +56,10 @@ public sealed class ApiKeysDomain
         return apiKeysDomain;
     }
 
+    //ჯერ ამ IP მისამართის ჩანაწერი იძებნება, თუ ასეთი არ არის — ჩანაწერი, რომლის RemoteIpAddress არის "*"
     public ApiKeyAndRemoteIpAddressDomain? AppSettingsByApiKey(string apiKey, string remoteIpAddress)
     {
-        return ApiKeys.SingleOrDefault(s => s.ApiKey == apiKey && s.RemoteIpAddress == remoteIpAddress);
+        return ApiKeys.SingleOrDefault(s => s.ApiKey == apiKey && s.RemoteIpAddress == remoteIpAddress) ??
+               ApiKeys.SingleOrDefault(s => s.ApiKey == apiKey && s.RemoteIpAddress == AnyRemoteIpAddress);
     }
 }

@@ -391,16 +391,53 @@ public sealed class ApiClientRequestTests
     }
 
     [Fact]
-    public async Task GetAsync_SendsABearerWithoutParameter_WhenThereIsNoAccessToken()
+    public async Task GetAsync_SendsNoAuthorization_WhenThereIsNoAccessToken()
     {
         using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
         TestableApiClient client = CreateClient(handler);
 
         await client.Get(ListAddress);
 
+        Assert.Null(handler.LastRequestAuthorization);
+    }
+
+    [Fact]
+    public async Task PostAsync_SendsNoAuthorization_WhenThereIsNoAccessToken()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
+        TestableApiClient client = CreateClient(handler);
+
+        await client.Post("/tasks/create", false, "{}");
+
+        Assert.Null(handler.LastRequestAuthorization);
+    }
+
+    [Fact]
+    public async Task GetAsync_KeepsTheTokenOfGetWithTokenAsync_WhenThereIsNoAccessToken()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
+        TestableApiClient client = CreateClient(handler);
+
+        await client.GetWithToken("token-1", ListAddress);
+        await client.Get(ListAddress);
+
         Assert.NotNull(handler.LastRequestAuthorization);
         Assert.Equal("Bearer", handler.LastRequestAuthorization.Scheme);
-        Assert.Null(handler.LastRequestAuthorization.Parameter);
+        Assert.Equal("token-1", handler.LastRequestAuthorization.Parameter);
+    }
+
+    [Fact]
+    public async Task GetAsync_SendsTheAccessToken_WhenTheHeaderAlreadyHasIt()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
+        TestableApiClient client = CreateClient(handler, accessToken: "access-1");
+
+        await client.Get(ListAddress);
+        await client.Get(ListAddress);
+
+        Assert.NotNull(handler.LastRequestAuthorization);
+        Assert.Equal("Bearer", handler.LastRequestAuthorization.Scheme);
+        Assert.Equal("access-1", handler.LastRequestAuthorization.Parameter);
     }
 
     [Fact]
@@ -413,6 +450,32 @@ public sealed class ApiClientRequestTests
 
         Assert.NotNull(handler.LastRequestUri);
         Assert.Equal("?name=abc&apikey=test-key", handler.LastRequestUri.Query);
+    }
+
+    [Fact]
+    public async Task CreateUri_EscapesTheApiKey()
+    {
+        const string apiKey = "a+b&c=d/e f#g%h";
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
+        TestableApiClient client = CreateClient(handler, apiKey);
+
+        await client.Get(ListAddress);
+
+        Assert.NotNull(handler.LastRequestUri);
+        Assert.Equal("?apikey=a%2Bb%26c%3Dd%2Fe%20f%23g%25h", handler.LastRequestUri.Query);
+        Assert.Equal(apiKey, Uri.UnescapeDataString(handler.LastRequestUri.Query["?apikey=".Length..]));
+    }
+
+    [Fact]
+    public async Task CreateUri_EscapesTheApiKeyAfterAnExistingQuery()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.OK, null);
+        TestableApiClient client = CreateClient(handler, "k&name=x");
+
+        await client.Get("/items/getbyname?name=abc");
+
+        Assert.NotNull(handler.LastRequestUri);
+        Assert.Equal("?name=abc&apikey=k%26name%3Dx", handler.LastRequestUri.Query);
     }
 
     [Fact]

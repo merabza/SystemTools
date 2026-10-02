@@ -24,9 +24,9 @@ public sealed class ApiClientDiagnosticsTests
         new UriBuilder(Uri.UriSchemeHttp, "localhost", 5028, "api/v1").Uri.AbsoluteUri;
 
     private static TestableApiClient CreateClient(HttpMessageHandler handler, bool useConsole,
-        ILogger? logger = null)
+        ILogger? logger = null, string? apiKey = ApiKey)
     {
-        return new TestableApiClient(new FakeHttpClientFactory(handler), Server, ApiKey, null, logger, useConsole);
+        return new TestableApiClient(new FakeHttpClientFactory(handler), Server, apiKey, null, logger, useConsole);
     }
 
     private static async Task<string> CaptureConsole(Func<Task> action)
@@ -75,10 +75,37 @@ public sealed class ApiClientDiagnosticsTests
 
         string output = await CaptureConsole(() => client.Post("/tasks/create", false, """{"TaskName":""}""").AsTask());
 
-        Assert.Contains("[ERROR] answer after uri: POST http://localhost:5028/api/v1/tasks/create?apikey=test-key",
-            output, StringComparison.Ordinal);
+        Assert.Contains("[ERROR] answer after uri: POST http://localhost:5028/api/v1/tasks/create?apikey=***",
+            output.Split(Environment.NewLine));
         Assert.Contains("""[ERROR] request body was : {"TaskName":""}""", output, StringComparison.Ordinal);
         Assert.Contains("[ERROR] Error from server: 400 Bad Request", output, StringComparison.Ordinal);
+        Assert.DoesNotContain(ApiKey, output, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task ErrorResponse_HidesOnlyTheApiKeyValueOfTheAddress()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.NotFound, null);
+        TestableApiClient client = CreateClient(handler, true, apiKey: "secret&key");
+
+        string output = await CaptureConsole(() => client.Get("/items/getbyname?name=abc&ApiKey=other-secret"));
+
+        Assert.Contains(
+            "[ERROR] answer after uri: GET http://localhost:5028/api/v1/items/getbyname?name=abc&apikey=***&apikey=***",
+            output.Split(Environment.NewLine));
+        Assert.DoesNotContain("secret", output, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task ErrorResponse_WritesTheAddressUnchanged_WhenThereIsNoQuery()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.NotFound, null);
+        TestableApiClient client = CreateClient(handler, true, apiKey: null);
+
+        string output = await CaptureConsole(() => client.Get("/tasks/list"));
+
+        Assert.Contains("[ERROR] answer after uri: GET http://localhost:5028/api/v1/tasks/list",
+            output.Split(Environment.NewLine));
     }
 
     [Fact]

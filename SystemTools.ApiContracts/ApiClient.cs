@@ -22,6 +22,9 @@ public /*open*/ abstract class ApiClient : IApiClient
     //შეცდომის შეტყობინებაში პასუხის სხეულის მაქსიმალური სიგრძე
     private const int MaxErrorBodyLengthInMessage = 500;
 
+    //მისამართის query-ში გასაღების პარამეტრი
+    private const string ApiKeyQueryPrefix = "apikey=";
+
     private readonly string? _apiKey;
     private readonly HttpClient _client;
     private readonly ILogger? _logger;
@@ -109,11 +112,10 @@ public /*open*/ abstract class ApiClient : IApiClient
         return ToResult(await SendAndReadAsync(HttpMethod.Get, uri, null, cancellationToken));
     }
 
+    //AccessToken-ის გარეშე Authorization header არ იცვლება, რომ ცარიელი Bearer არ გაიგზავნოს
     private void SetAuthorizationAccessToken()
     {
-        if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization is null ||
-            _client.DefaultRequestHeaders.Authorization?.Parameter is null ||
-            _client.DefaultRequestHeaders.Authorization.Parameter != AccessToken)
+        if (AccessToken is not null && _client.DefaultRequestHeaders.Authorization?.Parameter != AccessToken)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
         }
@@ -371,8 +373,8 @@ public /*open*/ abstract class ApiClient : IApiClient
         if (_useConsole)
         {
             StShared.WriteErrorLine(
-                $"answer after uri: {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri}", true,
-                null, false);
+                $"answer after uri: {response.RequestMessage?.Method} {HideApiKey(response.RequestMessage?.RequestUri)}",
+                true, null, false);
 
             if (!string.IsNullOrWhiteSpace(bodyJsonData))
             {
@@ -396,6 +398,25 @@ public /*open*/ abstract class ApiClient : IApiClient
             //რამდენიმე შეცდომა ერთად — PrintErrorsOnConsole თითოეულს ცალ-ცალკე დაბეჭდავს
             _ => new ValidationError(errors)
         };
+    }
+
+    //გასაღები საიდუმლოა: გამონატანისთვის მისამართის query-ში apikey-ის მნიშვნელობა ***-ით იცვლება, დანარჩენი პარამეტრები რჩება
+    private static string? HideApiKey(Uri? uri)
+    {
+        if (uri is null || string.IsNullOrEmpty(uri.Query))
+        {
+            return uri?.ToString();
+        }
+
+        string[] parameters =
+        [
+            .. uri.Query[1..].Split('&').Select(parameter =>
+                parameter.StartsWith(ApiKeyQueryPrefix, StringComparison.OrdinalIgnoreCase)
+                    ? $"{ApiKeyQueryPrefix}***"
+                    : parameter)
+        ];
+
+        return $"{uri.GetLeftPart(UriPartial.Path)}?{string.Join('&', parameters)}";
     }
 
     //BadRequest-ის პასუხი მასივია ([{code,description,type}]), გამონაკლისის დამმუშავებელი კი ერთ ობიექტს აბრუნებს — ორივე იკითხება.
@@ -512,9 +533,11 @@ public /*open*/ abstract class ApiClient : IApiClient
         var uri = new Uri($"{_server}{afterServerAddress}");
         if (!string.IsNullOrWhiteSpace(_apiKey))
         {
+            //escape საჭიროა, რომ გასაღების სიმბოლოებმა (&, +, #, ...) მისამართი არ დაარღვიოს
+            string apiKey = Uri.EscapeDataString(_apiKey);
             uri = string.IsNullOrEmpty(uri.Query)
-                ? new Uri($"{uri}?apikey={_apiKey}")
-                : new Uri($"{uri}&apikey={_apiKey}");
+                ? new Uri($"{uri}?{ApiKeyQueryPrefix}{apiKey}")
+                : new Uri($"{uri}&{ApiKeyQueryPrefix}{apiKey}");
         }
 
         return uri;

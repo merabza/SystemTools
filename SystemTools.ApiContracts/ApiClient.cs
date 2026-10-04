@@ -271,8 +271,15 @@ public /*open*/ abstract class ApiClient : IApiClient
 
     //გამოიყენება SupportTools პროექტში
     // ReSharper disable once MemberCanBePrivate.Global
-    protected async Task<Result<T>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
+    protected Task<Result<T>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
         string? bodyJsonData, CancellationToken cancellationToken = default)
+    {
+        return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, bodyJsonData, false, cancellationToken);
+    }
+
+    //bodyContainsSecrets: ტანში საიდუმლოა (პაროლი, API key), ამიტომ შეცდომის პასუხისას ტანი კონსოლზე არ იბეჭდება
+    protected async Task<Result<T>> PostAsyncReturn<T>(string afterServerAddress, bool useMessageHubClient,
+        string? bodyJsonData, bool bodyContainsSecrets, CancellationToken cancellationToken = default)
     {
         Uri uri = CreateUri(afterServerAddress);
 
@@ -281,7 +288,8 @@ public /*open*/ abstract class ApiClient : IApiClient
             await MessageHubClient.RunMessages(cancellationToken);
         }
 
-        Result<string> result = await SendAndReadAsync(HttpMethod.Post, uri, bodyJsonData, cancellationToken);
+        Result<string> result = await SendAndReadAsync(HttpMethod.Post, uri, bodyJsonData, !bodyContainsSecrets,
+            cancellationToken);
 
         if (useMessageHubClient && MessageHubClient is not null)
         {
@@ -313,11 +321,18 @@ public /*open*/ abstract class ApiClient : IApiClient
         return Deserialize<T>(result);
     }
 
+    private Task<Result<string>> SendAndReadAsync(HttpMethod method, Uri uri, string? bodyJsonData,
+        CancellationToken cancellationToken)
+    {
+        return SendAndReadAsync(method, uri, bodyJsonData, true, cancellationToken);
+    }
+
     //ერთადერთი ადგილი, სადაც მოთხოვნა იგზავნება და პასუხი იკითხება.
     //წარმატებისას აბრუნებს პასუხის ტექსტს, შეცდომისას — სერვერის მიერ დაბრუნებულ Error-ს.
-    //ქსელური შეცდომა და HttpClient-ის Timeout Result-ის შეცდომად იქცევა, ნამდვილი გაუქმება (OperationCanceledException) კი გადის
+    //ქსელური შეცდომა და HttpClient-ის Timeout Result-ის შეცდომად იქცევა, ნამდვილი გაუქმება (OperationCanceledException) კი გადის.
+    //writeBodyOnError: false-ისას შეცდომის პასუხზე მოთხოვნის ტანი კონსოლზე არ იბეჭდება (საიდუმლოს შემცველი ტანი)
     private async Task<Result<string>> SendAndReadAsync(HttpMethod method, Uri uri, string? bodyJsonData,
-        CancellationToken cancellationToken)
+        bool writeBodyOnError, CancellationToken cancellationToken)
     {
         using StringContent? content = bodyJsonData is null
             ? null
@@ -326,13 +341,15 @@ public /*open*/ abstract class ApiClient : IApiClient
         using var request = new HttpRequestMessage(method, uri);
         request.Content = content;
 
+        string? bodyToWriteOnError = writeBodyOnError ? bodyJsonData : null;
+
         try
         {
             using HttpResponseMessage response = await _client.SendAsync(request, cancellationToken);
             string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             return response.IsSuccessStatusCode
                 ? Result.Success(responseBody)
-                : Result.Failure<string>(CreateErrorFromResponse(response, responseBody, bodyJsonData));
+                : Result.Failure<string>(CreateErrorFromResponse(response, responseBody, bodyToWriteOnError));
         }
         catch (Exception e) when (e is HttpRequestException or IOException ||
                                   e is TaskCanceledException && !cancellationToken.IsCancellationRequested)

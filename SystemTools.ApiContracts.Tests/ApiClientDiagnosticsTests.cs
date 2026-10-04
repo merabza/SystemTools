@@ -83,6 +83,37 @@ public sealed class ApiClientDiagnosticsTests
     }
 
     [Fact]
+    public async Task ErrorResponse_WritesTheBodyOfAPostReturningAValue_WhenUsingTheConsole()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.BadRequest,
+            """[{"code":"TaskNameRequired","description":"task name is required","type":2}]""");
+        TestableApiClient client = CreateClient(handler, true);
+
+        string output =
+            await CaptureConsole(() => client.PostReturn<int>("/tasks/create", false, """{"TaskName":""}"""));
+
+        Assert.Contains("""[ERROR] request body was : {"TaskName":""}""", output, StringComparison.Ordinal);
+    }
+
+    //A body with a password or an API key never reaches the console, the rest of the error output stays
+    [Fact]
+    public async Task ErrorResponse_DoesNotWriteABodyWithSecrets_WhenUsingTheConsole()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.Conflict,
+            """{"title":"ConcurrencyConflict","status":409,"detail":"ApiClient a Version Conflict: Expected 1, Actual 2"}""");
+        TestableApiClient client = CreateClient(handler, true);
+
+        string output = await CaptureConsole(() =>
+            client.PostSecretReturn<int>("/clients/update/a", false, """{"ApiKey":"made-up-secret"}"""));
+
+        Assert.Contains("[ERROR] answer after uri: POST http://localhost:5028/api/v1/clients/update/a?apikey=***",
+            output.Split(Environment.NewLine));
+        Assert.Contains("[ERROR] Error from server: 409 Conflict", output, StringComparison.Ordinal);
+        Assert.DoesNotContain("request body was", output, StringComparison.Ordinal);
+        Assert.DoesNotContain("made-up-secret", output, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task ErrorResponse_HidesOnlyTheApiKeyValueOfTheAddress()
     {
         using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.NotFound, null);

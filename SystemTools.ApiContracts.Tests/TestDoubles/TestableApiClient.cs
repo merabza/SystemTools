@@ -95,6 +95,12 @@ internal sealed class TestableApiClient : ApiClient
         return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, bodyJsonData, cancellationToken);
     }
 
+    public Task<Result<T>> PostSecretReturn<T>(string afterServerAddress, bool useMessageHubClient,
+        string? bodyJsonData, CancellationToken cancellationToken = default)
+    {
+        return PostAsyncReturn<T>(afterServerAddress, useMessageHubClient, bodyJsonData, true, cancellationToken);
+    }
+
     public Task<Result<T>> PostReturnWithDefaults<T>(string afterServerAddress,
         CancellationToken cancellationToken = default)
     {

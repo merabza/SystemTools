@@ -338,6 +338,41 @@ public sealed class ApiClientRequestTests
         Assert.Equal(1, messageHubClient.StopCount);
     }
 
+    //A body with secrets is sent like any other; only the console output of an error leaves it out
+    [Theory]
+    [InlineData(false, 0)]
+    [InlineData(true, 1)]
+    public async Task PostAsyncReturn_WithSecrets_SendsTheBodyAndDeserializes(bool useMessageHubClient, int hubRuns)
+    {
+        using StubHttpMessageHandler handler =
+            StubHttpMessageHandler.Respond(HttpStatusCode.OK, """{"name":"abc","count":3}""");
+        var messageHubClient = new FakeMessageHubClient();
+        TestableApiClient client = CreateClient(handler, messageHubClient: messageHubClient);
+
+        Result<SampleDto> result = await client.PostSecretReturn<SampleDto>("/clients/update/a", useMessageHubClient,
+            """{"ApiKey":"made-up-key"}""");
+
+        Assert.Equal("abc", result.Value.Name);
+        Assert.Equal(3, result.Value.Count);
+        Assert.Equal(HttpMethod.Post, handler.LastRequestMethod);
+        Assert.Equal("""{"ApiKey":"made-up-key"}""", handler.LastRequestBody);
+        Assert.Equal(hubRuns, messageHubClient.RunCount);
+        Assert.Equal(hubRuns, messageHubClient.StopCount);
+    }
+
+    [Fact]
+    public async Task PostAsyncReturn_WithSecrets_ReturnsTheServerError_OnFailure()
+    {
+        using StubHttpMessageHandler handler = StubHttpMessageHandler.Respond(HttpStatusCode.Conflict,
+            """{"title":"ConcurrencyConflict","status":409,"detail":"ApiClient a Version Conflict: Expected 1, Actual 2"}""");
+        TestableApiClient client = CreateClient(handler);
+
+        Result<int> result = await client.PostSecretReturn<int>("/clients/update/a", false, """{"ApiKey":"k"}""");
+
+        Assert.Equal("ConcurrencyConflict", result.Error.Code);
+        Assert.Equal(ErrorType.Conflict, result.Error.Type);
+    }
+
     [Fact]
     public async Task GetWithTokenAsync_SendsTheTokenAsBearer()
     {

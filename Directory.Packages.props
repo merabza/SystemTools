@@ -8,9 +8,9 @@
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageVersion Include="LanguageExt.Core" Version="4.4.9" />
     <PackageVersion Include="MediatR" Version="14.2.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Http.Connections.Common" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Connections.Common" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.13" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="10.0.13" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.12" />
@@ -34,7 +34,7 @@
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.34.0.3385" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.35.0.4138" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="4.0.0" />
   </ItemGroup>

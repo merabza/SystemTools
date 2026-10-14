@@ -61,7 +61,7 @@ public sealed class ApiClientDiagnosticsTests
     private static void VerifyErrorLogged(Mock<ILogger> logger, string message, Func<Exception?, bool> exception)
     {
         logger.Verify(
-            l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, _) => v.ToString() == message),
+            l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, _) => v!.ToString() == message),
                 It.Is<Exception?>(e => exception(e)), It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
     }

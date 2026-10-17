@@ -24,6 +24,7 @@ public static class DatabaseServicesExtensions
             case EDatabaseProvider.SqLite:
             case EDatabaseProvider.OleDb:
             case EDatabaseProvider.WebAgent:
+            case EDatabaseProvider.MariaDb:
             case null:
                 break;
             default:

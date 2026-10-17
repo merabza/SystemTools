@@ -6,5 +6,6 @@ public enum EDatabaseProvider
     SqlServer = 1,
     SqLite = 2,
     OleDb = 3,
-    WebAgent = 4
+    WebAgent = 4,
+    MariaDb = 5
 }

@@ -15,6 +15,10 @@ namespace SystemTools.SystemToolsShared;
 
 public static class StShared
 {
+    //true-ს შემთხვევაში Pause ღილაკის დაჭერას აღარ ელოდება, რომ ბრძანებათა სტრიქონიდან გაშვებული ინსტრუმენტი
+    //შეცდომის შემდეგაც არ გაჩერდეს (SupportTools-ის --allyes)
+    public static bool SkipPause { get; set; }
+
     public static string TimeTakenMessage(DateTime startDateTime)
     {
         DateTime endDateTime = DateTime.Now; //პროცესის დასრულების დრო
@@ -208,7 +212,7 @@ public static class StShared
     {
         //როცა კონსოლი ინტერაქტიული არ არის (მაგალითად Linux-ზე სერვისად გაშვებისას),
         //Console.ReadKey ისვრის InvalidOperationException-ს ან სამუდამოდ იბლოკება
-        if (Console.IsInputRedirected)
+        if (SkipPause || Console.IsInputRedirected)
         {
             return;
         }

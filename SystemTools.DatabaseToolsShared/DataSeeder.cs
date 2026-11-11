@@ -225,8 +225,10 @@ public /*open*/ class DataSeeder<TDst, TMo> : ITableDataSeeder where TDst : clas
 
         Dictionary<string, TDst> secondDictionary = listWithLessPriority.ToDictionary(KeySelector, v => v);
 
-        var retList = new List<TDst>();
-        retList.AddRange(priorDictionary.Values);
+        List<TDst> retList =
+        [
+            .. priorDictionary.Values
+        ];
 
         List<string> extraKeys = [.. secondDictionary.Keys.Except(priorDictionary.Keys)];
         retList.AddRange(extraKeys.Select(key => secondDictionary[key]));

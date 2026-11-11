@@ -148,7 +148,10 @@ public sealed class DatabaseEntitiesDefaultConvention : IModelFinalizingConventi
             }
 
             //დავადგინოთ ინდექსში შემავალი ველების სახელები
-            string[] properties = [.. index.Properties.Select(p => p.GetColumnName())];
+            string[] properties =
+            [
+                .. index.Properties.Select(p => p is IReadOnlyProperty property ? property.GetColumnName() : p.Name)
+            ];
 
             //ნდექსის სახელი შევქმნათ ცხრილის სახელზე ველების სახელების დამატევით და უნიკალურობის გათვალისწინებით
             indexNameAnnotation = tableNameAnnotation.CreateIndexName(index.IsUnique, properties);
